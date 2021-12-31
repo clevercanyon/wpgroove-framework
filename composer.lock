@@ -458,12 +458,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/php-js-utilities-dev-npm.git",
-                "reference": "13cf31047c008ee6588d5454e0203338203e25eb"
+                "reference": "70550c829f5ee420991f3d7b885a6746a892ba8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities-dev-npm/zipball/13cf31047c008ee6588d5454e0203338203e25eb",
-                "reference": "13cf31047c008ee6588d5454e0203338203e25eb",
+                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities-dev-npm/zipball/70550c829f5ee420991f3d7b885a6746a892ba8c",
+                "reference": "70550c829f5ee420991f3d7b885a6746a892ba8c",
                 "shasum": ""
             },
             "require": {
@@ -473,7 +473,7 @@
             "type": "library",
             "extra": {
                 "clevercanyon": {
-                    "@extends-packages": [
+                    "$extends-packages": [
                         "clevercanyon/php-js-utilities-dev"
                     ]
                 }
@@ -499,7 +499,7 @@
                 "issues": "https://github.com/clevercanyon/php-js-utilities-dev-npm/issues",
                 "source": "https://github.com/clevercanyon/php-js-utilities-dev-npm/tree/main"
             },
-            "time": "2021-12-31T11:34:41+00:00"
+            "time": "2021-12-31T13:56:30+00:00"
         },
         {
             "name": "clevercanyon/wpgroove-framework-dev",
@@ -507,12 +507,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/wpgroove-framework-dev.git",
-                "reference": "57cc90198fd08ddbac2e89c4e5df22e087025ddc"
+                "reference": "96751dac062cadfb9252cb67d148215a3302088e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/wpgroove-framework-dev/zipball/57cc90198fd08ddbac2e89c4e5df22e087025ddc",
-                "reference": "57cc90198fd08ddbac2e89c4e5df22e087025ddc",
+                "url": "https://api.github.com/repos/clevercanyon/wpgroove-framework-dev/zipball/96751dac062cadfb9252cb67d148215a3302088e",
+                "reference": "96751dac062cadfb9252cb67d148215a3302088e",
                 "shasum": ""
             },
             "require": {
@@ -524,7 +524,7 @@
             "type": "library",
             "extra": {
                 "clevercanyon": {
-                    "@extends-packages": [
+                    "$extends-packages": [
                         "clevercanyon/php-js-utilities-dev"
                     ],
                     "&": {
@@ -541,10 +541,12 @@
                         },
                         "post_update_cmd_handler": {
                             "symlink_local_packages": {
-                                "vendor": [
-                                    "clevercanyon/wpgroove-framework",
-                                    "clevercanyon/wpgroove-framework-dev"
-                                ]
+                                "$concat": {
+                                    "vendor": [
+                                        "clevercanyon/wpgroove-framework",
+                                        "clevercanyon/wpgroove-framework-dev"
+                                    ]
+                                }
                             }
                         }
                     }
@@ -571,7 +573,7 @@
                 "issues": "https://github.com/clevercanyon/wpgroove-framework-dev/issues",
                 "source": "https://github.com/clevercanyon/wpgroove-framework-dev/tree/main"
             },
-            "time": "2021-12-31T11:38:22+00:00"
+            "time": "2021-12-31T13:57:17+00:00"
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
