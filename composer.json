@@ -55,6 +55,13 @@
 						}
 					}
 				},
+				"scoper"                  : {
+					"cfg" : {
+						"exclude-constants" : [ ],
+						"exclude-classes"   : [ ],
+						"exclude-functions" : [ ]
+					}
+				},
 				"post_update_cmd_handler" : {
 					"symlink_local_packages" : {
 						"$concat" : {
