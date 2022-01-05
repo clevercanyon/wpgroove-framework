@@ -60,12 +60,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/php-js-utilities.git",
-                "reference": "773b6dda1875a048bd87caa2299af49284b87ce5"
+                "reference": "1868f6b182e8d3c4a31f36f41ac5147120249692"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities/zipball/773b6dda1875a048bd87caa2299af49284b87ce5",
-                "reference": "773b6dda1875a048bd87caa2299af49284b87ce5",
+                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities/zipball/1868f6b182e8d3c4a31f36f41ac5147120249692",
+                "reference": "1868f6b182e8d3c4a31f36f41ac5147120249692",
                 "shasum": ""
             },
             "require": {
@@ -142,7 +142,7 @@
                 "issues": "https://github.com/clevercanyon/php-js-utilities/issues",
                 "source": "https://github.com/clevercanyon/php-js-utilities/tree/main"
             },
-            "time": "2022-01-05T04:24:11+00:00"
+            "time": "2022-01-05T04:36:05+00:00"
         },
         {
             "name": "ulrichsg/getopt-php",

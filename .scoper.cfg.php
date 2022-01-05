@@ -44,6 +44,15 @@ declare( strict_types = 1 ); // ｡･:*:･ﾟ★.
 namespace Clever_Canyon\Scoper\Config_File;
 
 /**
+ * CLI check.
+ *
+ * @since 2021-12-15
+ */
+if ( 'cli' !== PHP_SAPI ) {
+	exit( 'CLI mode only.' );
+}
+
+/**
  * Configuration.
  *
  * @since 2021-12-15
