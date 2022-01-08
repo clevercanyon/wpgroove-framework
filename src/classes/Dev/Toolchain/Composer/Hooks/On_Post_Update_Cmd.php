@@ -60,7 +60,7 @@ use Aws\Exception\AwsException;
  *
  * @since 2021-12-15
  */
-class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
+class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 	/**
 	 * Project.
 	 *
@@ -70,22 +70,29 @@ class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t
 
 	/**
 	 * Version.
+	 *
+	 * @since 2021-12-15
 	 */
 	protected const VERSION = '1.0.0';
 
 	/**
 	 * Tool name.
+	 *
+	 * @since 2021-12-15
 	 */
 	protected const NAME = 'Hook/Post_Update_Cmd_Handler';
 
 	/**
 	 * Constructor.
 	 *
+	 * @since 2021-12-15
+	 *
 	 * @param string|array|null $args_to_parse Optional custom args to parse instead of `$_SERVER['argv']`.
 	 *                                         If not given, defaults internally to `$_SERVER['argv']`.
 	 */
-	public function __construct( /* string|array|null */ $args_to_parse = 'update' ) {
+	public function __construct( /* string|array|null */ $args_to_parse = null ) {
 		parent::__construct( $args_to_parse );
+
 		$this->add_commands( [
 			'update' => [
 				'callback'    => [ $this, 'update' ],
@@ -325,27 +332,27 @@ class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t
 			throw new Exception( 'Failed to create project /._x/svn-comp directory.' );
 		}
 		if ( 0 !== U\CLI::run( [ 'composer', 'install', '--no-dev', '--no-scripts', '--no-plugins', '--optimize-autoloader', '--classmap-authoritative' ], U\Dir::join( $plugin_svn_comp_dir, '/trunk' ), false ) ) {
-			throw new Exception( 'Failed to run `composer install --no-dev --no-scripts --no-plugins --optimize-autoloader --classmap-authoritative` in ./._x/svn-comp/trunk directory.' );
+			throw new Exception( 'Failed to run `composer install --no-dev --no-scripts --no-plugins --optimize-autoloader --classmap-authoritative` from ./._x/svn-comp/trunk directory.' );
 		}
 
-		if ( 0 !== U\CLI::run( [ 'php', '../../vendor/varunsridharan/wp-cli-textdomain/src/add-text-domain.php', '-i', $plugin->headers->text_domain, $plugin_svn_comp_dir ], $plugin_svn_comp_dir, false ) ) {
-			throw new Exception( 'Failed to run `php ../../vendor/varunsridharan/wp-cli-textdomain/src/add-text-domain.php -i ' . $plugin->headers->text_domain . ' ' . $plugin_svn_comp_dir . '` in ./._x/svn-comp directory.' );
+		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'i18n-text-domain', 'add', '--text-domain', $plugin->headers->text_domain, '--dir', $plugin_svn_comp_dir ], $this->project->dir, false ) ) {
+			throw new Exception( 'Failed to run `composer exec -- i18n-text-domain add --text-domain ' . $plugin->headers->text_domain . ' --dir ' . $plugin_svn_comp_dir . '` from project directory.' );
 		}
-		if ( 0 !== U\CLI::run( [ 'php', '../../vendor/varunsridharan/wp-cli-textdomain/src/add-text-domain.php', '-i', $plugin->headers->text_domain, U\Dir::join( $plugin_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) ], $plugin_svn_comp_dir, false ) ) {
-			throw new Exception( 'Failed to run `php ../../vendor/varunsridharan/wp-cli-textdomain/src/add-text-domain.php -i ' . $plugin->headers->text_domain . ' ' . U\Dir::join( $plugin_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) . '` in ./._x/svn-comp directory.' );
+		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'i18n-text-domain', 'add', '--text-domain', $plugin->headers->text_domain, '--dir', U\Dir::join( $plugin_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) ], $this->project->dir, false ) ) {
+			throw new Exception( 'Failed to run `composer exec -- i18n-text-domain add --text-domain ' . $plugin->headers->text_domain . ' --dir ' . U\Dir::join( $plugin_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) . ' from project directory.' );
 		}
 		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper', 'add-prefix', '--config', U\Dir::join( $plugin_svn_comp_dir, '/.scoper.cfg.php' ), '--prefix', ucfirst( $this->project->name_hash ), '--no-interaction', '--force', '--stop-on-failure', '--working-dir', $plugin_svn_comp_dir, '--output-dir', $plugin_svn_distro_dir, $plugin_svn_comp_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- php-scoper add-prefix --config ' . U\Dir::join( $plugin_svn_comp_dir, '/.scoper.cfg.php' ) . ' --prefix ' . ucfirst( $this->project->name_hash ) . ' --no-interaction --force --stop-on-failure --working-dir ' . $plugin_svn_comp_dir . ' --output-dir ' . $plugin_svn_distro_dir . ' ' . $plugin_svn_comp_dir . '` in ./._x/svn-comp directory.' );
+			throw new Exception( 'Failed to run `composer exec -- php-scoper add-prefix --config ' . U\Dir::join( $plugin_svn_comp_dir, '/.scoper.cfg.php' ) . ' --prefix ' . ucfirst( $this->project->name_hash ) . ' --no-interaction --force --stop-on-failure --working-dir ' . $plugin_svn_comp_dir . ' --output-dir ' . $plugin_svn_distro_dir . ' ' . $plugin_svn_comp_dir . '` from project directory.' );
 		}
 
 		if ( 0 !== U\CLI::run( [ 'composer', 'dump-autoload', '--no-dev', '--no-scripts', '--no-plugins', '--optimize', '--classmap-authoritative' ], U\Dir::join( $plugin_svn_distro_dir, '/trunk' ), false ) ) {
-			throw new Exception( 'Failed to run `composer dump-autoload --no-dev --no-scripts --no-plugins --optimize --classmap-authoritative` in ./._x/svn-distro/trunk directory.' );
+			throw new Exception( 'Failed to run `composer dump-autoload --no-dev --no-scripts --no-plugins --optimize --classmap-authoritative` from ./._x/svn-distro/trunk directory.' );
 		}
 		if ( false === ( $_svn_distro_dir_trunk_plugin_file_contents = file_get_contents( U\Dir::join( $plugin_svn_distro_dir, '/trunk/plugin.php' ) ) ) ) {
 			throw new Exception( 'Failed to read contents of ./._x/svn-distro/trunk/plugin.php.' );
 		}
 		if ( false === file_put_contents( U\Dir::join( $plugin_svn_distro_dir, '/trunk/plugin.php' ), str_replace( '/vendor/autoload.php', '/vendor/scoper-autoload.php', $_svn_distro_dir_trunk_plugin_file_contents ) ) ) {
-			throw new Exception( 'Failed to update `/vendor/autoload.php` to `/vendor/scoper-autoload.php` in ./._x/svn-comp/trunk/plugin.php.' );
+			throw new Exception( 'Failed to update `/vendor/autoload.php` to `/vendor/scoper-autoload.php` in ./._x/svn-distro/trunk/plugin.php.' );
 		}
 
 		if ( ! U\Dir::prune( $plugin_svn_distro_dir, $distro_dir_prune_config[ 'prune' ], $distro_dir_prune_config[ 'exceptions' ] ) ) {
@@ -356,10 +363,10 @@ class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t
 		}
 
 		if ( ! U\Fs::copy( U\Dir::join( $plugin_svn_distro_dir, '/trunk' ), U\Dir::join( $plugin_svn_distro_dir, '/tags/' . $plugin->headers->version ) ) ) {
-			throw new Exception( 'Failed to create ./._x/svn-distro/tags/' . $plugin->headers->version . ' in project ./._x/svn-distro directory.' );
+			throw new Exception( 'Failed to copy ./._x/svn-distro/trunk to ./._x/svn-distro/tags/' . $plugin->headers->version . ' directory.' );
 		}
 		if ( ! U\Fs::copy( U\Dir::join( $plugin_svn_distro_dir, '/tags/' . $plugin->headers->version ), U\Dir::join( $plugin_svn_repo_dir, '/tags/' . $plugin->headers->version ) ) ) {
-			throw new Exception( 'Failed to copy ./._x/svn-distro/tags/' . $plugin->headers->version . ' in project ./._x/svn-distro directory into ./._x/svn-repo directory.' );
+			throw new Exception( 'Failed to copy ./._x/svn-distro/tags/' . $plugin->headers->version . ' to ./._x/svn-repo/tags/' . $plugin->headers->version . ' directory.' );
 		}
 	}
 
@@ -390,27 +397,27 @@ class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t
 			throw new Exception( 'Failed to create project /._x/svn-comp directory.' );
 		}
 		if ( 0 !== U\CLI::run( [ 'composer', 'install', '--no-dev', '--no-scripts', '--no-plugins', '--optimize-autoloader', '--classmap-authoritative' ], U\Dir::join( $theme_svn_comp_dir, '/trunk' ), false ) ) {
-			throw new Exception( 'Failed to run `composer install --no-dev --no-scripts --no-plugins --optimize-autoloader --classmap-authoritative` in ./._x/svn-comp/trunk directory.' );
+			throw new Exception( 'Failed to run `composer install --no-dev --no-scripts --no-plugins --optimize-autoloader --classmap-authoritative` from ./._x/svn-comp/trunk directory.' );
 		}
 
-		if ( 0 !== U\CLI::run( [ 'php', '../../vendor/varunsridharan/wp-cli-textdomain/src/add-text-domain.php', '-i', $theme->headers->text_domain, $theme_svn_comp_dir ], $theme_svn_comp_dir, false ) ) {
-			throw new Exception( 'Failed to run `php ../../vendor/varunsridharan/wp-cli-textdomain/src/add-text-domain.php -i ' . $theme->headers->text_domain . ' ' . $theme_svn_comp_dir . '` in ./._x/svn-comp directory.' );
+		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'i18n-text-domain', 'add', '--text-domain', $theme->headers->text_domain, '--dir', $theme_svn_comp_dir ], $this->project->dir, false ) ) {
+			throw new Exception( 'Failed to run `composer exec -- i18n-text-domain add --text-domain ' . $theme->headers->text_domain . ' --dir ' . $theme_svn_comp_dir . '` from project directory.' );
 		}
-		if ( 0 !== U\CLI::run( [ 'php', '../../vendor/varunsridharan/wp-cli-textdomain/src/add-text-domain.php', '-i', $theme->headers->text_domain, U\Dir::join( $theme_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) ], $theme_svn_comp_dir, false ) ) {
-			throw new Exception( 'Failed to run `php ../../vendor/varunsridharan/wp-cli-textdomain/src/add-text-domain.php -i ' . $theme->headers->text_domain . ' ' . U\Dir::join( $theme_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) . '` in ./._x/svn-comp directory.' );
+		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'i18n-text-domain', 'add', '--text-domain', $theme->headers->text_domain, '--dir', U\Dir::join( $theme_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) ], $this->project->dir, false ) ) {
+			throw new Exception( 'Failed to run `composer exec -- i18n-text-domain add --text-domain ' . $theme->headers->text_domain . ' --dir ' . U\Dir::join( $theme_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) . ' from project directory.' );
 		}
 		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper', 'add-prefix', '--config', U\Dir::join( $theme_svn_comp_dir, '/.scoper.cfg.php' ), '--prefix', ucfirst( $this->project->name_hash ), '--no-interaction', '--force', '--stop-on-failure', '--working-dir', $theme_svn_comp_dir, '--output-dir', $theme_svn_distro_dir, $theme_svn_comp_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- php-scoper add-prefix --config ' . U\Dir::join( $theme_svn_comp_dir, '/.scoper.cfg.php' ) . ' --prefix ' . ucfirst( $this->project->name_hash ) . ' --no-interaction --force --stop-on-failure --working-dir ' . $theme_svn_comp_dir . ' --output-dir ' . $theme_svn_distro_dir . ' ' . $theme_svn_comp_dir . '` in ./._x/svn-comp directory.' );
+			throw new Exception( 'Failed to run `composer exec -- php-scoper add-prefix --config ' . U\Dir::join( $theme_svn_comp_dir, '/.scoper.cfg.php' ) . ' --prefix ' . ucfirst( $this->project->name_hash ) . ' --no-interaction --force --stop-on-failure --working-dir ' . $theme_svn_comp_dir . ' --output-dir ' . $theme_svn_distro_dir . ' ' . $theme_svn_comp_dir . '` from project directory.' );
 		}
 
 		if ( 0 !== U\CLI::run( [ 'composer', 'dump-autoload', '--no-dev', '--no-scripts', '--no-plugins', '--optimize', '--classmap-authoritative' ], U\Dir::join( $theme_svn_distro_dir, '/trunk' ), false ) ) {
-			throw new Exception( 'Failed to run `composer dump-autoload --no-dev --no-scripts --no-plugins --optimize --classmap-authoritative` in ./._x/svn-distro/trunk directory.' );
+			throw new Exception( 'Failed to run `composer dump-autoload --no-dev --no-scripts --no-plugins --optimize --classmap-authoritative` from ./._x/svn-distro/trunk directory.' );
 		}
 		if ( false === ( $_svn_distro_dir_trunk_theme_file_contents = file_get_contents( U\Dir::join( $theme_svn_distro_dir, '/trunk/theme.php' ) ) ) ) {
 			throw new Exception( 'Failed to read contents of ./._x/svn-distro/trunk/theme.php.' );
 		}
 		if ( false === file_put_contents( U\Dir::join( $theme_svn_distro_dir, '/trunk/theme.php' ), str_replace( '/vendor/autoload.php', '/vendor/scoper-autoload.php', $_svn_distro_dir_trunk_theme_file_contents ) ) ) {
-			throw new Exception( 'Failed to update `/vendor/autoload.php` to `/vendor/scoper-autoload.php` in ./._x/svn-comp/trunk/theme.php.' );
+			throw new Exception( 'Failed to update `/vendor/autoload.php` to `/vendor/scoper-autoload.php` in ./._x/svn-distro/trunk/theme.php.' );
 		}
 
 		if ( ! U\Dir::prune( $theme_svn_distro_dir, $distro_dir_prune_config[ 'prune' ], $distro_dir_prune_config[ 'exceptions' ] ) ) {
@@ -421,10 +428,10 @@ class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t
 		}
 
 		if ( ! U\Fs::copy( U\Dir::join( $theme_svn_distro_dir, '/trunk' ), U\Dir::join( $theme_svn_distro_dir, '/tags/' . $theme->headers->version ) ) ) {
-			throw new Exception( 'Failed to create ./._x/svn-distro/tags/' . $theme->headers->version . ' in project ./._x/svn-distro directory.' );
+			throw new Exception( 'Failed to copy ./._x/svn-distro/trunk to ./._x/svn-distro/tags/' . $theme->headers->version . ' directory.' );
 		}
 		if ( ! U\Fs::copy( U\Dir::join( $theme_svn_distro_dir, '/tags/' . $theme->headers->version ), U\Dir::join( $theme_svn_repo_dir, '/tags/' . $theme->headers->version ) ) ) {
-			throw new Exception( 'Failed to copy ./._x/svn-distro/tags/' . $theme->headers->version . ' in project ./._x/svn-distro directory into ./._x/svn-repo directory.' );
+			throw new Exception( 'Failed to copy ./._x/svn-distro/tags/' . $theme->headers->version . ' to ./._x/svn-repo/tags/' . $theme->headers->version . ' directory.' );
 		}
 	}
 
@@ -444,7 +451,7 @@ class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t
 
 		if ( ! is_dir( $plugin_svn_repo_tag_dir ) ) {
 			throw new Exception(
-				'Failed to zip plugin’s ./._x/svn-repo/tags/' . $plugin->headers->version . ' directory.' .
+				'Failed to zip ./._x/svn-repo/tags/' . $plugin->headers->version . ' directory.' .
 				' Directory is missing: `' . $plugin_svn_repo_tag_dir . '`.'
 			);
 		}
@@ -453,7 +460,7 @@ class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t
 
 		if ( ! U\Fs::zip( $plugin_svn_repo_tag_dir . '->' . $plugin->slug, $plugin_zip_path ) ) {
 			throw new Exception(
-				'Failed to zip plugin’s ./._x/svn-repo/tags/' . $plugin->headers->version . ' directory.' .
+				'Failed to zip ./._x/svn-repo/tags/' . $plugin->headers->version . ' directory.' .
 				' From: `' . $plugin_svn_repo_tag_dir . '->' . $plugin->slug . '`, to: `' . $plugin_zip_path . '`.'
 			);
 		}
@@ -475,7 +482,7 @@ class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t
 
 		if ( ! is_dir( $theme_svn_repo_tag_dir ) ) {
 			throw new Exception(
-				'Failed to zip plugin’s ./._x/svn-repo/tags/' . $theme->headers->version . ' directory.' .
+				'Failed to zip ./._x/svn-repo/tags/' . $theme->headers->version . ' directory.' .
 				' Directory is missing: `' . $theme_svn_repo_tag_dir . '`.'
 			);
 		}
@@ -484,7 +491,7 @@ class Post_Update_Cmd_Handler extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t
 
 		if ( ! U\Fs::zip( $theme_svn_repo_tag_dir . '->' . $theme->slug, $theme_zip_path ) ) {
 			throw new Exception(
-				'Failed to zip plugin’s ./._x/svn-repo/tags/' . $theme->headers->version . ' directory.' .
+				'Failed to zip ./._x/svn-repo/tags/' . $theme->headers->version . ' directory.' .
 				' From: `' . $theme_svn_repo_tag_dir . '->' . $theme->slug . '`, to: `' . $theme_zip_path . '`.'
 			);
 		}

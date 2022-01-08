@@ -20,6 +20,9 @@
 			"composer/package-versions-deprecated"           : true
 		}
 	},
+	"bin"               : [
+		"./dev/toolchain/i18n/i18n-text-domain"
+	],
 	"require"           : {
 		"clevercanyon/php-js-utilities" : "dev-main"
 	},
@@ -37,7 +40,7 @@
 		}
 	},
 	"scripts"           : {
-		"post-update-cmd" : "[ $COMPOSER_DEV_MODE -eq 0 ] || ./dev/toolchain/composer/post-update-cmd.php",
+		"post-update-cmd" : "[ $COMPOSER_DEV_MODE -eq 0 ] || ./dev/toolchain/composer/on-post-update-cmd",
 		"phpunit"         : "composer exec -- phpunit --configuration ./.phpunit.xml",
 		"webpack"         : "npx webpack --config ./.webpack.cjs"
 	},
@@ -56,7 +59,7 @@
 						}
 					}
 				},
-				"scoper"                  : {
+				"php_scoper"              : {
 					"cfg" : {
 						"exclude-constants" : [ ],
 						"exclude-classes"   : [ ],

@@ -18,12 +18,12 @@
 
 /* @formatter:ignore
 -----------------------------------------------------------------------------------------------------------------------
-Example `extra.clevercanyon.&.scoper` in `composer.json`:
+Example `extra.clevercanyon.&.php_scoper` in `composer.json`:
 -----------------------------------------------------------------------------------------------------------------------
 "extra" : {
 	"clevercanyon" : {
 		"&" : {
-			"scoper" : {
+			"php_scoper" : {
 				"cfg" : {
 					"exclude-constants" : [],
 					"exclude-classes"   : [],
@@ -41,7 +41,7 @@ Example `extra.clevercanyon.&.scoper` in `composer.json`:
  * @since 2021-12-15
  */
 declare( strict_types = 1 ); // ｡･:*:･ﾟ★.
-namespace Clever_Canyon\Scoper\Config_File;
+namespace Clever_Canyon\PHP_Scoper\Config_File;
 
 /**
  * CLI check.
@@ -49,7 +49,7 @@ namespace Clever_Canyon\Scoper\Config_File;
  * @since 2021-12-15
  */
 if ( 'cli' !== PHP_SAPI ) {
-	exit( 'CLI mode only.' );
+	exit( 1 ); // CLI mode only.
 }
 
 /**
@@ -6160,7 +6160,7 @@ $cfg = [
 if ( is_file( __DIR__ . '/composer.json' ) ) {
 	$prj_cfg = file_get_contents( __DIR__ . '/composer.json' );
 	$prj_cfg = is_array( $prj_cfg = json_decode( $prj_cfg, true ) ) ? $prj_cfg : [];
-	$prj_cfg = $prj_cfg[ 'extra' ][ 'clevercanyon' ][ '&' ][ 'scoper' ][ 'cfg' ] ?? [];
+	$prj_cfg = $prj_cfg[ 'extra' ][ 'clevercanyon' ][ '&' ][ 'php_scoper' ][ 'cfg' ] ?? [];
 	$cfg     = array_merge( $cfg, $prj_cfg, [
 		'exclude-constants' => array_merge( $cfg[ 'exclude-constants' ], $prj_cfg[ 'exclude-constants' ] ?? [] ),
 		'exclude-classes'   => array_merge( $cfg[ 'exclude-classes' ], $prj_cfg[ 'exclude-classes' ] ?? [] ),
