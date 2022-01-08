@@ -79,11 +79,7 @@ if ( ! getenv( 'COMPOSER_DEV_MODE' ) ) {
  *
  * @since 2021-12-15
  */
-if ( is_dir( dirname( __FILE__, 4 ) . '/vendor' ) ) {
-	$project_dir = require dirname( __FILE__, 4 ) . '/vendor/clevercanyon/php-js-utilities/dev/toolchain/composer/.cli-project-dir.php';
-} else { // Not root. We're already inside a vendor directory.
-	$project_dir = require dirname( __FILE__, 7 ) . '/vendor/clevercanyon/php-js-utilities/dev/toolchain/composer/.cli-project-dir.php';
-}
+$project_dir = require __DIR__ . '/.cli-project-dir.php';
 
 /**
  * Requires autoloader.

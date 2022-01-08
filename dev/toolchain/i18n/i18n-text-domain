@@ -69,7 +69,7 @@ if ( 'cli' !== PHP_SAPI ) {
  *
  * @since 2021-12-15
  */
-$project_dir = require dirname( __FILE__, 4 ) . '/vendor/clevercanyon/php-js-utilities/dev/toolchain/composer/.cli-project-dir.php';
+$project_dir = require dirname( __FILE__, 2 ) . '/composer/.cli-project-dir.php';
 
 /**
  * Requires autoloader.
