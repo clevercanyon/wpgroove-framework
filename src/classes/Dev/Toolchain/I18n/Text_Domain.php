@@ -70,31 +70,34 @@ class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 	 * I18n functions.
 	 *
 	 * @since 2021-12-15
+	 *
+	 * @see   https://o5p.me/0IHrSW
 	 */
 	protected const I18N_FUNCTIONS = [
+		// Basic functions.
 		'__',
-		'__ngettext_noop',
-		'__ngettext',
-		'_',
-		'_c',
 		'_e',
-		'_ex',
-		'_n_js',
-		'_n_noop',
-		'_n',
-		'_nc',
-		'_nx_js',
-		'_nx_noop',
-		'_nx',
 		'_x',
-		'comments_number_link',
-		'esc_attr__',
-		'esc_attr_e',
-		'esc_attr_x',
+		'_ex',
+		'_n',
+		'_nx',
+		'_n_noop',
+		'_nx_noop',
+		'translate_nooped_plural',
+
+		// Translate + escape functions.
 		'esc_html__',
 		'esc_html_e',
 		'esc_html_x',
-		'translate_nooped_plural',
+		'esc_attr__',
+		'esc_attr_e',
+		'esc_attr_x',
+
+		// Deprecated functions.
+		'_c',
+		'_nc',
+		'__ngettext',
+		'__ngettext_noop',
 	];
 
 	/**
@@ -183,7 +186,7 @@ class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 	 * @return string Modified PHP file contents.
 	 */
 	protected function process_string( string $text_domain, string $str ) : string {
-		return $this->process_tokens( $text_domain, token_get_all( $str ) );
+		return $this->process_tokens( $text_domain, token_get_all( U\Str::normalize_eols( $str ) ) );
 	}
 
 	/**
@@ -197,7 +200,7 @@ class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 	 * @return string Modified PHP file contents (tokens converted to string).
 	 */
 	protected function process_tokens( string $text_domain, array $tokens ) : string {
-		$parens_balance             = 0;
+		$round_brackets_balance     = 0;
 		$in_i18n_function           = false;
 		$i18n_function_args_started = false;
 		$found_i18n_text_domain     = false;
@@ -208,9 +211,11 @@ class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 		foreach ( $tokens as $_i => $_token ) {
 			if ( is_array( $_token ) ) {
 				[ $_token_type, $_token ] = $_token;
-
-				if ( T_STRING === $_token_type && in_array( $_token, $this::I18N_FUNCTIONS, true ) ) {
-					$parens_balance             = 0;
+				if (
+					T_STRING === $_token_type
+					&& in_array( mb_strtolower( $_token ), $this::I18N_FUNCTIONS, true )
+				) {
+					$round_brackets_balance     = 0;
 					$in_i18n_function           = true;
 					$i18n_function_args_started = false;
 					$found_i18n_text_domain     = false;
@@ -223,21 +228,24 @@ class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 					}
 				}
 			} elseif ( '(' === $_token ) {
-				++$parens_balance;
-				$i18n_function_args_started = true;
+				++$round_brackets_balance;
+				$i18n_function_args_started = $in_i18n_function && 1 === $round_brackets_balance;
 
 			} elseif ( ')' === $_token ) {
-				--$parens_balance;
+				--$round_brackets_balance;
 
-				if ( $in_i18n_function && 0 === $parens_balance ) {
+				if ( $in_i18n_function && 0 === $round_brackets_balance ) {
 					if ( ! $found_i18n_text_domain ) {
 						$_token = ', ' . "'" . $text_domain . "'";
-
-						if ( T_WHITESPACE === $tokens[ $_i - 1 ][ 0 ] ) {
-							$_token                 .= ' ';
+						if (
+							isset( $tokens[ $_i - 1 ] )
+							&& is_array( $tokens[ $_i - 1 ] )
+							&& T_WHITESPACE === $tokens[ $_i - 1 ][ 0 ]
+						) {
 							$modified_file_contents = trim( $modified_file_contents );
+							$_token                 .= ' '; // Mimic adherence to coding standards.
 						}
-						$_token .= ')';
+						$_token .= ')'; // Close bracket now.
 					}
 					$in_i18n_function           = false;
 					$i18n_function_args_started = false;

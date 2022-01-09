@@ -467,12 +467,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/php-scoper.git",
-                "reference": "2b31dadd1f9af504e4334f4a04f9fe720e8aa6e3"
+                "reference": "f38f22665f55e09ebf023e2849507bc323b0777f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/php-scoper/zipball/2b31dadd1f9af504e4334f4a04f9fe720e8aa6e3",
-                "reference": "2b31dadd1f9af504e4334f4a04f9fe720e8aa6e3",
+                "url": "https://api.github.com/repos/clevercanyon/php-scoper/zipball/f38f22665f55e09ebf023e2849507bc323b0777f",
+                "reference": "f38f22665f55e09ebf023e2849507bc323b0777f",
                 "shasum": ""
             },
             "require": {
@@ -538,7 +538,7 @@
             ],
             "description": "Prefixes all PHP namespaces in a file or directory.",
             "support": {
-                "source": "https://github.com/clevercanyon/php-scoper/tree/fork"
+                "source": "https://github.com/clevercanyon/php-scoper/tree/1.0.0"
             },
             "funding": [
                 {
@@ -546,7 +546,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-08T19:04:02+00:00"
+            "time": "2022-01-03T09:49:41+00:00"
         },
         {
             "name": "clevercanyon/wpgroove-framework-dev",

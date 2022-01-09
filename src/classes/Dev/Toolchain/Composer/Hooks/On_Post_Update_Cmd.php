@@ -345,6 +345,9 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			throw new Exception( 'Failed to run `composer exec -- php-scoper add-prefix --config ' . U\Dir::join( $plugin_svn_comp_dir, '/.scoper.cfg.php' ) . ' --prefix ' . ucfirst( $this->project->name_hash ) . ' --no-interaction --force --stop-on-failure --working-dir ' . $plugin_svn_comp_dir . ' --output-dir ' . $plugin_svn_distro_dir . ' ' . $plugin_svn_comp_dir . '` from project directory.' );
 		}
 
+		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper-cleanup', 'fix-comments', '--dir', $plugin_svn_distro_dir ], $this->project->dir, false ) ) {
+			throw new Exception( 'Failed to run `composer exec -- php-scoper-cleanup fix-comments --dir ' . $plugin_svn_distro_dir . '` from project directory.' );
+		}
 		if ( 0 !== U\CLI::run( [ 'composer', 'dump-autoload', '--no-dev', '--no-scripts', '--no-plugins', '--optimize', '--classmap-authoritative' ], U\Dir::join( $plugin_svn_distro_dir, '/trunk' ), false ) ) {
 			throw new Exception( 'Failed to run `composer dump-autoload --no-dev --no-scripts --no-plugins --optimize --classmap-authoritative` from ./._x/svn-distro/trunk directory.' );
 		}
@@ -410,6 +413,9 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			throw new Exception( 'Failed to run `composer exec -- php-scoper add-prefix --config ' . U\Dir::join( $theme_svn_comp_dir, '/.scoper.cfg.php' ) . ' --prefix ' . ucfirst( $this->project->name_hash ) . ' --no-interaction --force --stop-on-failure --working-dir ' . $theme_svn_comp_dir . ' --output-dir ' . $theme_svn_distro_dir . ' ' . $theme_svn_comp_dir . '` from project directory.' );
 		}
 
+		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper-cleanup', 'fix-comments', '--dir', $theme_svn_distro_dir ], $this->project->dir, false ) ) {
+			throw new Exception( 'Failed to run `composer exec -- php-scoper-cleanup fix-comments --dir ' . $theme_svn_distro_dir . '` from project directory.' );
+		}
 		if ( 0 !== U\CLI::run( [ 'composer', 'dump-autoload', '--no-dev', '--no-scripts', '--no-plugins', '--optimize', '--classmap-authoritative' ], U\Dir::join( $theme_svn_distro_dir, '/trunk' ), false ) ) {
 			throw new Exception( 'Failed to run `composer dump-autoload --no-dev --no-scripts --no-plugins --optimize --classmap-authoritative` from ./._x/svn-distro/trunk directory.' );
 		}
