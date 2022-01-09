@@ -116,10 +116,9 @@ class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 				'description' => 'Adds text domain to PHP files in a given directory. See ' . __CLASS__ . '::add()',
 				'options'     => [
 					'dir'         => [
-						'optional'    => true,
+						'required'    => true,
 						'description' => 'Directory path.',
 						'validator'   => fn( $value ) => is_dir( $value ),
-						'default'     => getcwd(),
 					],
 					'text-domain' => [
 						'required'    => true,
