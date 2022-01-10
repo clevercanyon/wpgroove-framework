@@ -118,12 +118,13 @@ class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 					'dir'         => [
 						'required'    => true,
 						'description' => 'Directory path.',
-						'validator'   => fn( $value ) => is_dir( $value ),
+						'validator'   => fn( $value ) => $value && is_string( $value ) && is_dir( $value )
+							&& preg_match( '/\/\._[^\/]*\//u', U\Fs::normalize( $value ) ),
 					],
 					'text-domain' => [
 						'required'    => true,
-						'description' => 'Text domain.',
-						'validator'   => fn( $value ) => '' !== $value,
+						'description' => 'Text domain; e.g., `wpgroove-my-plugin`.',
+						'validator'   => fn( $value ) => $value && is_string( $value ) && U\Str::is_slug( $value ),
 					],
 				],
 			],
@@ -138,9 +139,11 @@ class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 	 */
 	protected function add() : void {
 		try {
-			$dir                = $this->get_option( 'dir' );
-			$text_domain        = $this->get_option( 'text-domain' );
-			$php_files_iterator = U\Dir::iterator( $dir, '.+\.php$' );
+			$dir         = $this->get_option( 'dir' );
+			$text_domain = $this->get_option( 'text-domain' );
+
+			$regexp             = U\Fs::gitignore_regexp_lookahead( 'negative', '.+\.php$', [ 'except:vendor/' => 'clevercanyon' ] );
+			$php_files_iterator = U\Dir::iterator( $dir, $regexp );
 
 			foreach ( $php_files_iterator as $_php_file ) {
 				$this->process_file( $text_domain, $_php_file->getPathname() );

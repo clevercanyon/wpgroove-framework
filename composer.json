@@ -20,9 +20,6 @@
 			"composer/package-versions-deprecated"           : true
 		}
 	},
-	"bin"               : [
-		"./dev/toolchain/i18n/i18n-text-domain"
-	],
 	"require"           : {
 		"clevercanyon/php-js-utilities" : "dev-main"
 	},

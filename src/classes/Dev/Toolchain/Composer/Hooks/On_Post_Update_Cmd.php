@@ -102,7 +102,8 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 					'project-dir' => [
 						'optional'    => true,
 						'description' => 'Project directory path.',
-						'validator'   => fn( $value ) => is_dir( $value ),
+						'validator'   => fn( $value ) => $value && is_string( $value ) && is_dir( $value )
+							&& is_file( U\Dir::join( $value, '/composer.json' ) ),
 						'default'     => getcwd(),
 					],
 				],
@@ -121,22 +122,15 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			$this->project = new Project(
 				$this->get_option( 'project-dir' )
 			);
-			$this->maybe_run_wp_project_sub_composer_updates();
-
-			$this->maybe_symlink_wp_plugin_locally();
-			$this->maybe_symlink_wp_theme_locally();
+			$this->maybe_run_wp_app_composer_updates();
+			$this->maybe_symlink_wp_app_locally();
 
 			$this->maybe_sync_wp_plugin_headers();
 			$this->maybe_sync_wp_theme_headers();
 
-			$this->maybe_compile_wp_plugin_svn_repo();
-			$this->maybe_compile_wp_theme_svn_repo();
-
-			$this->maybe_compile_wp_plugin_zip();
-			$this->maybe_compile_wp_theme_zip();
-
-			$this->maybe_s3_upload_wp_plugin_zip();
-			$this->maybe_s3_upload_wp_theme_zip();
+			$this->maybe_compile_wp_app_svn_repo();
+			$this->maybe_compile_wp_app_zip();
+			$this->maybe_s3_upload_wp_app_zip();
 
 		} catch ( \Throwable $throwable ) {
 			U\CLI::error( $throwable->getMessage() );
@@ -146,11 +140,14 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	}
 
 	/**
-	 * Maybe run WordPress project sub-Composer updates.
+	 * Maybe run WordPress app’s composer updates.
 	 *
-	 * @since 2021-12-15
+	 * @since        2021-12-15
+	 *
+	 * @throws Exception On any failure.
+	 * @noinspection PhpDocRedundantThrowsInspection
 	 */
-	protected function maybe_run_wp_project_sub_composer_updates() : void {
+	protected function maybe_run_wp_app_composer_updates() : void {
 		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
@@ -160,58 +157,41 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	}
 
 	/**
-	 * Maybe symlink WordPress plugin locally.
+	 * Maybe symlink WordPress app locally.
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception Whenever any failure occurs.
+	 * @throws Exception On any failure.
 	 */
-	protected function maybe_symlink_wp_plugin_locally() : void {
-		if ( ! $this->project->is_wp_plugin() ) {
+	protected function maybe_symlink_wp_app_locally() : void {
+		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
+		}
+		if ( $this->project->is_wp_plugin() ) {
+			$app = $this->project->wp_plugin_data();
+		} elseif ( $this->project->is_wp_theme() ) {
+			$app = $this->project->wp_theme_data();
+		} else {
+			throw new Exception( 'Unknown WordPress app type.' );
 		}
 		if ( ! $local_wp_public_html_dir = $this->project->local_wp_public_html_dir() ) {
 			return; // Not possible.
 		}
-		$plugin           = $this->project->wp_plugin_data();
-		$local_plugin_dir = U\Dir::join( $local_wp_public_html_dir, '/wp-content/plugins/' . $plugin->slug );
-
-		if ( U\Fs::path_exists( $local_plugin_dir ) ) {
+		if ( 'plugin' === $app->type ) {
+			$local_dir = U\Dir::join( $local_wp_public_html_dir, '/wp-content/plugins/' . $app->slug );
+		} elseif ( 'theme' === $app->type ) {
+			$local_dir = U\Dir::join( $local_wp_public_html_dir, '/wp-content/themes/' . $app->slug );
+		} else {
+			throw new Exception( 'Unknown WordPress app type.' );
+		}
+		if ( U\Fs::path_exists( $local_dir ) ) {
 			return; // Do not overwrite.
 		}
-		if ( ! is_writable( U\Dir::name( $local_plugin_dir ) ) ) {
-			throw new Exception( 'Failed to symlink local WordPress plugin directory. Directory not writable: ' . U\Dir::name( $local_plugin_dir ) );
+		if ( ! is_writable( U\Dir::name( $local_dir ) ) ) {
+			throw new Exception( 'Local WordPress symlink failure. Directory not writable: `' . U\Dir::name( $local_dir ) . '`.' );
 		}
-		if ( ! symlink( $plugin->dir, $local_plugin_dir ) ) {
-			throw new Exception( 'Failed to symlink local WordPress plugin directory: ' . $local_plugin_dir );
-		}
-	}
-
-	/**
-	 * Maybe symlink WordPress theme locally.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @throws Exception Whenever any failure occurs.
-	 */
-	protected function maybe_symlink_wp_theme_locally() : void {
-		if ( ! $this->project->is_wp_theme() ) {
-			return; // Not applicable.
-		}
-		if ( ! $local_wp_public_html_dir = $this->project->local_wp_public_html_dir() ) {
-			return; // Not possible.
-		}
-		$theme           = $this->project->wp_theme_data();
-		$local_theme_dir = U\Dir::join( $local_wp_public_html_dir, '/wp-content/themes/' . $theme->slug );
-
-		if ( U\Fs::path_exists( $local_theme_dir ) ) {
-			return; // Do not overwrite.
-		}
-		if ( ! is_writable( U\Dir::name( $local_theme_dir ) ) ) {
-			throw new Exception( 'Failed to symlink local WordPress theme directory. Directory not writable: ' . U\Dir::name( $local_theme_dir ) );
-		}
-		if ( ! symlink( $theme->dir, $local_theme_dir ) ) {
-			throw new Exception( 'Failed to symlink local WordPress theme directory: ' . $local_theme_dir );
+		if ( ! symlink( $app->dir, $local_dir ) ) {
+			throw new Exception( 'Unexpected local WordPress symlink failure: `' . $local_dir . '`.' );
 		}
 	}
 
@@ -220,7 +200,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception Whenever any failure occurs.
+	 * @throws Exception On any failure.
 	 */
 	protected function maybe_sync_wp_plugin_headers() : void {
 		if ( ! $this->project->is_wp_plugin() ) {
@@ -258,7 +238,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception Whenever any failure occurs.
+	 * @throws Exception On any failure.
 	 */
 	protected function maybe_sync_wp_theme_headers() : void {
 		if ( ! $this->project->is_wp_theme() ) {
@@ -306,248 +286,221 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	}
 
 	/**
-	 * Maybe compile WordPress plugin's SVN repo.
+	 * Maybe compile WordPress app’s SVN repo.
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception Whenever any failure occurs.
+	 * @throws Exception On any failure.
+	 *
+	 * @note  Regarding use of `--no-plugins` in Composer calls below.
+	 *       {@see https://github.com/humbug/php-scoper#composer-plugins}.
 	 */
-	protected function maybe_compile_wp_plugin_svn_repo() : void {
-		if ( ! $this->project->is_wp_plugin() ) {
+	protected function maybe_compile_wp_app_svn_repo() : void {
+		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
-		$plugin = $this->project->wp_plugin_data();
+		if ( $this->project->is_wp_plugin() ) {
+			$app = $this->project->wp_plugin_data();
+		} elseif ( $this->project->is_wp_theme() ) {
+			$app = $this->project->wp_theme_data();
+		} else {
+			throw new Exception( 'Unknown WordPress app type.' );
+		}
+		$comp_dir_copy_config  = $this->project->comp_dir_copy_config();
+		$comp_dir_prune_config = $this->project->comp_dir_prune_config();
 
-		$comp_dir_copy_config    = $this->project->comp_dir_copy_config();
-		$distro_dir_prune_config = $this->project->distro_dir_prune_config();
+		$svn_comp_dir   = U\Dir::join( $this->project->dir, '/._x/svn-comp' );
+		$svn_distro_dir = U\Dir::join( $this->project->dir, '/._x/svn-distro' );
+		$svn_repo_dir   = U\Dir::join( $this->project->dir, '/._x/svn-repo' );
 
-		$plugin_svn_comp_dir   = U\Dir::join( $this->project->dir, '/._x/svn-comp' );
-		$plugin_svn_distro_dir = U\Dir::join( $this->project->dir, '/._x/svn-distro' );
-		$plugin_svn_repo_dir   = U\Dir::join( $this->project->dir, '/._x/svn-repo' );
+		// Copies project directory into `._x/svn-comp`.
+		// This copy ignores everything in `.gitignore`, and nothing else.
+		// For further details {@see Project::comp_dir_copy_config()}.
 
-		// Regarding use of `--no-plugins` in Composer calls below.
-		// {@see https://github.com/humbug/php-scoper#composer-plugins}.
+		if ( ! U\Fs::copy(
+			$this->project->dir,
+			$svn_comp_dir,
+			$comp_dir_copy_config[ 'ignore' ],
+			$comp_dir_copy_config[ 'exceptions' ]
+		) ) {
+			throw new Exception( 'Failed to create `./._x/svn-comp`.' );
+		}
+		// Installs composer dependencies in `._x/svn-comp/trunk`.
+		// We didn't ignore `composer.json` when copying, so it's available.
+		// The autoloader is optimized here, as we are compiling for production.
 
-		if ( ! U\Fs::copy( $this->project->dir, $plugin_svn_comp_dir, $comp_dir_copy_config[ 'ignore' ], $comp_dir_copy_config[ 'exceptions' ] ) ) {
-			throw new Exception( 'Failed to create project /._x/svn-comp directory.' );
-		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'install', '--no-dev', '--no-scripts', '--no-plugins', '--optimize-autoloader', '--classmap-authoritative' ], U\Dir::join( $plugin_svn_comp_dir, '/trunk' ), false ) ) {
-			throw new Exception( 'Failed to run `composer install --no-dev --no-scripts --no-plugins --optimize-autoloader --classmap-authoritative` from ./._x/svn-comp/trunk directory.' );
-		}
+		U\CLI::run( [
+			[ 'composer', 'install' ],
+			[ '--no-dev', '--no-scripts', '--no-plugins' ],
+			[ '--optimize-autoloader', '--classmap-authoritative' ],
+		], U\Dir::join( $svn_comp_dir, '/trunk' ) );
 
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'i18n-text-domain', 'add', '--text-domain', $plugin->headers->text_domain, '--dir', $plugin_svn_comp_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- i18n-text-domain add --text-domain ' . $plugin->headers->text_domain . ' --dir ' . $plugin_svn_comp_dir . '` from project directory.' );
-		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'i18n-text-domain', 'add', '--text-domain', $plugin->headers->text_domain, '--dir', U\Dir::join( $plugin_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- i18n-text-domain add --text-domain ' . $plugin->headers->text_domain . ' --dir ' . U\Dir::join( $plugin_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) . ' from project directory.' );
-		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper', 'add-prefix', '--config', U\Dir::join( $plugin_svn_comp_dir, '/.scoper.cfg.php' ), '--prefix', ucfirst( $this->project->name_hash ), '--no-interaction', '--force', '--stop-on-failure', '--working-dir', $plugin_svn_comp_dir, '--output-dir', $plugin_svn_distro_dir, $plugin_svn_comp_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- php-scoper add-prefix --config ' . U\Dir::join( $plugin_svn_comp_dir, '/.scoper.cfg.php' ) . ' --prefix ' . ucfirst( $this->project->name_hash ) . ' --no-interaction --force --stop-on-failure --working-dir ' . $plugin_svn_comp_dir . ' --output-dir ' . $plugin_svn_distro_dir . ' ' . $plugin_svn_comp_dir . '` from project directory.' );
-		}
+		// Prunes the `./._x/svn-comp` directory, which speeds up remaining tasks.
+		// This prunes everything in `.gitignore`, except: `vendor`, `composer.json`.
+		// It also prunes a bunch of other things; {@see Project::comp_dir_prune_config()}.
 
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper-cleanup', 'fix-comments', '--dir', $plugin_svn_distro_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- php-scoper-cleanup fix-comments --dir ' . $plugin_svn_distro_dir . '` from project directory.' );
+		if ( ! U\Dir::prune(
+			$svn_comp_dir,
+			$comp_dir_prune_config[ 'prune' ],
+			array_merge( $comp_dir_prune_config[ 'exceptions' ], [
+				'/(?:^|.+?\/)composer\.json$/ui',
+			] ),
+		) ) {
+			throw new Exception( 'Failed to prune `./._x/svn-comp`.' );
 		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper-cleanup', 'fix-formatting', '--project-dir', $this->project->dir, '--dir', $plugin_svn_distro_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- php-scoper-cleanup fix-formatting --project-dir ' . $this->project->dir . ' --dir ' . $plugin_svn_distro_dir . '` from project directory.' );
-		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'dump-autoload', '--no-dev', '--no-scripts', '--no-plugins', '--optimize', '--classmap-authoritative' ], U\Dir::join( $plugin_svn_distro_dir, '/trunk' ), false ) ) {
-			throw new Exception( 'Failed to run `composer dump-autoload --no-dev --no-scripts --no-plugins --optimize --classmap-authoritative` from ./._x/svn-distro/trunk directory.' );
-		}
-		if ( false === ( $_svn_distro_dir_trunk_plugin_file_contents = file_get_contents( U\Dir::join( $plugin_svn_distro_dir, '/trunk/plugin.php' ) ) ) ) {
-			throw new Exception( 'Failed to read contents of ./._x/svn-distro/trunk/plugin.php.' );
-		}
-		if ( false === file_put_contents( U\Dir::join( $plugin_svn_distro_dir, '/trunk/plugin.php' ), str_replace( '/vendor/autoload.php', '/vendor/scoper-autoload.php', $_svn_distro_dir_trunk_plugin_file_contents ) ) ) {
-			throw new Exception( 'Failed to update `/vendor/autoload.php` to `/vendor/scoper-autoload.php` in ./._x/svn-distro/trunk/plugin.php.' );
-		}
+		// Adds text domain to everything in `._x/svn-comp/trunk`.
+		// This tool ignores everything in `.gitignore`, except `vendor/clevercanyon/*`.
+		// Therefore, we are adding the text domain to other clevercanyon packages, including the WP Groove framework.
 
-		if ( ! U\Dir::prune( $plugin_svn_distro_dir, $distro_dir_prune_config[ 'prune' ], $distro_dir_prune_config[ 'exceptions' ] ) ) {
-			throw new Exception( 'Failed to prune project ./._x/svn-distro directory.' );
-		}
-		if ( ! U\Fs::copy( U\Dir::join( $plugin_svn_distro_dir, '/*' ), $plugin_svn_repo_dir ) ) {
-			throw new Exception( 'Failed to copy contents of pruned ./._x/svn-distro directory into ./._x/svn-repo directory.' );
-		}
+		U\CLI::run( [
+			[ U\Dir::join( $this->project->dir, '/vendor/clevercanyon/wpgroove-framework/dev/toolchain/i18n/text-domain' ), 'add' ],
+			[ '--text-domain', $app->headers->text_domain ],
+			[ '--dir', U\Dir::join( $svn_comp_dir, '/trunk' ) ],
+		] );
+		// Runs PHP Scoper on full `._x/svn-comp` directory; outputting to `._x/svn-distro`.
+		// PHP Scoper ignores files based on Finders in the `.scoper.cfg.php` file.
+		// We're not using that functionality, though, as we have already pruned the directory.
 
-		if ( ! U\Fs::copy( U\Dir::join( $plugin_svn_distro_dir, '/trunk' ), U\Dir::join( $plugin_svn_distro_dir, '/tags/' . $plugin->headers->version ) ) ) {
-			throw new Exception( 'Failed to copy ./._x/svn-distro/trunk to ./._x/svn-distro/tags/' . $plugin->headers->version . ' directory.' );
-		}
-		if ( ! U\Fs::copy( U\Dir::join( $plugin_svn_distro_dir, '/tags/' . $plugin->headers->version ), U\Dir::join( $plugin_svn_repo_dir, '/tags/' . $plugin->headers->version ) ) ) {
-			throw new Exception( 'Failed to copy ./._x/svn-distro/tags/' . $plugin->headers->version . ' to ./._x/svn-repo/tags/' . $plugin->headers->version . ' directory.' );
-		}
-	}
+		U\CLI::run( [
+			[ U\Dir::join( $this->project->dir, '/vendor/clevercanyon/php-js-utilities/dev/toolchain/php-scoper/scoper' ), 'scope' ],
+			[ '--project-dir', $this->project->dir ],
+			[ '--prefix', ucfirst( $this->project->name_hash ) ],
+			[ '--dir', $svn_comp_dir ],
+			[ '--output-dir', $svn_distro_dir ],
+			[ '--output-project-dir', U\Dir::join( $svn_distro_dir, '/trunk' ) ],
+			[ '--output-project-dir-entry-file', U\Dir::join( $svn_distro_dir, '/trunk/' . basename( $app->file ) ) ],
+		] );
+		// Prunes the `./._x/svn-distro` directory now.
+		// This prunes everything in `.gitignore`, except `vendor`.This time, including `composer.json` files.
+		// It also prunes a bunch of other things; {@see Project::comp_dir_prune_config()}.
 
-	/**
-	 * Maybe compile WordPress theme's SVN repo.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @throws Exception Whenever any failure occurs.
-	 */
-	protected function maybe_compile_wp_theme_svn_repo() : void {
-		if ( ! $this->project->is_wp_theme() ) {
-			return; // Not applicable.
+		if ( ! U\Dir::prune(
+			$svn_distro_dir,
+			$comp_dir_prune_config[ 'prune' ],
+			$comp_dir_prune_config[ 'exceptions' ]
+		) ) {
+			throw new Exception( 'Failed to prune `./._x/svn-distro`.' );
 		}
-		$theme = $this->project->wp_theme_data();
+		// Copies contents of `./._x/svn-distro/*` into `./._x/svn-repo/` directory.
+		// This copy ignores nothing. Everything is copied without exception.
 
-		$comp_dir_copy_config    = $this->project->comp_dir_copy_config();
-		$distro_dir_prune_config = $this->project->distro_dir_prune_config();
-
-		$theme_svn_comp_dir   = U\Dir::join( $this->project->dir, '/._x/svn-comp' );
-		$theme_svn_distro_dir = U\Dir::join( $this->project->dir, '/._x/svn-distro' );
-		$theme_svn_repo_dir   = U\Dir::join( $this->project->dir, '/._x/svn-repo' );
-
-		// Regarding use of `--no-plugins` in Composer calls below.
-		// {@see https://github.com/humbug/php-scoper#composer-plugins}.
-
-		if ( ! U\Fs::copy( $this->project->dir, $theme_svn_comp_dir, $comp_dir_copy_config[ 'ignore' ], $comp_dir_copy_config[ 'exceptions' ] ) ) {
-			throw new Exception( 'Failed to create project /._x/svn-comp directory.' );
-		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'install', '--no-dev', '--no-scripts', '--no-plugins', '--optimize-autoloader', '--classmap-authoritative' ], U\Dir::join( $theme_svn_comp_dir, '/trunk' ), false ) ) {
-			throw new Exception( 'Failed to run `composer install --no-dev --no-scripts --no-plugins --optimize-autoloader --classmap-authoritative` from ./._x/svn-comp/trunk directory.' );
-		}
-
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'i18n-text-domain', 'add', '--text-domain', $theme->headers->text_domain, '--dir', $theme_svn_comp_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- i18n-text-domain add --text-domain ' . $theme->headers->text_domain . ' --dir ' . $theme_svn_comp_dir . '` from project directory.' );
-		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'i18n-text-domain', 'add', '--text-domain', $theme->headers->text_domain, '--dir', U\Dir::join( $theme_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- i18n-text-domain add --text-domain ' . $theme->headers->text_domain . ' --dir ' . U\Dir::join( $theme_svn_comp_dir, '/trunk/vendor/clevercanyon/wpgroove-framework' ) . ' from project directory.' );
-		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper', 'add-prefix', '--config', U\Dir::join( $theme_svn_comp_dir, '/.scoper.cfg.php' ), '--prefix', ucfirst( $this->project->name_hash ), '--no-interaction', '--force', '--stop-on-failure', '--working-dir', $theme_svn_comp_dir, '--output-dir', $theme_svn_distro_dir, $theme_svn_comp_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- php-scoper add-prefix --config ' . U\Dir::join( $theme_svn_comp_dir, '/.scoper.cfg.php' ) . ' --prefix ' . ucfirst( $this->project->name_hash ) . ' --no-interaction --force --stop-on-failure --working-dir ' . $theme_svn_comp_dir . ' --output-dir ' . $theme_svn_distro_dir . ' ' . $theme_svn_comp_dir . '` from project directory.' );
-		}
-
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper-cleanup', 'fix-comments', '--dir', $theme_svn_distro_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- php-scoper-cleanup fix-comments --dir ' . $theme_svn_distro_dir . '` from project directory.' );
-		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'exec', '--', 'php-scoper-cleanup', 'fix-formatting', '--project-dir', $this->project->dir, '--dir', $theme_svn_distro_dir ], $this->project->dir, false ) ) {
-			throw new Exception( 'Failed to run `composer exec -- php-scoper-cleanup fix-formatting --project-dir ' . $this->project->dir . ' --dir ' . $theme_svn_distro_dir . '` from project directory.' );
-		}
-		if ( 0 !== U\CLI::run( [ 'composer', 'dump-autoload', '--no-dev', '--no-scripts', '--no-plugins', '--optimize', '--classmap-authoritative' ], U\Dir::join( $theme_svn_distro_dir, '/trunk' ), false ) ) {
-			throw new Exception( 'Failed to run `composer dump-autoload --no-dev --no-scripts --no-plugins --optimize --classmap-authoritative` from ./._x/svn-distro/trunk directory.' );
-		}
-		if ( false === ( $_svn_distro_dir_trunk_theme_file_contents = file_get_contents( U\Dir::join( $theme_svn_distro_dir, '/trunk/theme.php' ) ) ) ) {
-			throw new Exception( 'Failed to read contents of ./._x/svn-distro/trunk/theme.php.' );
-		}
-		if ( false === file_put_contents( U\Dir::join( $theme_svn_distro_dir, '/trunk/theme.php' ), str_replace( '/vendor/autoload.php', '/vendor/scoper-autoload.php', $_svn_distro_dir_trunk_theme_file_contents ) ) ) {
-			throw new Exception( 'Failed to update `/vendor/autoload.php` to `/vendor/scoper-autoload.php` in ./._x/svn-distro/trunk/theme.php.' );
-		}
-
-		if ( ! U\Dir::prune( $theme_svn_distro_dir, $distro_dir_prune_config[ 'prune' ], $distro_dir_prune_config[ 'exceptions' ] ) ) {
-			throw new Exception( 'Failed to prune project ./._x/svn-distro directory.' );
-		}
-		if ( ! U\Fs::copy( U\Dir::join( $theme_svn_distro_dir, '/*' ), $theme_svn_repo_dir ) ) {
-			throw new Exception( 'Failed to copy contents of pruned ./._x/svn-distro directory into ./._x/svn-repo directory.' );
-		}
-
-		if ( ! U\Fs::copy( U\Dir::join( $theme_svn_distro_dir, '/trunk' ), U\Dir::join( $theme_svn_distro_dir, '/tags/' . $theme->headers->version ) ) ) {
-			throw new Exception( 'Failed to copy ./._x/svn-distro/trunk to ./._x/svn-distro/tags/' . $theme->headers->version . ' directory.' );
-		}
-		if ( ! U\Fs::copy( U\Dir::join( $theme_svn_distro_dir, '/tags/' . $theme->headers->version ), U\Dir::join( $theme_svn_repo_dir, '/tags/' . $theme->headers->version ) ) ) {
-			throw new Exception( 'Failed to copy ./._x/svn-distro/tags/' . $theme->headers->version . ' to ./._x/svn-repo/tags/' . $theme->headers->version . ' directory.' );
-		}
-	}
-
-	/**
-	 * Maybe compile WordPress plugin zip.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @throws Exception Whenever any failure occurs.
-	 */
-	protected function maybe_compile_wp_plugin_zip() : void {
-		if ( ! $this->project->is_wp_plugin() ) {
-			return; // Not applicable.
-		}
-		$plugin                  = $this->project->wp_plugin_data();
-		$plugin_svn_repo_tag_dir = U\Dir::join( $this->project->dir, '/._x/svn-repo/tags/' . $plugin->headers->version );
-
-		if ( ! is_dir( $plugin_svn_repo_tag_dir ) ) {
+		if ( ! U\Fs::copy(
+			U\Dir::join( $svn_distro_dir, '/*' ),
+			$svn_repo_dir
+		) ) {
 			throw new Exception(
-				'Failed to zip ./._x/svn-repo/tags/' . $plugin->headers->version . ' directory.' .
-				' Directory is missing: `' . $plugin_svn_repo_tag_dir . '`.'
+				'Failed to copy contents of `./._x/svn-distro/*`' .
+				' into `./._x/svn-repo`.'
 			);
 		}
-		$plugin_zip_basename = $plugin->slug . '-v' . $plugin->headers->version . '.zip';
-		$plugin_zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $plugin_zip_basename );
+		// Copies `./._x/svn-distro/trunk` into `./._x/svn-distro/tags/[version]` directory.
+		// This copy ignores nothing. Everything is copied without exception.
 
-		if ( ! U\Fs::zip( $plugin_svn_repo_tag_dir . '->' . $plugin->slug, $plugin_zip_path ) ) {
+		if ( ! U\Fs::copy(
+			U\Dir::join( $svn_distro_dir, '/trunk' ),
+			U\Dir::join( $svn_distro_dir, '/tags/' . $app->headers->version )
+		) ) {
 			throw new Exception(
-				'Failed to zip ./._x/svn-repo/tags/' . $plugin->headers->version . ' directory.' .
-				' From: `' . $plugin_svn_repo_tag_dir . '->' . $plugin->slug . '`, to: `' . $plugin_zip_path . '`.'
+				'Failed to copy `./._x/svn-distro/trunk`' .
+				' into `./._x/svn-distro/tags/' . $app->headers->version . '`.'
+			);
+		}
+		// Copies `./._x/svn-distro/tags[version]` into `./._x/svn-repo/tags/[version]`.
+		// This copy ignores nothing. Everything is copied without exception.
+
+		if ( ! U\Fs::copy(
+			U\Dir::join( $svn_distro_dir, '/tags/' . $app->headers->version ),
+			U\Dir::join( $svn_repo_dir, '/tags/' . $app->headers->version )
+		) ) {
+			throw new Exception(
+				'Failed to copy `./._x/svn-distro/tags/' . $app->headers->version . '`' .
+				' into `./._x/svn-repo/tags/' . $app->headers->version . '`.'
 			);
 		}
 	}
 
 	/**
-	 * Maybe compile WordPress theme zip.
+	 * Maybe compile WordPress app’s zip file.
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception Whenever any failure occurs.
+	 * @throws Exception On any failure.
 	 */
-	protected function maybe_compile_wp_theme_zip() : void {
-		if ( ! $this->project->is_wp_theme() ) {
+	protected function maybe_compile_wp_app_zip() : void {
+		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
-		$theme                  = $this->project->wp_theme_data();
-		$theme_svn_repo_tag_dir = U\Dir::join( $this->project->dir, '/._x/svn-repo/tags/' . $theme->headers->version );
+		if ( $this->project->is_wp_plugin() ) {
+			$app = $this->project->wp_plugin_data();
+		} elseif ( $this->project->is_wp_theme() ) {
+			$app = $this->project->wp_theme_data();
+		} else {
+			throw new Exception( 'Unknown WordPress app type.' );
+		}
+		$svn_repo_tag_dir = U\Dir::join( $this->project->dir, '/._x/svn-repo/tags/' . $app->headers->version );
 
-		if ( ! is_dir( $theme_svn_repo_tag_dir ) ) {
+		if ( ! is_dir( $svn_repo_tag_dir ) ) {
 			throw new Exception(
-				'Failed to zip ./._x/svn-repo/tags/' . $theme->headers->version . ' directory.' .
-				' Directory is missing: `' . $theme_svn_repo_tag_dir . '`.'
+				'Failed to zip `./._x/svn-repo/tags/' . $app->headers->version . '` directory.' .
+				' Directory is missing: `' . $svn_repo_tag_dir . '`.'
 			);
 		}
-		$theme_zip_basename = $theme->slug . '-v' . $theme->headers->version . '.zip';
-		$theme_zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $theme_zip_basename );
+		$zip_basename = $app->slug . '-v' . $app->headers->version . '.zip';
+		$zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_basename );
 
-		if ( ! U\Fs::zip( $theme_svn_repo_tag_dir . '->' . $theme->slug, $theme_zip_path ) ) {
+		if ( ! U\Fs::zip( $svn_repo_tag_dir . '->' . $app->slug, $zip_path ) ) {
 			throw new Exception(
-				'Failed to zip ./._x/svn-repo/tags/' . $theme->headers->version . ' directory.' .
-				' From: `' . $theme_svn_repo_tag_dir . '->' . $theme->slug . '`, to: `' . $theme_zip_path . '`.'
+				'Failed to zip `./._x/svn-repo/tags/' . $app->headers->version . '` directory.' .
+				' From: `' . $svn_repo_tag_dir . '->' . $app->slug . '`, to: `' . $zip_path . '`.'
 			);
 		}
 	}
 
 	/**
-	 * Maybe upload a plugin zip to AWS S3.
+	 * Maybe upload a WordPress app’s zip file to AWS S3.
 	 *
 	 * @since 2021-12-15
 	 *
 	 * @throws Exception On any failure.
 	 * @throws \Throwable On some failures.
 	 */
-	protected function maybe_s3_upload_wp_plugin_zip() : void {
-		if ( ! $this->project->is_wp_plugin() ) {
+	protected function maybe_s3_upload_wp_app_zip() : void {
+		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
-		$plugin              = $this->project->wp_plugin_data();
-		$plugin_zip_basename = $plugin->slug . '-v' . $plugin->headers->version . '.zip';
-		$plugin_zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $plugin_zip_basename );
-
-		if ( ! is_file( $plugin_zip_path ) ) {
-			throw new Exception( 'Missing zip file: `' . $plugin_zip_path . '`.' );
+		if ( $this->project->is_wp_plugin() ) {
+			$app = $this->project->wp_plugin_data();
+		} elseif ( $this->project->is_wp_theme() ) {
+			$app = $this->project->wp_theme_data();
+		} else {
+			throw new Exception( 'Unknown WordPress app type.' );
 		}
-		$plugin_s3_zip_hash           = $this->project->s3_hash_hmac_sha256( $plugin->unbranded_slug . $plugin->headers->version );
-		$plugin_s3_zip_file_subpath   = 'cdn/product/' . $plugin->unbranded_slug . '/zips/' . $plugin_s3_zip_hash . '/' . $plugin_zip_basename;
-		$plugin_s3_index_file_subpath = 'cdn/product/' . $plugin->unbranded_slug . '/data/index.json';
+		$zip_basename = $app->slug . '-v' . $app->headers->version . '.zip';
+		$zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_basename );
+
+		if ( ! is_file( $zip_path ) ) {
+			throw new Exception( 'Missing zip file: `' . $zip_path . '`.' );
+		}
+		$s3_zip_hash           = $this->project->s3_hash_hmac_sha256( $app->unbranded_slug . $app->headers->version );
+		$s3_zip_file_subpath   = 'cdn/product/' . $app->unbranded_slug . '/zips/' . $s3_zip_hash . '/' . $zip_basename;
+		$s3_index_file_subpath = 'cdn/product/' . $app->unbranded_slug . '/data/index.json';
 
 		$s3 = new S3Client( $this->project->s3_bucket_config() );
 
 		// Get index w/ tagged versions.
 
 		try {
-			$_s3r            = $s3->getObject( [
+			$_s3r     = $s3->getObject( [
 				'Bucket' => $this->project->s3_bucket(),
-				'Key'    => $plugin_s3_index_file_subpath,
+				'Key'    => $s3_index_file_subpath,
 			] );
-			$plugin_s3_index = U\Str::json_decode( (string) $_s3r->get( 'Body' ) );
+			$s3_index = U\Str::json_decode( (string) $_s3r->get( 'Body' ) );
 
-			if ( ! is_object( $plugin_s3_index ) || ! isset( $plugin_s3_index->versions->tags, $plugin_s3_index->versions->stable_tag ) ) {
-				throw new Exception( 'Unable to retrieve valid JSON data from: `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $plugin_s3_index_file_subpath ) . '`.' );
+			if ( ! is_object( $s3_index ) || ! isset( $s3_index->versions->tags, $s3_index->versions->stable_tag ) ) {
+				throw new Exception( 'Unable to retrieve valid JSON data from: `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_index_file_subpath ) . '`.' );
 			}
-			if ( ! is_object( $plugin_s3_index->versions->tags ) || ! is_string( $plugin_s3_index->versions->stable_tag ) ) {
-				throw new Exception( 'Unable to retrieve valid JSON data from: `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $plugin_s3_index_file_subpath ) . '`.' );
+			if ( ! is_object( $s3_index->versions->tags ) || ! is_string( $s3_index->versions->stable_tag ) ) {
+				throw new Exception( 'Unable to retrieve valid JSON data from: `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_index_file_subpath ) . '`.' );
 			}
 		} catch ( \Throwable $throwable ) {
 			if ( ! $throwable instanceof AwsException ) {
@@ -556,120 +509,35 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			if ( 'NoSuchKey' !== $throwable->getAwsErrorCode() ) {
 				throw $throwable; // Problem.
 			}
-			$plugin_s3_index = (object) [
+			$s3_index = (object) [
 				'versions' => (object) [
 					'tags'       => (object) [],
 					'stable_tag' => '',
 				],
 			]; // No index file yet, we'll create below.
 		}
-
-		// Upload zip file.
-		// Throws exception on failure, which we intentionally do not catch.
+		// Upload zip file. Throws exception on failure, which we intentionally do not catch.
 
 		$s3->putObject( [
-			'SourceFile' => $plugin_zip_path,
+			'SourceFile' => $zip_path,
 			'Bucket'     => $this->project->s3_bucket(),
-			'Key'        => $plugin_s3_zip_file_subpath,
+			'Key'        => $s3_zip_file_subpath,
 		] );
-
 		// Update index w/ tagged versions.
 		// Throws exception on failure, which we intentionally do not catch.
 
-		$plugin_s3_index->versions->tags = (array) $plugin_s3_index->versions->tags;
-		$plugin_s3_index->versions->tags = array_merge( $plugin_s3_index->versions->tags, [ $plugin->headers->version => time() ] );
+		$s3_index->versions->tags = (array) $s3_index->versions->tags;
+		$s3_index->versions->tags = array_merge( $s3_index->versions->tags, [ $app->headers->version => time() ] );
 
-		uksort( $plugin_s3_index->versions->tags, 'version_compare' ); // Example: <https://3v4l.org/QitGb>.
-		$plugin_s3_index->versions->tags = array_reverse( $plugin_s3_index->versions->tags );
+		uksort( $s3_index->versions->tags, 'version_compare' ); // Example: <https://3v4l.org/QitGb>.
+		$s3_index->versions->tags = array_reverse( $s3_index->versions->tags );
 
-		$plugin_s3_index->versions->stable_tag = $plugin->headers->stable_tag;
+		$s3_index->versions->stable_tag = $app->headers->stable_tag;
 
 		$s3->putObject( [
-			'Body'   => U\Str::json_encode( $plugin_s3_index ),
+			'Body'   => U\Str::json_encode( $s3_index ),
 			'Bucket' => $this->project->s3_bucket(),
-			'Key'    => $plugin_s3_index_file_subpath,
-		] );
-	}
-
-	/**
-	 * Maybe upload a theme zip to AWS S3.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @throws Exception Whenever any failure occurs.
-	 * @throws \Throwable On some failures.
-	 */
-	protected function maybe_s3_upload_wp_theme_zip() : void {
-		if ( ! $this->project->is_wp_theme() ) {
-			return; // Not applicable.
-		}
-		$theme              = $this->project->wp_theme_data();
-		$theme_zip_basename = $theme->slug . '-v' . $theme->headers->version . '.zip';
-		$theme_zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $theme_zip_basename );
-
-		if ( ! is_file( $theme_zip_path ) ) {
-			throw new Exception( 'Missing zip file: `' . $theme_zip_path . '`.' );
-		}
-		$theme_s3_zip_hash           = $this->project->s3_hash_hmac_sha256( $theme->unbranded_slug . $theme->headers->version );
-		$theme_s3_zip_file_subpath   = 'cdn/product/' . $theme->unbranded_slug . '/zips/' . $theme_s3_zip_hash . '/' . $theme_zip_basename;
-		$theme_s3_index_file_subpath = 'cdn/product/' . $theme->unbranded_slug . '/data/index.json';
-
-		$s3 = new S3Client( $this->project->s3_bucket_config() );
-
-		// Get index w/ tagged versions.
-
-		try {
-			$_s3r           = $s3->getObject( [
-				'Bucket' => $this->project->s3_bucket(),
-				'Key'    => $theme_s3_index_file_subpath,
-			] );
-			$theme_s3_index = U\Str::json_decode( (string) $_s3r->get( 'Body' ) );
-
-			if ( ! is_object( $theme_s3_index ) || ! isset( $theme_s3_index->versions->tags, $theme_s3_index->versions->stable_tag ) ) {
-				throw new Exception( 'Unable to retrieve valid JSON data from: `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $theme_s3_index_file_subpath ) . '`.' );
-			}
-			if ( ! is_object( $theme_s3_index->versions->tags ) || ! is_string( $theme_s3_index->versions->stable_tag ) ) {
-				throw new Exception( 'Unable to retrieve valid JSON data from: `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $theme_s3_index_file_subpath ) . '`.' );
-			}
-		} catch ( \Throwable $throwable ) {
-			if ( ! $throwable instanceof AwsException ) {
-				throw $throwable; // Problem.
-			}
-			if ( 'NoSuchKey' !== $throwable->getAwsErrorCode() ) {
-				throw $throwable; // Problem.
-			}
-			$theme_s3_index = (object) [
-				'versions' => (object) [
-					'tags'       => (object) [],
-					'stable_tag' => '',
-				],
-			]; // No index file yet, we'll create below.
-		}
-
-		// Upload zip file.
-		// Throws exception on failure, which we intentionally do not catch.
-
-		$s3->putObject( [
-			'SourceFile' => $theme_zip_path,
-			'Bucket'     => $this->project->s3_bucket(),
-			'Key'        => $theme_s3_zip_file_subpath,
-		] );
-
-		// Update index w/ tagged versions.
-		// Throws exception on failure, which we intentionally do not catch.
-
-		$theme_s3_index->versions->tags = (array) $theme_s3_index->versions->tags;
-		$theme_s3_index->versions->tags = array_merge( $theme_s3_index->versions->tags, [ $theme->headers->version => time() ] );
-
-		uksort( $theme_s3_index->versions->tags, 'version_compare' ); // Example: <https://3v4l.org/QitGb>.
-		$theme_s3_index->versions->tags = array_reverse( $theme_s3_index->versions->tags );
-
-		$theme_s3_index->versions->stable_tag = $theme->headers->stable_tag;
-
-		$s3->putObject( [
-			'Body'   => U\Str::json_encode( $theme_s3_index ),
-			'Bucket' => $this->project->s3_bucket(),
-			'Key'    => $theme_s3_index_file_subpath,
+			'Key'    => $s3_index_file_subpath,
 		] );
 	}
 }

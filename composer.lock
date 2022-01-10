@@ -60,12 +60,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/php-js-utilities.git",
-                "reference": "a52f2ae0877e440c248a2e557c07afa601336fff"
+                "reference": "a0d34a596422b8a8036f201293b2912deca6dafd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities/zipball/a52f2ae0877e440c248a2e557c07afa601336fff",
-                "reference": "a52f2ae0877e440c248a2e557c07afa601336fff",
+                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities/zipball/a0d34a596422b8a8036f201293b2912deca6dafd",
+                "reference": "a0d34a596422b8a8036f201293b2912deca6dafd",
                 "shasum": ""
             },
             "require": {
@@ -82,10 +82,6 @@
                 "ulrichsg/getopt-php": "^4.0"
             },
             "default-branch": true,
-            "bin": [
-                "./dev/toolchain/php-scoper/php-scoper-cleanup",
-                "./dev/toolchain/php-scoper/php-scoper-config-file"
-            ],
             "type": "library",
             "extra": {
                 "clevercanyon": {
@@ -146,7 +142,7 @@
                 "issues": "https://github.com/clevercanyon/php-js-utilities/issues",
                 "source": "https://github.com/clevercanyon/php-js-utilities/tree/main"
             },
-            "time": "2022-01-09T17:35:29+00:00"
+            "time": "2022-01-10T08:23:36+00:00"
         }
     ],
     "packages-dev": [
