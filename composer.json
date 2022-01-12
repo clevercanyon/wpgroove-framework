@@ -45,8 +45,17 @@
 		"clevercanyon" : {
 			"$extends-packages" : [ "clevercanyon/php-js-utilities" ],
 			"&"                 : {
+				"project"                 : {
+					"data" : {
+						"version"    : "1.0.0",
+						"stable_tag" : "1.0.0",
+						"layout"     : "distro-lib",
+						"name"       : "WP Groove: WordPress Framework"
+					}
+				},
 				"brand"                   : {
 					"data" : {
+						"name" : "WP Groove",
 						"slug" : "wpgroove"
 					},
 					"aws"  : {

@@ -50,7 +50,7 @@ abstract class AA6t_App extends A6t_Base {
 	 *
 	 * @since 2021-12-15
 	 */
-	use \Clever_Canyon\Utilities\OOP\Traits\I7e_Base\Magic\Readable_Members;
+	use \Clever_Canyon\Utilities\OOP\Traits\I7e_Base\Magic\Finals\Readable_Members;
 
 	/**
 	 * Brand info.
@@ -59,7 +59,7 @@ abstract class AA6t_App extends A6t_Base {
 	 *
 	 * @final Starting w/ PHP 8.1.0.
 	 */
-	protected const BRAND = [
+	private const BRAND = [
 		'name' => 'WP Groove',
 
 		'slug'        => 'wpgroove',
@@ -74,147 +74,147 @@ abstract class AA6t_App extends A6t_Base {
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $file;
+	private string $file;
 
 	/**
 	 * Plugin|Theme: absolute dir path.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $dir;
+	private string $dir;
 
 	/**
 	 * Plugin|Theme: URL to directory.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $url;
+	private string $url;
 
 	/**
 	 * Plugin: subpath (i.e., plugin basename).
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $subpath;
-
-	/**
-	 * Plugin|Theme: name (e.g., My App).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $name;
-
-	/**
-	 * Plugin|Theme: slug (e.g., wpgroove-my-app).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $slug;
-
-	/**
-	 * Plugin|Theme: slug prefix (e.g., wpgroove-my-app--).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $slug_prefix;
-
-	/**
-	 * Plugin|Theme: var (e.g., wpgroove_my_app).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $var;
-
-	/**
-	 * Plugin|Theme: var prefix (e.g., wpgroove_my_app__).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $var_prefix;
-
-	/**
-	 * Plugin|Theme: brand name (i.e., WP Groove).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_name;
-
-	/**
-	 * Plugin|Theme: brand slug (i.e., wpgroove).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_slug;
-
-	/**
-	 * Plugin|Theme: brand slug prefix (i.e., wpgroove-).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_slug_prefix;
-
-	/**
-	 * Plugin|Theme: brand var (i.e., wpgroove).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_var;
-
-	/**
-	 * Plugin|Theme: brand var prefix (i.e., wpgroove_).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_var_prefix;
-
-	/**
-	 * Plugin|Theme: unbranded slug (e.g., my-app).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $unbranded_slug;
-
-	/**
-	 * Plugin|Theme: unbranded var (e.g., my_app).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $unbranded_var;
+	private string $subpath;
 
 	/**
 	 * Plugin|Theme: version string.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $version;
+	private string $version;
+
+	/**
+	 * Plugin|Theme: name (e.g., My App).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $name;
+
+	/**
+	 * Plugin|Theme: slug (e.g., wpgroove-my-app).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $slug;
+
+	/**
+	 * Plugin|Theme: var (e.g., wpgroove_my_app).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $var;
+
+	/**
+	 * Plugin|Theme: slug prefix (e.g., wpgroove-my-app--).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $slug_prefix;
+
+	/**
+	 * Plugin|Theme: var prefix (e.g., wpgroove_my_app__).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $var_prefix;
+
+	/**
+	 * Plugin|Theme: brand name (i.e., WP Groove).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $brand_name;
+
+	/**
+	 * Plugin|Theme: brand slug (i.e., wpgroove).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $brand_slug;
+
+	/**
+	 * Plugin|Theme: brand var (i.e., wpgroove).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $brand_var;
+
+	/**
+	 * Plugin|Theme: brand slug prefix (i.e., wpgroove-).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $brand_slug_prefix;
+
+	/**
+	 * Plugin|Theme: brand var prefix (i.e., wpgroove_).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $brand_var_prefix;
+
+	/**
+	 * Plugin|Theme: unbranded slug (e.g., my-app).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $unbranded_slug;
+
+	/**
+	 * Plugin|Theme: unbranded var (e.g., my_app).
+	 *
+	 * @since 2021-12-15
+	 */
+	private string $unbranded_var;
 
 	/**
 	 * Plugin: plugins loaded hook priority.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected int $plugins_loaded_hook_priority;
+	private int $plugins_loaded_hook_priority;
 
 	/**
 	 * Plugin|Theme: after setup theme hook priority.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected int $after_setup_theme_hook_priority;
+	private int $after_setup_theme_hook_priority;
 
 	/**
 	 * Plugin|Theme: init hook priority.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected int $init_hook_priority;
+	private int $init_hook_priority;
 
 	/**
 	 * Plugin|Theme: static app instances.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected static array $instances;
+	private static array $instances;
 
 	// --- Instance -----------------------------------------------------------
 
@@ -410,6 +410,8 @@ abstract class AA6t_App extends A6t_Base {
 		} else {
 			throw new Fatal_Exception( 'Unable to determine app type based on class: `' . get_class( $this ) . '`.' );
 		}
+		$this->version = $version; // e.g., `1.0.0`.
+
 		$this->name = $name; // e.g., `My Plugin`.
 		$this->slug = $slug; // e.g., `wpgroove-my-plugin`.
 		$this->var  = str_replace( '-', '_', $this->slug );
@@ -426,8 +428,6 @@ abstract class AA6t_App extends A6t_Base {
 
 		$this->unbranded_slug = mb_substr( $this->slug, mb_strlen( $this->brand_slug_prefix ) );
 		$this->unbranded_var  = str_replace( '-', '_', $this->unbranded_slug );
-
-		$this->version = $version; // e.g., `1.0.0`.
 
 		$this->plugins_loaded_hook_priority    ??= 10;
 		$this->after_setup_theme_hook_priority ??= 10;

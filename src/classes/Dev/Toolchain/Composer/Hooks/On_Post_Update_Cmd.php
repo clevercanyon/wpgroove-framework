@@ -177,10 +177,10 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		if ( ! $local_wp_public_html_dir = $this->project->local_wp_public_html_dir() ) {
 			return; // Not possible.
 		}
-		if ( 'plugin' === $app->type ) {
-			$local_dir = U\Dir::join( $local_wp_public_html_dir, '/wp-content/plugins/' . $app->slug );
-		} elseif ( 'theme' === $app->type ) {
-			$local_dir = U\Dir::join( $local_wp_public_html_dir, '/wp-content/themes/' . $app->slug );
+		if ( $this->project->is_wp_plugin() ) {
+			$local_dir = U\Dir::join( $local_wp_public_html_dir, '/wp-content/plugins/' . $this->project->slug );
+		} elseif ( $this->project->is_wp_theme() ) {
+			$local_dir = U\Dir::join( $local_wp_public_html_dir, '/wp-content/themes/' . $this->project->slug );
 		} else {
 			throw new Exception( 'Unknown WordPress app type.' );
 		}
@@ -218,12 +218,15 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		$plugin_readme_file_contents = file_get_contents( $plugin->readme_file );
 
 		foreach ( $plugin->headers->_map as $_prop => $_header ) {
+			if ( in_array( $_prop, [ 'version', 'stable_tag', 'name' ], true ) ) {
+				$plugin->headers->{$_prop} = $this->project->{$_prop}; // Sync these w/ project data.
+			}
 			$plugin_file_contents        = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $plugin->headers->{$_prop}, $plugin_file_contents );
 			$plugin_readme_file_contents = preg_replace( '/^(\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $plugin->headers->{$_prop}, $plugin_readme_file_contents );
 		}
-		$plugin_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@slug\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $plugin->slug ) . "'" . '${2} // @slug', $plugin_file_contents );
-		$plugin_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@name\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $plugin->headers->name ) . "'" . '${2} // @name', $plugin_file_contents );
-		$plugin_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@version\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $plugin->headers->version ) . "'" . '${2} // @version', $plugin_file_contents );
+		$plugin_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@slug\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->slug ) . "'" . '${2} // @slug', $plugin_file_contents );
+		$plugin_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@name\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->name ) . "'" . '${2} // @name', $plugin_file_contents );
+		$plugin_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@version\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->version ) . "'" . '${2} // @version', $plugin_file_contents );
 
 		if ( false === file_put_contents( $plugin->file, $plugin_file_contents ) ) {
 			throw new Exception( 'Unable to update plugin file when syncing versions: ' . $plugin->file );
@@ -258,18 +261,21 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		$theme_readme_file_contents    = file_get_contents( $theme->readme_file );
 
 		foreach ( $theme->headers->_map as $_prop => $_header ) {
+			if ( in_array( $_prop, [ 'version', 'stable_tag', 'name' ], true ) ) {
+				$theme->headers->{$_prop} = $this->project->{$_prop}; // Sync these w/ project data.
+			}
 			$theme_file_contents           = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_file_contents );
 			$theme_functions_file_contents = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_functions_file_contents );
 			$theme_style_file_contents     = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_style_file_contents );
 			$theme_readme_file_contents    = preg_replace( '/^(\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_readme_file_contents );
 		}
-		$theme_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@slug\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $theme->slug ) . "'" . '${2} // @slug', $theme_file_contents );
-		$theme_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@name\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $theme->headers->name ) . "'" . '${2} // @name', $theme_file_contents );
-		$theme_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@version\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $theme->headers->version ) . "'" . '${2} // @version', $theme_file_contents );
+		$theme_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@slug\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->slug ) . "'" . '${2} // @slug', $theme_file_contents );
+		$theme_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@name\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->name ) . "'" . '${2} // @name', $theme_file_contents );
+		$theme_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@version\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->version ) . "'" . '${2} // @version', $theme_file_contents );
 
-		$theme_functions_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@slug\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $theme->slug ) . "'" . '${2} // @slug', $theme_functions_file_contents );
-		$theme_functions_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@name\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $theme->headers->name ) . "'" . '${2} // @name', $theme_functions_file_contents );
-		$theme_functions_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@version\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $theme->headers->version ) . "'" . '${2} // @version', $theme_functions_file_contents );
+		$theme_functions_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@slug\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->slug ) . "'" . '${2} // @slug', $theme_functions_file_contents );
+		$theme_functions_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@name\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->name ) . "'" . '${2} // @name', $theme_functions_file_contents );
+		$theme_functions_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@version\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->version ) . "'" . '${2} // @version', $theme_functions_file_contents );
 
 		if ( false === file_put_contents( $theme->file, $theme_file_contents ) ) {
 			throw new Exception( 'Unable to update theme file when syncing versions: ' . $theme->file );
@@ -364,14 +370,14 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		U\CLI::run( [
 			[ U\Dir::join( $this->project->dir, '/vendor/clevercanyon/php-js-utilities/dev/toolchain/php-scoper/scoper' ), 'scope' ],
 			[ '--project-dir', $this->project->dir ],
-			[ '--prefix', ucfirst( $this->project->name_hash ) ],
+			[ '--prefix', ucfirst( $this->project->pkg_name_hash ) ],
 			[ '--dir', $svn_comp_dir ],
 			[ '--output-dir', $svn_distro_dir ],
 			[ '--output-project-dir', U\Dir::join( $svn_distro_dir, '/trunk' ) ],
 			[ '--output-project-dir-entry-file', U\Dir::join( $svn_distro_dir, '/trunk/' . basename( $app->file ) ) ],
 		] );
 		// Prunes the `./._x/svn-distro` directory now.
-		// This prunes everything in `.gitignore`, except `vendor`.This time, including `composer.json` files.
+		// This prunes everything in `.gitignore`, except `vendor`. This time, including `composer.json` files.
 		// It also prunes a bunch of other things; {@see Project::comp_dir_prune_config()}.
 
 		if ( ! U\Dir::prune(
@@ -398,23 +404,23 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 
 		if ( ! U\Fs::copy(
 			U\Dir::join( $svn_distro_dir, '/trunk' ),
-			U\Dir::join( $svn_distro_dir, '/tags/' . $app->headers->version )
+			U\Dir::join( $svn_distro_dir, '/tags/' . $this->project->version )
 		) ) {
 			throw new Exception(
 				'Failed to copy `./._x/svn-distro/trunk`' .
-				' into `./._x/svn-distro/tags/' . $app->headers->version . '`.'
+				' into `./._x/svn-distro/tags/' . $this->project->version . '`.'
 			);
 		}
 		// Copies `./._x/svn-distro/tags[version]` into `./._x/svn-repo/tags/[version]`.
 		// This copy ignores nothing. Everything is copied without exception.
 
 		if ( ! U\Fs::copy(
-			U\Dir::join( $svn_distro_dir, '/tags/' . $app->headers->version ),
-			U\Dir::join( $svn_repo_dir, '/tags/' . $app->headers->version )
+			U\Dir::join( $svn_distro_dir, '/tags/' . $this->project->version ),
+			U\Dir::join( $svn_repo_dir, '/tags/' . $this->project->version )
 		) ) {
 			throw new Exception(
-				'Failed to copy `./._x/svn-distro/tags/' . $app->headers->version . '`' .
-				' into `./._x/svn-repo/tags/' . $app->headers->version . '`.'
+				'Failed to copy `./._x/svn-distro/tags/' . $this->project->version . '`' .
+				' into `./._x/svn-repo/tags/' . $this->project->version . '`.'
 			);
 		}
 	}
@@ -430,28 +436,21 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
-		if ( $this->project->is_wp_plugin() ) {
-			$app = $this->project->wp_plugin_data();
-		} elseif ( $this->project->is_wp_theme() ) {
-			$app = $this->project->wp_theme_data();
-		} else {
-			throw new Exception( 'Unknown WordPress app type.' );
-		}
-		$svn_repo_tag_dir = U\Dir::join( $this->project->dir, '/._x/svn-repo/tags/' . $app->headers->version );
+		$svn_repo_tag_dir = U\Dir::join( $this->project->dir, '/._x/svn-repo/tags/' . $this->project->version );
 
 		if ( ! is_dir( $svn_repo_tag_dir ) ) {
 			throw new Exception(
-				'Failed to zip `./._x/svn-repo/tags/' . $app->headers->version . '` directory.' .
+				'Failed to zip `./._x/svn-repo/tags/' . $this->project->version . '` directory.' .
 				' Directory is missing: `' . $svn_repo_tag_dir . '`.'
 			);
 		}
-		$zip_basename = $app->slug . '-v' . $app->headers->version . '.zip';
+		$zip_basename = $this->project->slug . '-v' . $this->project->version . '.zip';
 		$zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_basename );
 
-		if ( ! U\Fs::zip( $svn_repo_tag_dir . '->' . $app->slug, $zip_path ) ) {
+		if ( ! U\Fs::zip( $svn_repo_tag_dir . '->' . $this->project->slug, $zip_path ) ) {
 			throw new Exception(
-				'Failed to zip `./._x/svn-repo/tags/' . $app->headers->version . '` directory.' .
-				' From: `' . $svn_repo_tag_dir . '->' . $app->slug . '`, to: `' . $zip_path . '`.'
+				'Failed to zip `./._x/svn-repo/tags/' . $this->project->version . '` directory.' .
+				' From: `' . $svn_repo_tag_dir . '->' . $this->project->slug . '`, to: `' . $zip_path . '`.'
 			);
 		}
 	}
@@ -468,22 +467,15 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
-		if ( $this->project->is_wp_plugin() ) {
-			$app = $this->project->wp_plugin_data();
-		} elseif ( $this->project->is_wp_theme() ) {
-			$app = $this->project->wp_theme_data();
-		} else {
-			throw new Exception( 'Unknown WordPress app type.' );
-		}
-		$zip_basename = $app->slug . '-v' . $app->headers->version . '.zip';
+		$zip_basename = $this->project->slug . '-v' . $this->project->version . '.zip';
 		$zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_basename );
 
 		if ( ! is_file( $zip_path ) ) {
 			throw new Exception( 'Missing zip file: `' . $zip_path . '`.' );
 		}
-		$s3_zip_hash           = $this->project->s3_hash_hmac_sha256( $app->unbranded_slug . $app->headers->version );
-		$s3_zip_file_subpath   = 'cdn/product/' . $app->unbranded_slug . '/zips/' . $s3_zip_hash . '/' . $zip_basename;
-		$s3_index_file_subpath = 'cdn/product/' . $app->unbranded_slug . '/data/index.json';
+		$s3_zip_hash           = $this->project->s3_hash_hmac_sha256( $this->project->unbranded_slug . $this->project->version );
+		$s3_zip_file_subpath   = 'cdn/product/' . $this->project->unbranded_slug . '/zips/' . $s3_zip_hash . '/' . $zip_basename;
+		$s3_index_file_subpath = 'cdn/product/' . $this->project->unbranded_slug . '/data/index.json';
 
 		$s3 = new S3Client( $this->project->s3_bucket_config() );
 
@@ -496,11 +488,16 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			] );
 			$s3_index = U\Str::json_decode( (string) $_s3r->get( 'Body' ) );
 
-			if ( ! is_object( $s3_index ) || ! isset( $s3_index->versions->tags, $s3_index->versions->stable_tag ) ) {
-				throw new Exception( 'Unable to retrieve valid JSON data from: `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_index_file_subpath ) . '`.' );
-			}
-			if ( ! is_object( $s3_index->versions->tags ) || ! is_string( $s3_index->versions->stable_tag ) ) {
-				throw new Exception( 'Unable to retrieve valid JSON data from: `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_index_file_subpath ) . '`.' );
+			if ( ! is_object( $s3_index )
+				|| ! isset( $s3_index->versions->tags )
+				|| ! isset( $s3_index->versions->stable_tag )
+				|| ! is_object( $s3_index->versions->tags )
+				|| ! is_string( $s3_index->versions->stable_tag )
+			) {
+				throw new Exception(
+					'Unable to retrieve valid JSON data from: ' .
+					' `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_index_file_subpath ) . '`.'
+				);
 			}
 		} catch ( \Throwable $throwable ) {
 			if ( ! $throwable instanceof AwsException ) {
@@ -527,12 +524,12 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		// Throws exception on failure, which we intentionally do not catch.
 
 		$s3_index->versions->tags = (array) $s3_index->versions->tags;
-		$s3_index->versions->tags = array_merge( $s3_index->versions->tags, [ $app->headers->version => time() ] );
+		$s3_index->versions->tags = array_merge( $s3_index->versions->tags, [ $this->project->version => time() ] );
 
 		uksort( $s3_index->versions->tags, 'version_compare' ); // Example: <https://3v4l.org/QitGb>.
 		$s3_index->versions->tags = array_reverse( $s3_index->versions->tags );
 
-		$s3_index->versions->stable_tag = $app->headers->stable_tag;
+		$s3_index->versions->stable_tag = $this->project->stable_tag;
 
 		$s3->putObject( [
 			'Body'   => U\Str::json_encode( $s3_index ),
