@@ -33,7 +33,7 @@ use Clever_Canyon\Utilities\OOP\Interfaces\{I7e_Base, I7e_Offsets, I7e_Generic, 
  *
  * @since 2021-12-15
  */
-use WP_Groove\Framework\Utilities\{STC as UU};
+use WP_Groove\Framework\Utilities\{STC as W};
 use WP_Groove\Framework\Theme\Abstracts\{AA6t_Theme};
 use WP_Groove\Framework\Plugin\Abstracts\{AA6t_Plugin};
 
@@ -43,6 +43,29 @@ use WP_Groove\Framework\Plugin\Abstracts\{AA6t_Plugin};
  * Plugin|Theme (i.e., app) base class.
  *
  * @since 2021-12-15
+ *
+ * @property-read $file
+ * @property-read $dir
+ * @property-read $url
+ * @property-read $subpath
+ * @property-read $version
+ *
+ * @property-read $name
+ * @property-read $slug
+ * @property-read $var
+ *
+ * @property-read $slug_prefix
+ * @property-read $var_prefix
+ *
+ * @property-read $brand_name
+ * @property-read $brand_slug
+ * @property-read $brand_var
+ *
+ * @property-read $brand_slug_prefix
+ * @property-read $brand_var_prefix
+ *
+ * @property-read $unbranded_slug
+ * @property-read $unbranded_var
  */
 abstract class AA6t_App extends A6t_Base {
 	/**
@@ -247,6 +270,8 @@ abstract class AA6t_App extends A6t_Base {
 	 * @throws Fatal_Exception On failure to determine app type.
 	 */
 	final public static function add_instance_hooks( string ...$args ) : void {
+		assert( ! empty( $args[ 0 ] ) && is_file( $args[ 0 ] ) );
+
 		// Saves instance args for {@see load()}.
 		// Args also be used by {@see on_uninstall_base()}.
 
@@ -706,7 +731,8 @@ abstract class AA6t_App extends A6t_Base {
 	 */
 	final public function on_plugins_loaded_base() : void {
 		if ( $this instanceof AA6t_Plugin ) {
-			if ( version_compare( get_option( $this->var_prefix . 'version' ) ?: '', $this->version, '<' ) ) {
+			$version = get_option( $this->var_prefix . 'version' ) ?: '';
+			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {
 				$this->on_activation_base( false );
 				$this->on_plugin_activation( false );
 			}
@@ -733,7 +759,8 @@ abstract class AA6t_App extends A6t_Base {
 	 */
 	final public function on_after_setup_theme_base() : void {
 		if ( $this instanceof AA6t_Theme ) {
-			if ( version_compare( get_option( $this->var_prefix . 'version' ) ?: '', $this->version, '<' ) ) {
+			$version = get_option( $this->var_prefix . 'version' ) ?: '';
+			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {
 				$this->on_activation_base();
 				$this->on_theme_activation();
 			}

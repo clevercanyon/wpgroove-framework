@@ -33,7 +33,8 @@ use Clever_Canyon\Utilities\OOP\Interfaces\{I7e_Base, I7e_Offsets, I7e_Generic, 
  *
  * @since 2021-12-15
  */
-use WP_Groove\Framework\Utilities\{STC as UU};
+use WP_Groove\Framework\Utilities\{STC as W};
+use WP_Groove\Framework\Theme\Abstracts\{AA6t_Theme};
 use WP_Groove\Framework\Plugin\Abstracts\{AA6t_Plugin};
 use WP_Groove\Framework\Utilities\OOP\Abstracts\{AA6t_App};
 
