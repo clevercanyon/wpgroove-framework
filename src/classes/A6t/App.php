@@ -15,27 +15,22 @@
  *
  * @since 2021-12-25
  */
-declare( strict_types = 1 ); // ｡･:*:･ﾟ★.
-namespace WP_Groove\Framework\Utilities\OOP\Abstracts;
+declare( strict_types = 1 );
+namespace WP_Groove\Framework\A6t;
 
 /**
  * Utilities.
  *
  * @since 2021-12-15
  */
-use Clever_Canyon\Utilities\{STC as U};
-use Clever_Canyon\Utilities\OOP\{Offsets, Generic, Error, Exception, Fatal_Exception};
-use Clever_Canyon\Utilities\OOP\Abstracts\{A6t_Base, A6t_Offsets, A6t_Generic, A6t_Error, A6t_Exception};
-use Clever_Canyon\Utilities\OOP\Interfaces\{I7e_Base, I7e_Offsets, I7e_Generic, I7e_Error, I7e_Exception};
+use Clever_Canyon\{Utilities as U};
 
 /**
- * WP Groove utilities.
+ * Framework.
  *
  * @since 2021-12-15
  */
-use WP_Groove\Framework\Utilities\{STC as W};
-use WP_Groove\Framework\Theme\Abstracts\{AA6t_Theme};
-use WP_Groove\Framework\Plugin\Abstracts\{AA6t_Plugin};
+use WP_Groove\{Framework as WPG};
 
 // </editor-fold>
 
@@ -67,13 +62,13 @@ use WP_Groove\Framework\Plugin\Abstracts\{AA6t_Plugin};
  * @property-read $unbranded_slug
  * @property-read $unbranded_var
  */
-abstract class AA6t_App extends A6t_Base {
+abstract class App extends U\A6t\Base {
 	/**
-	 * OOP traits.
+	 * Traits.
 	 *
 	 * @since 2021-12-15
 	 */
-	use \Clever_Canyon\Utilities\OOP\Traits\I7e_Base\Magic\Finals\Readable_Members;
+	use U\Traits\Base\Magic\Finals\Readable_Members;
 
 	/**
 	 * Brand info.
@@ -246,18 +241,18 @@ abstract class AA6t_App extends A6t_Base {
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @throws Fatal_Exception On failure to determine app type.
+	 * @throws U\Fatal_Exception On failure to determine app type.
 	 * @return string Either `plugin` or `theme`.
 	 */
 	final protected static function app_type() : string {
 		$cls = get_called_class();
 
-		if ( is_a( $cls, AA6t_Plugin::class, true ) ) {
+		if ( is_a( $cls, WPG\A6t\Plugin::class, true ) ) {
 			return 'plugin';
-		} elseif ( is_a( $cls, AA6t_Theme::class, true ) ) {
+		} elseif ( is_a( $cls, WPG\A6t\Plugin::class, true ) ) {
 			return 'theme';
 		}
-		throw new Fatal_Exception( 'Unable to determine app type based on class: `' . $cls . '`.' );
+		throw new U\Fatal_Exception( 'Unable to determine app type based on class: `' . $cls . '`.' );
 	}
 
 	/**
@@ -265,9 +260,9 @@ abstract class AA6t_App extends A6t_Base {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @param string ...$args {@see __construct()} for details.
+	 * @param string ...$args {@see WPG\A6t\App::__construct()} for details.
 	 *
-	 * @throws Fatal_Exception On failure to determine app type.
+	 * @throws U\Fatal_Exception On failure to determine app type.
 	 */
 	final public static function add_instance_hooks( string ...$args ) : void {
 		assert( ! empty( $args[ 0 ] ) && is_file( $args[ 0 ] ) );
@@ -288,7 +283,7 @@ abstract class AA6t_App extends A6t_Base {
 		} elseif ( 'theme' === $app_type ) {
 			static::add_theme_instance_hooks( ...$args );
 		} else {
-			throw new Fatal_Exception( 'Unable to determine app type based on class: `' . $cls . '`.' );
+			throw new U\Fatal_Exception( 'Unable to determine app type based on class: `' . $cls . '`.' );
 		}
 	}
 
@@ -297,7 +292,7 @@ abstract class AA6t_App extends A6t_Base {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @param string ...$args {@see __construct()} for details.
+	 * @param string ...$args {@see WPG\A6t\App::__construct()} for details.
 	 */
 	final protected static function add_plugin_instance_hooks( string ...$args ) : void {
 		assert( ! empty( $args[ 0 ] ) && is_file( $args[ 0 ] ) );
@@ -340,7 +335,7 @@ abstract class AA6t_App extends A6t_Base {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @param string ...$args {@see __construct()} for details.
+	 * @param string ...$args {@see WPG\A6t\App::__construct()} for details.
 	 */
 	final protected static function add_theme_instance_hooks( string ...$args ) : void {
 		assert( ! empty( $args[ 0 ] ) && is_file( $args[ 0 ] ) );
@@ -362,18 +357,18 @@ abstract class AA6t_App extends A6t_Base {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @param bool $maybe_setup_hooks Control over hook setup. {@see __construct()}.
+	 * @param bool $maybe_setup_hooks Control over hook setup. {@see WPG\A6t\App::__construct()}.
 	 *                                Default is `true`. Set to `false` when uninstalling.
 	 *
-	 * @throws Fatal_Exception If missing instance args.
-	 * @return AA6t_App App instance for the called class.
+	 * @throws U\Fatal_Exception If missing instance args.
+	 * @return WPG\A6t\App App instance for the called class.
 	 */
-	final public static function load( bool $maybe_setup_hooks = true ) : AA6t_App {
+	final public static function load( bool $maybe_setup_hooks = true ) : WPG\A6t\App {
 		$cls = get_called_class();
 
 		if ( ! isset( static::$instances[ $cls ][ '&' ] ) ) {
 			if ( ! isset( static::$instances[ $cls ][ 'args' ] ) ) {
-				throw new Fatal_Exception( 'Missing ' . static::app_type() . ' instance args for class: `' . $cls . '`.' );
+				throw new U\Fatal_Exception( 'Missing ' . static::app_type() . ' instance args for class: `' . $cls . '`.' );
 			}
 			$args                             = array_slice( static::$instances[ $cls ][ 'args' ], 0, 4 );
 			$args                             = array_merge( $args, [ $maybe_setup_hooks ] );
@@ -387,14 +382,14 @@ abstract class AA6t_App extends A6t_Base {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Fatal_Exception If missing instance.
-	 * @return AA6t_App App instance for the called class.
+	 * @throws U\Fatal_Exception If missing instance.
+	 * @return WPG\A6t\App App instance for the called class.
 	 */
-	final public static function instance() : AA6t_App {
+	final public static function instance() : WPG\A6t\App {
 		$cls = get_called_class();
 
 		if ( ! isset( static::$instances[ $cls ][ '&' ] ) ) {
-			throw new Fatal_Exception( 'Missing ' . static::app_type() . ' instance for class: `' . $cls . '`.' );
+			throw new U\Fatal_Exception( 'Missing ' . static::app_type() . ' instance for class: `' . $cls . '`.' );
 		}
 		return static::$instances[ $cls ][ '&' ];
 	}
@@ -412,7 +407,7 @@ abstract class AA6t_App extends A6t_Base {
 	 * @param string $version           Current version string; e.g., `1.0.0`.
 	 * @param bool   $maybe_setup_hooks Maybe setup hooks? Set to `false` when uninstalling.
 	 *
-	 * @throws Fatal_Exception On failure to determine app type.
+	 * @throws U\Fatal_Exception On failure to determine app type.
 	 */
 	final protected function __construct( string $file, string $name, string $slug, string $version, bool $maybe_setup_hooks ) {
 		parent::__construct();
@@ -425,15 +420,15 @@ abstract class AA6t_App extends A6t_Base {
 		$this->file = U\Fs::normalize( $file );
 		$this->dir  = U\Dir::name( $this->file );
 
-		if ( $this instanceof AA6t_Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			$this->url     = rtrim( plugins_url( '', $this->file ), '/' );
 			$this->subpath = U\Fs::normalize( plugin_basename( $this->file ) );
 
-		} elseif ( $this instanceof AA6t_Theme ) {
+		} elseif ( $this instanceof WPG\A6t\Theme ) {
 			$this->url     = rtrim( get_template_directory_uri(), '/' );
 			$this->subpath = ''; // Not applicable.
 		} else {
-			throw new Fatal_Exception( 'Unable to determine app type based on class: `' . get_class( $this ) . '`.' );
+			throw new U\Fatal_Exception( 'Unable to determine app type based on class: `' . get_class( $this ) . '`.' );
 		}
 		$this->version = $version; // e.g., `1.0.0`.
 
@@ -493,7 +488,7 @@ abstract class AA6t_App extends A6t_Base {
 	 * @since 2021-12-15
 	 */
 	final protected function setup_hooks() : void {
-		if ( $this instanceof AA6t_Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			add_action( $this->var_prefix . 'activation', [ $this, 'on_activation_base' ] );
 			add_action( $this->var_prefix . 'activation', [ $this, 'on_plugin_activation' ] );
 
@@ -503,7 +498,7 @@ abstract class AA6t_App extends A6t_Base {
 			add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded_base' ], $this->plugins_loaded_hook_priority );
 			add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded' ], $this->plugins_loaded_hook_priority );
 
-		} elseif ( $this instanceof AA6t_Theme ) {
+		} elseif ( $this instanceof WPG\A6t\Theme ) {
 			add_action( 'after_switch_theme', [ $this, 'on_activation_base' ] );
 			add_action( 'after_switch_theme', [ $this, 'on_theme_activation' ] );
 
@@ -537,7 +532,7 @@ abstract class AA6t_App extends A6t_Base {
 		update_option( $this->var_prefix . 'previous_version', $previous_version, false );
 		update_option( $this->var_prefix . 'version', $this->version, true );
 
-		if ( $this instanceof AA6t_Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			// This fires {@see on_uninstall_plugin()} before it runs.
 			register_uninstall_hook( $this->file, [ static::class, 'on_uninstall_base' ] );
 		}
@@ -641,16 +636,16 @@ abstract class AA6t_App extends A6t_Base {
 		try { // Fail softly.
 			$app = static::load( false );
 
-		} catch ( Fatal_Exception $exception ) {
+		} catch ( U\Fatal_Exception $exception ) {
 			error_log( 'Failed to load ' . static::app_type() . ' on: `' . current_action() . '`.' );
 			return; // Fail software.
 		}
 		// App-specific uninstall routines.
 
-		if ( $app instanceof AA6t_Theme ) {
+		if ( $app instanceof WPG\A6t\Theme ) {
 			static::on_uninstall_theme( $app );
 
-		} elseif ( $app instanceof AA6t_Plugin ) {
+		} elseif ( $app instanceof WPG\A6t\Plugin ) {
 			static::on_uninstall_plugin( $app );
 		}
 		// Base uninstall routines.
@@ -696,28 +691,28 @@ abstract class AA6t_App extends A6t_Base {
 	}
 
 	/**
-	 * Plugin: on `uninstall_{$this->subpath}` hook, via {@see on_uninstall_base()}.
+	 * Plugin: on `uninstall_{$this->subpath}` hook, via {@see WPG\A6t\App::on_uninstall_base()}.
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @param AA6t_Plugin $plugin Plugin instance.
+	 * @param WPG\A6t\Plugin $plugin Plugin instance.
 	 *
 	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
-	public static function on_uninstall_plugin( AA6t_Plugin $plugin ) : void {
+	public static function on_uninstall_plugin( WPG\A6t\Plugin $plugin ) : void {
 		// DO NOT POPULATE. This is for extenders only.
 	}
 
 	/**
-	 * Theme: on `switch_theme` hook, via {@see on_uninstall_base()}.
+	 * Theme: on `switch_theme` hook, via {@see WPG\A6t\App::on_uninstall_base()}.
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @param AA6t_Theme $theme Theme instance.
+	 * @param WPG\A6t\Theme $theme Theme instance.
 	 *
 	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
-	public static function on_uninstall_theme( AA6t_Theme $theme ) : void {
+	public static function on_uninstall_theme( WPG\A6t\Theme $theme ) : void {
 		// DO NOT POPULATE. This is for extenders only.
 	}
 
@@ -730,7 +725,7 @@ abstract class AA6t_App extends A6t_Base {
 	 * @since 2021-12-15
 	 */
 	final public function on_plugins_loaded_base() : void {
-		if ( $this instanceof AA6t_Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			$version = get_option( $this->var_prefix . 'version' ) ?: '';
 			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {
 				$this->on_activation_base( false );
@@ -758,7 +753,7 @@ abstract class AA6t_App extends A6t_Base {
 	 * @since 2021-12-15
 	 */
 	final public function on_after_setup_theme_base() : void {
-		if ( $this instanceof AA6t_Theme ) {
+		if ( $this instanceof WPG\A6t\Theme ) {
 			$version = get_option( $this->var_prefix . 'version' ) ?: '';
 			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {
 				$this->on_activation_base();
@@ -786,11 +781,11 @@ abstract class AA6t_App extends A6t_Base {
 	 * @since 2021-12-15
 	 */
 	final public function on_init_base() : void {
-		if ( $this instanceof AA6t_Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
 				load_plugin_textdomain( $this->slug, false, U\Dir::name( $this->subpath, '/languages' ) );
 			}
-		} elseif ( $this instanceof AA6t_Theme ) {
+		} elseif ( $this instanceof WPG\A6t\Theme ) {
 			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
 				load_theme_textdomain( $this->slug, U\Dir::join( $this->dir, '/languages' ) );
 			}

@@ -15,32 +15,28 @@
  *
  * @since 2021-12-25
  */
-declare( strict_types = 1 ); // ｡･:*:･ﾟ★.
-namespace WP_Groove\Framework\Theme\Abstracts;
+declare( strict_types = 1 );
+namespace WP_Groove\Framework\A6t;
 
 /**
  * Utilities.
  *
  * @since 2021-12-15
  */
-use Clever_Canyon\Utilities\{STC as U};
-use Clever_Canyon\Utilities\OOP\{Offsets, Generic, Error, Exception, Fatal_Exception};
-use Clever_Canyon\Utilities\OOP\Abstracts\{A6t_Base, A6t_Offsets, A6t_Generic, A6t_Error, A6t_Exception};
-use Clever_Canyon\Utilities\OOP\Interfaces\{I7e_Base, I7e_Offsets, I7e_Generic, I7e_Error, I7e_Exception};
+use Clever_Canyon\{Utilities as U};
 
 /**
- * WP Groove utilities.
+ * Framework.
  *
  * @since 2021-12-15
  */
-use WP_Groove\Framework\Utilities\{STC as W};
-use WP_Groove\Framework\Utilities\OOP\Abstracts\{AA6t_App};
+use WP_Groove\{Framework as WPG};
 
 // </editor-fold>
 
 /**
- * Base class for a WordPress theme.
+ * Base class for a WordPress plugin.
  *
  * @since 2021-12-15
  */
-abstract class AA6t_Theme extends AA6t_App { }
+abstract class Plugin extends WPG\A6t\App { }

@@ -17,7 +17,21 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 ); // ｡･:*:･ﾟ★.
-namespace WP_Groove\Framework\Dev\Toolchain\Composer;
+namespace WP_Groove\Framework\Dev\CLI_Tools\I18n;
+
+/**
+ * Utilities.
+ *
+ * @since 2021-12-15
+ */
+use Clever_Canyon\{Utilities as U};
+
+/**
+ * Framework.
+ *
+ * @since 2021-12-15
+ */
+use WP_Groove\{Framework as WPG};
 
 // </editor-fold>
 
@@ -31,12 +45,29 @@ if ( 'cli' !== PHP_SAPI ) {
 }
 
 /**
- * Locates project directory.
+ * Project directory.
  *
  * @since 2021-12-15
  */
-if ( is_dir( dirname( __FILE__, 4 ) . '/vendor' ) ) {
-	return require dirname( __FILE__, 4 ) . '/vendor/clevercanyon/php-js-utilities/dev/toolchain/composer/.cli-project-dir.php';
-} else { // Not root. We're inside a /vendor directory.
-	return require dirname( __FILE__, 7 ) . '/vendor/clevercanyon/php-js-utilities/dev/toolchain/composer/.cli-project-dir.php';
-}
+$project_dir = require dirname( __FILE__, 2 ) . '/composer/.cli-project-dir.php';
+
+/**
+ * Requires autoloader.
+ *
+ * @since 2021-12-15
+ */
+require_once $project_dir . '/vendor/autoload.php';
+
+/**
+ * Enables debugging mode.
+ *
+ * @since 2021-12-15
+ */
+U\Env::config_debugging_mode();
+
+/**
+ * CLI tool instance.
+ *
+ * @since 2021-12-15
+ */
+new WPG\Dev\CLI_Tools\I18n\Text_Domain();

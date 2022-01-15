@@ -15,35 +15,22 @@
  *
  * @since 2021-12-25
  */
-declare( strict_types = 1 ); // ｡･:*:･ﾟ★.
-namespace WP_Groove\Framework\Dev\Toolchain\I18n;
+declare( strict_types = 1 );
+namespace WP_Groove\Framework\Dev\CLI_Tools\I18n;
 
 /**
  * Utilities.
  *
  * @since 2021-12-15
  */
-use Clever_Canyon\Utilities\{STC as U};
-use Clever_Canyon\Utilities\OOP\{Offsets, Generic, Error, Exception, Fatal_Exception};
-use Clever_Canyon\Utilities\OOP\Abstracts\{A6t_Base, A6t_Offsets, A6t_Generic, A6t_Error, A6t_Exception};
-use Clever_Canyon\Utilities\OOP\Interfaces\{I7e_Base, I7e_Offsets, I7e_Generic, I7e_Error, I7e_Exception};
+use Clever_Canyon\{Utilities as U};
 
 /**
- * WP Groove utilities.
+ * Framework.
  *
  * @since 2021-12-15
  */
-use WP_Groove\Framework\Utilities\{STC as W};
-use WP_Groove\Framework\Theme\Abstracts\{AA6t_Theme};
-use WP_Groove\Framework\Plugin\Abstracts\{AA6t_Plugin};
-use WP_Groove\Framework\Utilities\OOP\Abstracts\{AA6t_App};
-
-/**
- * Toolchain.
- *
- * @since 2021-12-15
- */
-use Clever_Canyon\Utilities\Dev\Toolchain\{Tools as T};
+use WP_Groove\{Framework as WPG};
 
 // </editor-fold>
 
@@ -52,7 +39,7 @@ use Clever_Canyon\Utilities\Dev\Toolchain\{Tools as T};
  *
  * @since 2021-12-15
  */
-class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
+class Text_Domain extends U\A6t\CLI_Tool {
 	/**
 	 * Version.
 	 *
@@ -164,17 +151,17 @@ class Text_Domain extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
 	 * @param string $text_domain Text domain.
 	 * @param string $file        File path.
 	 *
-	 * @throws Exception On any failure.
+	 * @throws U\Exception On any failure.
 	 */
 	protected function process_file( string $text_domain, string $file ) : void {
 		if ( ! $text_domain ) {
-			throw new Exception( 'Missing text domain.' );
+			throw new U\Exception( 'Missing text domain.' );
 		}
 		if ( ! $file || ! is_readable( $file ) || ! is_writable( $file ) ) {
-			throw new Exception( 'Unable to process file: `' . $file . '`. Is it readable and writable?' );
+			throw new U\Exception( 'Unable to process file: `' . $file . '`. Is it readable and writable?' );
 		}
 		if ( false === file_put_contents( $file, $this->process_string( $text_domain, file_get_contents( $file ) ) ) ) {
-			throw new Exception( 'Failed processing file: `' . $file . '`. Is the file readable and writable?' );
+			throw new U\Exception( 'Failed processing file: `' . $file . '`. Is the file readable and writable?' );
 		}
 	}
 

@@ -15,28 +15,22 @@
  *
  * @since 2021-12-25
  */
-declare( strict_types = 1 ); // ｡･:*:･ﾟ★.
-namespace WP_Groove\Framework\Utilities\STC;
+declare( strict_types = 1 );
+namespace WP_Groove\Framework;
 
 /**
  * Utilities.
  *
  * @since 2021-12-15
  */
-use Clever_Canyon\Utilities\{STC as U};
-use Clever_Canyon\Utilities\OOP\{Offsets, Generic, Error, Exception, Fatal_Exception};
-use Clever_Canyon\Utilities\OOP\Abstracts\{A6t_Base, A6t_Offsets, A6t_Generic, A6t_Error, A6t_Exception};
-use Clever_Canyon\Utilities\OOP\Interfaces\{I7e_Base, I7e_Offsets, I7e_Generic, I7e_Error, I7e_Exception};
+use Clever_Canyon\{Utilities as U};
 
 /**
- * WP Groove utilities.
+ * Framework.
  *
  * @since 2021-12-15
  */
-use WP_Groove\Framework\Utilities\{STC as W};
-use WP_Groove\Framework\Theme\Abstracts\{AA6t_Theme};
-use WP_Groove\Framework\Plugin\Abstracts\{AA6t_Plugin};
-use WP_Groove\Framework\Utilities\OOP\Abstracts\{AA6t_App};
+use WP_Groove\{Framework as WPG};
 
 // </editor-fold>
 
@@ -45,7 +39,7 @@ use WP_Groove\Framework\Utilities\OOP\Abstracts\{AA6t_App};
  *
  * @since 2021-12-15
  */
-class File extends \Clever_Canyon\Utilities\STC\Abstracts\A6t_Stc_Utilities {
+class File extends U\A6t\Stc_Utilities {
 	/**
 	 * Gets file MIME type.
 	 *

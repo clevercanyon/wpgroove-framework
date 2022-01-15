@@ -17,42 +17,21 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 ); // ｡･:*:･ﾟ★.
-namespace WP_Groove\Framework\Dev\Toolchain\Composer;
+namespace WP_Groove\Framework\Dev\CLI_Tools\Composer;
 
 /**
  * Utilities.
  *
  * @since 2021-12-15
  */
-use Clever_Canyon\Utilities\{STC as U};
-use Clever_Canyon\Utilities\OOP\{Offsets, Generic, Error, Exception, Fatal_Exception};
-use Clever_Canyon\Utilities\OOP\Abstracts\{A6t_Base, A6t_Offsets, A6t_Generic, A6t_Error, A6t_Exception};
-use Clever_Canyon\Utilities\OOP\Interfaces\{I7e_Base, I7e_Offsets, I7e_Generic, I7e_Error, I7e_Exception};
+use Clever_Canyon\{Utilities as U};
 
 /**
- * WP Groove utilities.
+ * Framework.
  *
  * @since 2021-12-15
  */
-use WP_Groove\Framework\Utilities\{STC as W};
-use WP_Groove\Framework\Plugin\Abstracts\{AA6t_Plugin};
-use WP_Groove\Framework\Utilities\OOP\Abstracts\{AA6t_App};
-
-/**
- * Toolchain.
- *
- * @since 2021-12-15
- */
-use Clever_Canyon\Utilities\Dev\Toolchain\{Tools as T};
-use Clever_Canyon\Utilities\Dev\Toolchain\Composer\{Project};
-
-/**
- * File-specific.
- *
- * @since 2021-12-15
- */
-use Clever_Canyon\Utilities\Dev\Toolchain\Composer\Hooks\{On_Post_Update_Cmd as Parent_On_Post_Update_Cmd};
-use WP_Groove\Framework\Dev\Toolchain\Composer\Hooks\{On_Post_Update_Cmd};
+use WP_Groove\{Framework as WPG};
 
 // </editor-fold>
 
@@ -101,9 +80,9 @@ U\Env::config_debugging_mode();
  * @since 2021-12-15
  */
 if ( 'update' === ( $argv[ 1 ] ?? '' ) ) {
-	new Parent_On_Post_Update_Cmd( [ 'update', '--project-dir', $project_dir ] );
-	new On_Post_Update_Cmd( [ 'update', '--project-dir', $project_dir ] );
+	new U\Dev\CLI_Tools\Composer\On_Post_Update_Cmd( [ 'update', '--project-dir', $project_dir ] );
+	new WPG\Dev\CLI_Tools\Composer\On_Post_Update_Cmd( [ 'update', '--project-dir', $project_dir ] );
 } else {
-	new Parent_On_Post_Update_Cmd( [ 'symlink', '--project-dir', $project_dir ] );
+	new U\Dev\CLI_Tools\Composer\On_Post_Update_Cmd( [ 'symlink', '--project-dir', $project_dir ] );
 	U\CLI::run( [ $argv[ 0 ], 'update' ] ); // Separate process, after symlinks.
 }

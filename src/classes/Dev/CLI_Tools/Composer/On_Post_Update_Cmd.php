@@ -15,36 +15,22 @@
  *
  * @since 2021-12-25
  */
-declare( strict_types = 1 ); // ｡･:*:･ﾟ★.
-namespace WP_Groove\Framework\Dev\Toolchain\Composer\Hooks;
+declare( strict_types = 1 );
+namespace WP_Groove\Framework\Dev\CLI_Tools\Composer;
 
 /**
  * Utilities.
  *
  * @since 2021-12-15
  */
-use Clever_Canyon\Utilities\{STC as U};
-use Clever_Canyon\Utilities\OOP\{Offsets, Generic, Error, Exception, Fatal_Exception};
-use Clever_Canyon\Utilities\OOP\Abstracts\{A6t_Base, A6t_Offsets, A6t_Generic, A6t_Error, A6t_Exception};
-use Clever_Canyon\Utilities\OOP\Interfaces\{I7e_Base, I7e_Offsets, I7e_Generic, I7e_Error, I7e_Exception};
+use Clever_Canyon\{Utilities as U};
 
 /**
- * WP Groove utilities.
+ * Framework.
  *
  * @since 2021-12-15
  */
-use WP_Groove\Framework\Utilities\{STC as W};
-use WP_Groove\Framework\Theme\Abstracts\{AA6t_Theme};
-use WP_Groove\Framework\Plugin\Abstracts\{AA6t_Plugin};
-use WP_Groove\Framework\Utilities\OOP\Abstracts\{AA6t_App};
-
-/**
- * Toolchain.
- *
- * @since 2021-12-15
- */
-use Clever_Canyon\Utilities\Dev\Toolchain\{Tools as T};
-use Clever_Canyon\Utilities\Dev\Toolchain\Composer\{Project};
+use WP_Groove\{Framework as WPG};
 
 /**
  * File-specific.
@@ -61,13 +47,13 @@ use Aws\Exception\AwsException;
  *
  * @since 2021-12-15
  */
-class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_Tool {
+class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	/**
 	 * Project.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected Project $project;
+	protected U\Dev\Project $project;
 
 	/**
 	 * Version.
@@ -120,7 +106,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 */
 	protected function update() : void {
 		try {
-			$this->project = new Project(
+			$this->project = new U\Dev\Project(
 				$this->get_option( 'project-dir' )
 			);
 			$this->maybe_run_wp_app_composer_updates();
@@ -145,7 +131,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 *
 	 * @since        2021-12-15
 	 *
-	 * @throws Exception On any failure.
+	 * @throws U\Exception On any failure.
 	 * @noinspection PhpDocRedundantThrowsInspection
 	 */
 	protected function maybe_run_wp_app_composer_updates() : void {
@@ -162,7 +148,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception On any failure.
+	 * @throws U\Exception On any failure.
 	 */
 	protected function maybe_symlink_wp_app_locally() : void {
 		if ( ! $this->project->is_wp_project() ) {
@@ -173,7 +159,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		} elseif ( $this->project->is_wp_theme() ) {
 			$app = $this->project->wp_theme_data();
 		} else {
-			throw new Exception( 'Unknown WordPress app type.' );
+			throw new U\Exception( 'Unknown WordPress app type.' );
 		}
 		if ( ! $local_wp_public_html_dir = $this->project->local_wp_public_html_dir() ) {
 			return; // Not possible.
@@ -183,16 +169,16 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		} elseif ( $this->project->is_wp_theme() ) {
 			$local_dir = U\Dir::join( $local_wp_public_html_dir, '/wp-content/themes/' . $this->project->slug );
 		} else {
-			throw new Exception( 'Unknown WordPress app type.' );
+			throw new U\Exception( 'Unknown WordPress app type.' );
 		}
 		if ( U\Fs::path_exists( $local_dir ) ) {
 			return; // Do not overwrite.
 		}
 		if ( ! is_writable( U\Dir::name( $local_dir ) ) ) {
-			throw new Exception( 'Local WordPress symlink failure. Directory not writable: `' . U\Dir::name( $local_dir ) . '`.' );
+			throw new U\Exception( 'Local WordPress symlink failure. Directory not writable: `' . U\Dir::name( $local_dir ) . '`.' );
 		}
 		if ( ! symlink( $app->dir, $local_dir ) ) {
-			throw new Exception( 'Unexpected local WordPress symlink failure: `' . $local_dir . '`.' );
+			throw new U\Exception( 'Unexpected local WordPress symlink failure: `' . $local_dir . '`.' );
 		}
 	}
 
@@ -201,7 +187,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception On any failure.
+	 * @throws U\Exception On any failure.
 	 */
 	protected function maybe_sync_wp_plugin_headers() : void {
 		if ( ! $this->project->is_wp_plugin() ) {
@@ -230,10 +216,10 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		$plugin_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@version\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->version ) . "'" . '${2} // @version', $plugin_file_contents );
 
 		if ( false === file_put_contents( $plugin->file, $plugin_file_contents ) ) {
-			throw new Exception( 'Unable to update plugin file when syncing versions: ' . $plugin->file );
+			throw new U\Exception( 'Unable to update plugin file when syncing versions: ' . $plugin->file );
 		}
 		if ( false === file_put_contents( $plugin->readme_file, $plugin_readme_file_contents ) ) {
-			throw new Exception( 'Unable to update plugin readme file when syncing versions: ' . $plugin->readme_file );
+			throw new U\Exception( 'Unable to update plugin readme file when syncing versions: ' . $plugin->readme_file );
 		}
 	}
 
@@ -242,7 +228,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception On any failure.
+	 * @throws U\Exception On any failure.
 	 */
 	protected function maybe_sync_wp_theme_headers() : void {
 		if ( ! $this->project->is_wp_theme() ) {
@@ -279,16 +265,16 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		$theme_functions_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@version\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->version ) . "'" . '${2} // @version', $theme_functions_file_contents );
 
 		if ( false === file_put_contents( $theme->file, $theme_file_contents ) ) {
-			throw new Exception( 'Unable to update theme file when syncing versions: ' . $theme->file );
+			throw new U\Exception( 'Unable to update theme file when syncing versions: ' . $theme->file );
 		}
 		if ( false === file_put_contents( $theme->functions_file, $theme_functions_file_contents ) ) {
-			throw new Exception( 'Unable to update theme functions file when syncing versions: ' . $theme->functions_file );
+			throw new U\Exception( 'Unable to update theme functions file when syncing versions: ' . $theme->functions_file );
 		}
 		if ( false === file_put_contents( $theme->style_file, $theme_style_file_contents ) ) {
-			throw new Exception( 'Unable to update theme style file when syncing versions: ' . $theme->style_file );
+			throw new U\Exception( 'Unable to update theme style file when syncing versions: ' . $theme->style_file );
 		}
 		if ( false === file_put_contents( $theme->readme_file, $theme_readme_file_contents ) ) {
-			throw new Exception( 'Unable to update theme readme file when syncing versions: ' . $theme->readme_file );
+			throw new U\Exception( 'Unable to update theme readme file when syncing versions: ' . $theme->readme_file );
 		}
 	}
 
@@ -297,7 +283,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception On any failure.
+	 * @throws U\Exception On any failure.
 	 *
 	 * @note  Regarding use of `--no-plugins` in Composer calls below.
 	 *       {@see https://github.com/humbug/php-scoper#composer-plugins}.
@@ -311,7 +297,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		} elseif ( $this->project->is_wp_theme() ) {
 			$app = $this->project->wp_theme_data();
 		} else {
-			throw new Exception( 'Unknown WordPress app type.' );
+			throw new U\Exception( 'Unknown WordPress app type.' );
 		}
 		$comp_dir_copy_config  = $this->project->comp_dir_copy_config();
 		$comp_dir_prune_config = $this->project->comp_dir_prune_config();
@@ -330,7 +316,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			$comp_dir_copy_config[ 'ignore' ],
 			$comp_dir_copy_config[ 'exceptions' ]
 		) ) {
-			throw new Exception( 'Failed to create `./._x/svn-comp`.' );
+			throw new U\Exception( 'Failed to create `./._x/svn-comp`.' );
 		}
 		// Installs composer dependencies in `._x/svn-comp/trunk`.
 		// We didn't ignore `composer.json` when copying, so it's available.
@@ -353,14 +339,14 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 				'/(?:^|.+?\/)composer\.json$/ui',
 			] ),
 		) ) {
-			throw new Exception( 'Failed to prune `./._x/svn-comp`.' );
+			throw new U\Exception( 'Failed to prune `./._x/svn-comp`.' );
 		}
 		// Adds text domain to everything in `._x/svn-comp/trunk`.
 		// This tool ignores everything in `.gitignore`, except `vendor/clevercanyon/*`.
 		// Therefore, we are adding the text domain to other clevercanyon packages, including the WP Groove framework.
 
 		U\CLI::run( [
-			[ U\Dir::join( $this->project->dir, '/vendor/clevercanyon/wpgroove-framework/dev/toolchain/i18n/text-domain' ), 'add' ],
+			[ U\Dir::join( $this->project->dir, '/vendor/clevercanyon/wpgroove-framework/dev/cli-tools/i18n/text-domain' ), 'add' ],
 			[ '--text-domain', $app->headers->text_domain ],
 			[ '--dir', U\Dir::join( $svn_comp_dir, '/trunk' ) ],
 		] );
@@ -369,7 +355,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		// We're not using that functionality, though, as we have already pruned the directory.
 
 		U\CLI::run( [
-			[ U\Dir::join( $this->project->dir, '/vendor/clevercanyon/php-js-utilities/dev/toolchain/php-scoper/scoper' ), 'scope' ],
+			[ U\Dir::join( $this->project->dir, '/vendor/clevercanyon/php-js-utilities/dev/cli-tools/php-scoper/scoper' ), 'scope' ],
 			[ '--project-dir', $this->project->dir ],
 			[ '--prefix', ucfirst( $this->project->pkg_name_hash ) ],
 			[ '--dir', $svn_comp_dir ],
@@ -386,7 +372,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			$comp_dir_prune_config[ 'prune' ],
 			$comp_dir_prune_config[ 'exceptions' ]
 		) ) {
-			throw new Exception( 'Failed to prune `./._x/svn-distro`.' );
+			throw new U\Exception( 'Failed to prune `./._x/svn-distro`.' );
 		}
 		// Copies contents of `./._x/svn-distro/*` into `./._x/svn-repo/` directory.
 		// This copy ignores nothing. Everything is copied without exception.
@@ -395,7 +381,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			U\Dir::join( $svn_distro_dir, '/*' ),
 			$svn_repo_dir
 		) ) {
-			throw new Exception(
+			throw new U\Exception(
 				'Failed to copy contents of `./._x/svn-distro/*`' .
 				' into `./._x/svn-repo`.'
 			);
@@ -407,7 +393,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			U\Dir::join( $svn_distro_dir, '/trunk' ),
 			U\Dir::join( $svn_distro_dir, '/tags/' . $this->project->version )
 		) ) {
-			throw new Exception(
+			throw new U\Exception(
 				'Failed to copy `./._x/svn-distro/trunk`' .
 				' into `./._x/svn-distro/tags/' . $this->project->version . '`.'
 			);
@@ -419,7 +405,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 			U\Dir::join( $svn_distro_dir, '/tags/' . $this->project->version ),
 			U\Dir::join( $svn_repo_dir, '/tags/' . $this->project->version )
 		) ) {
-			throw new Exception(
+			throw new U\Exception(
 				'Failed to copy `./._x/svn-distro/tags/' . $this->project->version . '`' .
 				' into `./._x/svn-repo/tags/' . $this->project->version . '`.'
 			);
@@ -431,7 +417,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception On any failure.
+	 * @throws U\Exception On any failure.
 	 */
 	protected function maybe_compile_wp_app_zip() : void {
 		if ( ! $this->project->is_wp_project() ) {
@@ -440,7 +426,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		$svn_repo_tag_dir = U\Dir::join( $this->project->dir, '/._x/svn-repo/tags/' . $this->project->version );
 
 		if ( ! is_dir( $svn_repo_tag_dir ) ) {
-			throw new Exception(
+			throw new U\Exception(
 				'Failed to zip `./._x/svn-repo/tags/' . $this->project->version . '` directory.' .
 				' Directory is missing: `' . $svn_repo_tag_dir . '`.'
 			);
@@ -449,7 +435,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		$zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_basename );
 
 		if ( ! U\Fs::zip( $svn_repo_tag_dir . '->' . $this->project->slug, $zip_path ) ) {
-			throw new Exception(
+			throw new U\Exception(
 				'Failed to zip `./._x/svn-repo/tags/' . $this->project->version . '` directory.' .
 				' From: `' . $svn_repo_tag_dir . '->' . $this->project->slug . '`, to: `' . $zip_path . '`.'
 			);
@@ -461,7 +447,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws Exception On any failure.
+	 * @throws U\Exception On any failure.
 	 * @throws \Throwable On some failures.
 	 */
 	protected function maybe_s3_upload_wp_app_zip() : void {
@@ -472,7 +458,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 		$zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_basename );
 
 		if ( ! is_file( $zip_path ) ) {
-			throw new Exception( 'Missing zip file: `' . $zip_path . '`.' );
+			throw new U\Exception( 'Missing zip file: `' . $zip_path . '`.' );
 		}
 		$s3_zip_hash           = $this->project->s3_hash_hmac_sha256( $this->project->unbranded_slug . $this->project->version );
 		$s3_zip_file_subpath   = 'cdn/product/' . $this->project->unbranded_slug . '/zips/' . $s3_zip_hash . '/' . $zip_basename;
@@ -495,7 +481,7 @@ class On_Post_Update_Cmd extends \Clever_Canyon\Utilities\OOP\Abstracts\A6t_CLI_
 				|| ! is_object( $s3_index->versions->tags )
 				|| ! is_string( $s3_index->versions->stable_tag )
 			) {
-				throw new Exception(
+				throw new U\Exception(
 					'Unable to retrieve valid JSON data from: ' .
 					' `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_index_file_subpath ) . '`.'
 				);
