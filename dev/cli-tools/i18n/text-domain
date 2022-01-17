@@ -46,18 +46,22 @@ if ( 'cli' !== PHP_SAPI ) {
 }
 
 /**
- * Project directory.
+ * Requires dev utilities.
  *
  * @since 2021-12-15
  */
-$project_dir = require dirname( __FILE__, 2 ) . '/composer/.cli-project-dir.php';
+if ( is_dir( dirname( __FILE__, 4 ) . '/vendor' ) ) { // Possible symlink. That's OK here.
+	require_once dirname( __FILE__, 4 ) . '/vendor/clevercanyon/php-js-utilities/dev/utilities/load.php';
+} else { // Assume running as a dependency from inside of another project’s `/vendor` directory.
+	require_once dirname( __FILE__, 7 ) . '/vendor/clevercanyon/php-js-utilities/dev/utilities/load.php';
+}
 
 /**
  * Requires autoloader.
  *
  * @since 2021-12-15
  */
-require_once $project_dir . '/vendor/autoload.php';
+require_once D\Dir::join( D\CLI::project_dir(), '/vendor/autoload.php' );
 
 /**
  * Enables debugging mode.

@@ -11,13 +11,13 @@
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "git@github.com:clevercanyon/php-js-utilities.git",
-                "reference": "3d5388fcaac3313e1ad1fe4753ea29f84052ebe3"
+                "url": "https://github.com/clevercanyon/php-js-utilities.git",
+                "reference": "d03db15f8db64ca53f854a4a242ea67966f087f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities/zipball/3d5388fcaac3313e1ad1fe4753ea29f84052ebe3",
-                "reference": "3d5388fcaac3313e1ad1fe4753ea29f84052ebe3",
+                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities/zipball/d03db15f8db64ca53f854a4a242ea67966f087f3",
+                "reference": "d03db15f8db64ca53f854a4a242ea67966f087f3",
                 "shasum": ""
             },
             "require": {
@@ -97,7 +97,11 @@
                 }
             ],
             "description": "CLEVER CANYON’s utilities for PHP/JS applications.",
-            "time": "2022-01-17T02:49:14+00:00"
+            "support": {
+                "issues": "https://github.com/clevercanyon/php-js-utilities/issues",
+                "source": "https://github.com/clevercanyon/php-js-utilities/tree/main"
+            },
+            "time": "2022-01-17T07:28:54+00:00"
         }
     ],
     "packages-dev": [
@@ -248,12 +252,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/php-js-standards.git",
-                "reference": "915c30af832ac44d25294362b57676ed0184bda7"
+                "reference": "4952bc9076a5d138e6acb34bff40261328428856"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/php-js-standards/zipball/915c30af832ac44d25294362b57676ed0184bda7",
-                "reference": "915c30af832ac44d25294362b57676ed0184bda7",
+                "url": "https://api.github.com/repos/clevercanyon/php-js-standards/zipball/4952bc9076a5d138e6acb34bff40261328428856",
+                "reference": "4952bc9076a5d138e6acb34bff40261328428856",
                 "shasum": ""
             },
             "require": {
@@ -281,7 +285,7 @@
                 "issues": "https://github.com/clevercanyon/php-js-standards/issues",
                 "source": "https://github.com/clevercanyon/php-js-standards/tree/main"
             },
-            "time": "2022-01-06T12:08:24+00:00"
+            "time": "2022-01-17T03:19:47+00:00"
         },
         {
             "name": "clevercanyon/php-js-utilities-dev",
@@ -289,12 +293,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/php-js-utilities-dev.git",
-                "reference": "ff83bf941c2a22fdd000fba78e671ea69cd24cbd"
+                "reference": "d812cb20b3a2913c921de98fcf05a599bb436163"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities-dev/zipball/ff83bf941c2a22fdd000fba78e671ea69cd24cbd",
-                "reference": "ff83bf941c2a22fdd000fba78e671ea69cd24cbd",
+                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities-dev/zipball/d812cb20b3a2913c921de98fcf05a599bb436163",
+                "reference": "d812cb20b3a2913c921de98fcf05a599bb436163",
                 "shasum": ""
             },
             "require": {
@@ -329,7 +333,7 @@
                 "issues": "https://github.com/clevercanyon/php-js-utilities-dev/issues",
                 "source": "https://github.com/clevercanyon/php-js-utilities-dev/tree/main"
             },
-            "time": "2022-01-15T16:38:06+00:00"
+            "time": "2022-01-17T03:20:34+00:00"
         },
         {
             "name": "clevercanyon/php-js-utilities-dev-npm",
@@ -458,12 +462,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/wpgroove-framework-dev.git",
-                "reference": "a35afe8e7eb49484685bf4c6c98292cee8741180"
+                "reference": "ac8d38fe9f61e03d1f6e781fabf704bcbc613e24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/wpgroove-framework-dev/zipball/a35afe8e7eb49484685bf4c6c98292cee8741180",
-                "reference": "a35afe8e7eb49484685bf4c6c98292cee8741180",
+                "url": "https://api.github.com/repos/clevercanyon/wpgroove-framework-dev/zipball/ac8d38fe9f61e03d1f6e781fabf704bcbc613e24",
+                "reference": "ac8d38fe9f61e03d1f6e781fabf704bcbc613e24",
                 "shasum": ""
             },
             "require": {
@@ -487,7 +491,7 @@
                 "issues": "https://github.com/clevercanyon/wpgroove-framework-dev/issues",
                 "source": "https://github.com/clevercanyon/wpgroove-framework-dev/tree/main"
             },
-            "time": "2022-01-15T16:38:31+00:00"
+            "time": "2022-01-17T03:20:52+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",

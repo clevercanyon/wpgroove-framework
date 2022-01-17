@@ -105,6 +105,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 */
 	protected function update() : void {
 		try {
+			U\CLI::heading( '[' . __METHOD__ . '()]: Updating ...' );
+
 			$project_dir   = U\Fs::abs( $this->get_option( 'project-dir' ) );
 			$this->project = new U\Dev\Project( $project_dir );
 
@@ -118,6 +120,7 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			$this->maybe_compile_wp_app_zip();
 			$this->maybe_s3_upload_wp_app_zip();
 
+			U\CLI::done( '[' . __METHOD__ . '()]: Update complete ✔.' );
 		} catch ( \Throwable $throwable ) {
 			U\CLI::error( $throwable->getMessage() );
 			U\CLI::error( $throwable->getTraceAsString() );
@@ -134,12 +137,15 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 * @noinspection PhpDocRedundantThrowsInspection
 	 */
 	protected function maybe_run_wp_app_composer_updates() : void {
+		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
+
 		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
 		if ( $this->project->has_file( 'trunk/composer.json' ) ) {
 			U\CLI::run( [ 'composer', 'update' ], U\Dir::join( $this->project->dir, '/trunk' ) );
 		}
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Ran `composer update` in `' . U\Dir::join( $this->project->dir, '/trunk' ) . '`.' );
 	}
 
 	/**
@@ -150,6 +156,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 * @throws U\Exception On any failure.
 	 */
 	protected function maybe_symlink_wp_app_locally() : void {
+		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
+
 		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
@@ -161,6 +169,7 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			throw new U\Exception( 'Unknown WordPress app type.' );
 		}
 		if ( ! $local_wp_public_html_dir = $this->project->local_wp_public_html_dir() ) {
+			U\CLI::log( '[' . __FUNCTION__ . '()]: No local WP public HTML directory in `~/.dev.json`.' );
 			return; // Not possible.
 		}
 		if ( $this->project->is_wp_plugin() ) {
@@ -171,6 +180,7 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			throw new U\Exception( 'Unknown WordPress app type.' );
 		}
 		if ( U\Fs::exists( $local_dir ) ) {
+			U\CLI::log( '[' . __FUNCTION__ . '()]: Path exists: `' . $local_dir . '` — leaving as-is.' );
 			return; // Do not overwrite existing path.
 		}
 		if ( ! is_writable( U\Dir::name( $local_dir ) ) ) {
@@ -179,6 +189,7 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		if ( ! symlink( $app->dir, $local_dir ) ) {
 			throw new U\Exception( 'Unexpected local WordPress symlink failure: `' . $local_dir . '`.' );
 		}
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Symlinked: `' . $local_dir . '`' . "\n" . ' →  `' . $app->dir . '`.' );
 	}
 
 	/**
@@ -189,6 +200,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 * @throws U\Exception On any failure.
 	 */
 	protected function maybe_sync_wp_plugin_headers() : void {
+		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
+
 		if ( ! $this->project->is_wp_plugin() ) {
 			return; // Not applicable.
 		}
@@ -220,6 +233,11 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		if ( false === file_put_contents( $plugin->readme_file, $plugin_readme_file_contents ) ) {
 			throw new U\Exception( 'Unable to update plugin readme file when syncing versions: ' . $plugin->readme_file );
 		}
+		U\CLI::log(
+			'[' . __FUNCTION__ . '()]: The following files are now in sync:' . "\n" .
+			'`' . $plugin->file . '`' . "\n" .
+			'`' . $plugin->readme_file . '`'
+		);
 	}
 
 	/**
@@ -230,6 +248,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 * @throws U\Exception On any failure.
 	 */
 	protected function maybe_sync_wp_theme_headers() : void {
+		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
+
 		if ( ! $this->project->is_wp_theme() ) {
 			return; // Not applicable.
 		}
@@ -275,6 +295,13 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		if ( false === file_put_contents( $theme->readme_file, $theme_readme_file_contents ) ) {
 			throw new U\Exception( 'Unable to update theme readme file when syncing versions: ' . $theme->readme_file );
 		}
+		U\CLI::log(
+			'[' . __FUNCTION__ . '()]: The following files are now in sync:' . "\n" .
+			'`' . $theme->file . '`' . "\n" .
+			'`' . $theme->functions_file . '`' . "\n" .
+			'`' . $theme->style_file . '`' . "\n" .
+			'`' . $theme->readme_file . '`'
+		);
 	}
 
 	/**
@@ -288,6 +315,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 *       {@see https://github.com/humbug/php-scoper#composer-plugins}.
 	 */
 	protected function maybe_compile_wp_app_svn_repo() : void {
+		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
+
 		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
@@ -317,15 +346,18 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		) ) {
 			throw new U\Exception( 'Failed to create `./._x/svn-comp`.' );
 		}
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Copied: `' . $this->project->dir . '`' . "\n" . ' →  `' . $svn_comp_dir . '`.' );
+
 		// Installs composer dependencies in `._x/svn-comp/trunk`.
 		// We didn't ignore `composer.json` when copying, so it's available.
 		// The autoloader is optimized here, as we are compiling for production.
 
 		U\CLI::run( [
 			[ 'composer', 'install' ],
-			[ '--no-dev', '--no-scripts', '--no-plugins' ],
+			[ '--profile', '--no-dev', '--no-scripts', '--no-plugins' ],
 			[ '--optimize-autoloader', '--classmap-authoritative' ],
 		], U\Dir::join( $svn_comp_dir, '/trunk' ) );
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Ran `composer install` in: `' . U\Dir::join( $svn_comp_dir, '/trunk' ) . '`.' );
 
 		// Prunes the `./._x/svn-comp` directory, which speeds up remaining tasks.
 		// This prunes everything in `.gitignore`, except: `vendor`, `composer.json`.
@@ -340,6 +372,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		) ) {
 			throw new U\Exception( 'Failed to prune `./._x/svn-comp`.' );
 		}
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Pruned: `' . $svn_comp_dir . '`.' );
+
 		// Adds text domain to everything in `._x/svn-comp/trunk`.
 		// This tool ignores everything in `.gitignore`, except `vendor/clevercanyon/*`.
 		// i.e., We're adding text domain to all clevercanyon packages, including the WP Groove framework.
@@ -355,6 +389,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			[ '--work-dir', U\Dir::join( $svn_comp_dir, '/trunk' ) ],
 			[ '--text-domain', $app->headers->text_domain ],
 		] );
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Added text domain to: `' . U\Dir::join( $svn_comp_dir, '/trunk' ) . '`.' );
+
 		// Runs PHP Scoper on full `._x/svn-comp` directory; outputting to `._x/svn-distro`.
 		// PHP Scoper ignores files based on Finders in the `.scoper.cfg.php` file.
 		// We're not using that functionality, though, as we have already pruned the directory.
@@ -370,6 +406,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			[ '--output-project-dir', U\Dir::join( $svn_distro_dir, '/trunk' ) ],
 			[ '--output-project-dir-entry-file', U\Dir::join( $svn_distro_dir, '/trunk/' . basename( $app->file ) ) ],
 		] );
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Scoped: `' . $svn_comp_dir . '`' . "\n" . ' →  `' . $svn_distro_dir . '`.' );
+
 		// Prunes the `./._x/svn-distro` directory now.
 		// This prunes everything in `.gitignore`, except `vendor`. This time, including `composer.json` files.
 		// It also prunes a bunch of other things; {@see Project::comp_dir_prune_config()}.
@@ -381,6 +419,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		) ) {
 			throw new U\Exception( 'Failed to prune `./._x/svn-distro`.' );
 		}
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Pruned: `' . $svn_distro_dir . '`.' );
+
 		// Copies contents of `./._x/svn-distro/*` into `./._x/svn-repo/` directory.
 		// This copy ignores nothing. Everything is copied without exception.
 
@@ -393,6 +433,10 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 				' into `./._x/svn-repo`.'
 			);
 		}
+		U\CLI::log(
+			'[' . __FUNCTION__ . '()]: Copied: `' . U\Dir::join( $svn_distro_dir, '/*' ) . '`' . "\n"
+			. ' →  `' . $svn_repo_dir . '`.'
+		);
 		// Copies `./._x/svn-distro/trunk` into `./._x/svn-distro/tags/[version]` directory.
 		// This copy ignores nothing. Everything is copied without exception.
 
@@ -405,6 +449,10 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 				' into `./._x/svn-distro/tags/' . $this->project->version . '`.'
 			);
 		}
+		U\CLI::log(
+			'[' . __FUNCTION__ . '()]: Copied: `' . U\Dir::join( $svn_distro_dir, '/trunk' ) . '`' . "\n" .
+			' →  `' . U\Dir::join( $svn_distro_dir, '/tags/' . $this->project->version ) . '`.'
+		);
 		// Copies `./._x/svn-distro/tags[version]` into `./._x/svn-repo/tags/[version]`.
 		// This copy ignores nothing. Everything is copied without exception.
 
@@ -417,6 +465,10 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 				' into `./._x/svn-repo/tags/' . $this->project->version . '`.'
 			);
 		}
+		U\CLI::log(
+			'[' . __FUNCTION__ . '()]: Copied: `' . U\Dir::join( $svn_distro_dir, '/tags/' . $this->project->version ) . '`' . "\n" .
+			' →  `' . U\Dir::join( $svn_repo_dir, '/tags/' . $this->project->version ) . '`.'
+		);
 	}
 
 	/**
@@ -427,6 +479,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 * @throws U\Exception On any failure.
 	 */
 	protected function maybe_compile_wp_app_zip() : void {
+		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
+
 		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
@@ -447,6 +501,7 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 				' From: `' . $svn_repo_tag_dir . '->' . $this->project->slug . '`, to: `' . $zip_path . '`.'
 			);
 		}
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Zipped: `' . $svn_repo_tag_dir . '`' . "\n" . ' →  `' . $zip_path . '`.' );
 	}
 
 	/**
@@ -458,6 +513,8 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 * @throws \Throwable On some failures.
 	 */
 	protected function maybe_s3_upload_wp_app_zip() : void {
+		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
+
 		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
@@ -514,6 +571,10 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			'Bucket'     => $this->project->s3_bucket(),
 			'Key'        => $s3_zip_file_subpath,
 		] );
+		U\CLI::log(
+			'[' . __FUNCTION__ . '()]: Uploaded: `' . $zip_path . '`' . "\n" .
+			' →  `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_zip_file_subpath ) . '`.'
+		);
 		// Update index w/ tagged versions.
 		// Throws exception on failure, which we intentionally do not catch.
 
@@ -530,5 +591,10 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			'Bucket' => $this->project->s3_bucket(),
 			'Key'    => $s3_index_file_subpath,
 		] );
+		U\CLI::log(
+			'[' . __FUNCTION__ . '()]: Updated: `' .
+			U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_index_file_subpath ) .
+			'`.'
+		);
 	}
 }

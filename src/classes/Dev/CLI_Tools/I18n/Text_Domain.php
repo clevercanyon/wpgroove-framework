@@ -140,6 +140,8 @@ final class Text_Domain extends U\A6t\CLI_Tool {
 	 */
 	protected function add() : void {
 		try {
+			U\CLI::heading( '[' . __METHOD__ . '()]: Adding ...' );
+
 			$project_dir   = U\Fs::abs( $this->get_option( 'project-dir' ) );
 			$this->project = new U\Dev\Project( $project_dir );
 
@@ -151,7 +153,9 @@ final class Text_Domain extends U\A6t\CLI_Tool {
 
 			foreach ( $php_files_iterator as $_php_file ) {
 				$this->process_file( $text_domain, $_php_file->getPathname() );
+				U\CLI::log( '[' . __FUNCTION__ . '()]: Processed: `' . $_php_file->getPathname() . '`.' );
 			}
+			U\CLI::done( '[' . __METHOD__ . '()]: Complete ✔.' );
 		} catch ( \Throwable $throwable ) {
 			U\CLI::error( $throwable->getMessage() );
 			U\CLI::error( $throwable->getTraceAsString() );

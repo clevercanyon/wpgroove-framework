@@ -78,8 +78,6 @@ require_once D\Dir::join( D\CLI::project_dir(), '/vendor/autoload.php' );
  * @since 2021-12-15
  */
 U\Env::config_debugging_mode();
-U\CLI::log( D\CLI::project_dir() );
-U\CLI::exit_status( 0 );
 
 /**
  * Handles `post-update-cmd` hook.
