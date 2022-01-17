@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework\I7e;
 
 /**
  * Utilities.
@@ -35,15 +35,8 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Base class for a WordPress plugin.
+ * Theme interface.
  *
  * @since 2021-12-15
  */
-abstract class Plugin extends WPG\A6t\App implements WPG\I7e\Plugin {
-	/**
-	 * Traits.
-	 *
-	 * @since 2021-12-15
-	 */
-	use WPG\Traits\Plugin\Members;
-}
+interface Theme extends WPG\I7e\App { }

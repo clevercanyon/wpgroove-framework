@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework\Traits\App\Hooks;
 
 /**
  * Utilities.
@@ -35,15 +35,37 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Base class for a WordPress plugin.
+ * Interface members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\I7e\App
  */
-abstract class Plugin extends WPG\A6t\App implements WPG\I7e\Plugin {
+trait On_After_Setup_Theme_Members {
 	/**
-	 * Traits.
+	 * Plugin|Theme: on `after_setup_theme` hook.
 	 *
 	 * @since 2021-12-15
 	 */
-	use WPG\Traits\Plugin\Members;
+	final public function on_after_setup_theme_base() : void {
+		if ( $this instanceof WPG\I7e\Theme ) {
+			$version = get_option( $this->var_prefix . 'version' ) ?: '';
+
+			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {
+				$this->on_activation_base();
+				$this->on_theme_activation();
+			}
+		}
+	}
+
+	/**
+	 * Plugin|Theme: on `after_setup_theme` hook.
+	 *
+	 * @since 2021-12-15
+	 *
+	 * @note  DO NOT POPULATE. This is for extenders only.
+	 */
+	public function on_after_setup_theme() : void {
+		// DO NOT POPULATE. This is for extenders only.
+	}
 }

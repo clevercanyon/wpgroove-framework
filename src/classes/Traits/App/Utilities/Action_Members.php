@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework\Traits\App\Utilities;
 
 /**
  * Utilities.
@@ -35,15 +35,22 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Base class for a WordPress plugin.
+ * Interface members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\I7e\App
  */
-abstract class Plugin extends WPG\A6t\App implements WPG\I7e\Plugin {
+trait Action_Members {
 	/**
-	 * Traits.
+	 * Plugin|Theme: {@see do_action()}.
 	 *
-	 * @since 2021-12-15
+	 * @since 2021-12-30
+	 *
+	 * @param string $hook_name {@see do_action()}.
+	 * @param mixed  ...$args   {@see do_action()}.
 	 */
-	use WPG\Traits\Plugin\Members;
+	final public function do_action( string $hook_name, /* mixed */ ...$args ) : void {
+		do_action( $this->var_prefix . $hook_name, ...$args );
+	}
 }

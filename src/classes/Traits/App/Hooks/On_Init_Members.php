@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework\Traits\App\Hooks;
 
 /**
  * Utilities.
@@ -35,32 +35,38 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Plugin|Theme (i.e., app) base class.
+ * Interface members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\I7e\App
  */
-abstract class App extends U\A6t\Base implements WPG\I7e\App {
+trait On_Init_Members {
 	/**
-	 * Brand info.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @final Starting w/ PHP 8.1.0.
-	 */
-	private const BRAND = [
-		'name' => 'WP Groove',
-
-		'slug'        => 'wpgroove',
-		'slug_prefix' => 'wpgroove-',
-
-		'var'        => 'wpgroove',
-		'var_prefix' => 'wpgroove_',
-	];
-
-	/**
-	 * Traits.
+	 * Plugin|Theme: on `init` hook.
 	 *
 	 * @since 2021-12-15
 	 */
-	use WPG\Traits\App\Members;
+	final public function on_init_base() : void {
+		if ( $this instanceof WPG\I7e\Plugin ) {
+			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
+				load_plugin_textdomain( $this->slug, false, U\Dir::name( $this->subpath, '/languages' ) );
+			}
+		} elseif ( $this instanceof WPG\I7e\Theme ) {
+			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
+				load_theme_textdomain( $this->slug, U\Dir::join( $this->dir, '/languages' ) );
+			}
+		}
+	}
+
+	/**
+	 * Plugin|Theme: on `init` hook.
+	 *
+	 * @since 2021-12-15
+	 *
+	 * @note  DO NOT POPULATE. This is for extenders only.
+	 */
+	public function on_init() : void {
+		// DO NOT POPULATE. This is for extenders only.
+	}
 }

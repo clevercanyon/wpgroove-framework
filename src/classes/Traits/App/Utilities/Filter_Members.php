@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework\Traits\App\Utilities;
 
 /**
  * Utilities.
@@ -35,15 +35,24 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Base class for a WordPress plugin.
+ * Interface members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\I7e\App
  */
-abstract class Plugin extends WPG\A6t\App implements WPG\I7e\Plugin {
+trait Filter_Members {
 	/**
-	 * Traits.
+	 * Plugin|Theme: {@see apply_filters()}.
 	 *
-	 * @since 2021-12-15
+	 * @since 2021-12-30
+	 *
+	 * @param string $hook_name {@see apply_filters()}.
+	 * @param mixed  ...$args   {@see apply_filters()}.
+	 *
+	 * @return mixed {@see apply_filters()}.
 	 */
-	use WPG\Traits\Plugin\Members;
+	final public function apply_filters( string $hook_name, /* mixed */ ...$args ) /* : mixed */ {
+		return apply_filters( $this->var_prefix . $hook_name, ...$args );
+	}
 }

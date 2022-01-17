@@ -39,4 +39,11 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  */
-abstract class Theme extends WPG\A6t\App { }
+abstract class Theme extends WPG\A6t\App implements WPG\I7e\Theme {
+	/**
+	 * Traits.
+	 *
+	 * @since 2021-12-15
+	 */
+	use WPG\Traits\Theme\Members;
+}
