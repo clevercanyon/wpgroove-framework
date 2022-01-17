@@ -39,7 +39,14 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  */
-class Text_Domain extends U\A6t\CLI_Tool {
+final class Text_Domain extends U\A6t\CLI_Tool {
+	/**
+	 * Project.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected U\Dev\Project $project;
+
 	/**
 	 * Version.
 	 *
@@ -103,11 +110,17 @@ class Text_Domain extends U\A6t\CLI_Tool {
 				'synopsis'    => 'Adds text domain to PHP files in a given directory.',
 				'description' => 'Adds text domain to PHP files in a given directory. See ' . __CLASS__ . '::add()',
 				'options'     => [
-					'dir'         => [
+					'project-dir' => [
 						'required'    => true,
-						'description' => 'Directory path.',
-						'validator'   => fn( $value ) => $value && is_string( $value ) && is_dir( $value )
-							&& preg_match( '/\/\._[^\/]*\//u', U\Fs::normalize( $value ) ),
+						'description' => 'Project directory path.',
+						'validator'   => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
+							&& is_file( U\Dir::join( $abs_path, '/composer.json' ) ),
+					],
+					'work-dir'    => [
+						'required'    => true,
+						'description' => 'Work directory path.',
+						'validator'   => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
+							&& preg_match( '/\/\._[^\/]*\//u', $abs_path ),
 					],
 					'text-domain' => [
 						'required'    => true,
@@ -127,11 +140,14 @@ class Text_Domain extends U\A6t\CLI_Tool {
 	 */
 	protected function add() : void {
 		try {
-			$dir         = $this->get_option( 'dir' );
+			$project_dir   = U\Fs::abs( $this->get_option( 'project-dir' ) );
+			$this->project = new U\Dev\Project( $project_dir );
+
+			$work_dir    = U\Fs::abs( $this->get_option( 'work-dir' ) );
 			$text_domain = $this->get_option( 'text-domain' );
 
 			$regexp             = U\Fs::gitignore_regexp_lookahead( 'negative', '.+\.php$', [ 'except:vendor/' => 'clevercanyon' ] );
-			$php_files_iterator = U\Dir::iterator( $dir, $regexp );
+			$php_files_iterator = U\Dir::iterator( $work_dir, $regexp );
 
 			foreach ( $php_files_iterator as $_php_file ) {
 				$this->process_file( $text_domain, $_php_file->getPathname() );

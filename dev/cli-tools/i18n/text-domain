@@ -25,6 +25,7 @@ namespace WP_Groove\Framework\Dev\CLI_Tools\I18n;
  * @since 2021-12-15
  */
 use Clever_Canyon\{Utilities as U};
+use Clever_Canyon\Utilities\Dev\{Utilities as D};
 
 /**
  * Framework.

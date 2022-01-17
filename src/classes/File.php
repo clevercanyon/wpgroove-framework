@@ -39,7 +39,7 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  */
-class File extends U\A6t\Stc_Utilities {
+final class File extends U\A6t\Stc_Utilities {
 	/**
 	 * Gets file MIME type.
 	 *

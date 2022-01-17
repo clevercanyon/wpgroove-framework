@@ -25,6 +25,7 @@ namespace WP_Groove\Framework\Dev\CLI_Tools\Composer;
  * @since 2021-12-15
  */
 use Clever_Canyon\{Utilities as U};
+use Clever_Canyon\Utilities\Dev\{Utilities as D};
 
 /**
  * Framework.
@@ -54,18 +55,22 @@ if ( ! getenv( 'COMPOSER_DEV_MODE' ) ) {
 }
 
 /**
- * Project directory.
+ * Requires dev utilities.
  *
  * @since 2021-12-15
  */
-$project_dir = require __DIR__ . '/.cli-project-dir.php';
+if ( is_dir( dirname( __FILE__, 4 ) . '/vendor' ) ) { // Possible symlink. That's OK here.
+	require_once dirname( __FILE__, 4 ) . '/vendor/clevercanyon/php-js-utilities/dev/utilities/load.php';
+} else { // Assume running as a dependency from inside of another project’s `/vendor` directory.
+	require_once dirname( __FILE__, 7 ) . '/vendor/clevercanyon/php-js-utilities/dev/utilities/load.php';
+}
 
 /**
  * Requires autoloader.
  *
  * @since 2021-12-15
  */
-require_once $project_dir . '/vendor/autoload.php';
+require_once D\Dir::join( D\CLI::project_dir(), '/vendor/autoload.php' );
 
 /**
  * Enables debugging mode.
@@ -73,6 +78,8 @@ require_once $project_dir . '/vendor/autoload.php';
  * @since 2021-12-15
  */
 U\Env::config_debugging_mode();
+U\CLI::log( D\CLI::project_dir() );
+U\CLI::exit_status( 0 );
 
 /**
  * Handles `post-update-cmd` hook.
@@ -80,9 +87,9 @@ U\Env::config_debugging_mode();
  * @since 2021-12-15
  */
 if ( 'update' === ( $argv[ 1 ] ?? '' ) ) {
-	new U\Dev\CLI_Tools\Composer\On_Post_Update_Cmd( [ 'update', '--project-dir', $project_dir ] );
-	new WPG\Dev\CLI_Tools\Composer\On_Post_Update_Cmd( [ 'update', '--project-dir', $project_dir ] );
+	new U\Dev\CLI_Tools\Composer\On_Post_Update_Cmd( [ 'update', '--project-dir', D\CLI::project_dir() ] );
+	new WPG\Dev\CLI_Tools\Composer\On_Post_Update_Cmd( [ 'update', '--project-dir', D\CLI::project_dir() ] );
 } else {
-	new U\Dev\CLI_Tools\Composer\On_Post_Update_Cmd( [ 'symlink', '--project-dir', $project_dir ] );
+	new U\Dev\CLI_Tools\Composer\On_Post_Update_Cmd( [ 'symlink', '--project-dir', D\CLI::project_dir() ] );
 	U\CLI::run( [ $argv[ 0 ], 'update' ] ); // Separate process, after symlinks.
 }

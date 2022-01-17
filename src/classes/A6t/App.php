@@ -266,6 +266,7 @@ abstract class App extends U\A6t\Base {
 	 */
 	final public static function add_instance_hooks( string ...$args ) : void {
 		assert( ! empty( $args[ 0 ] ) && is_file( $args[ 0 ] ) );
+		// @todo Normalize `$args[0]`?
 
 		// Saves instance args for {@see load()}.
 		// Args also be used by {@see on_uninstall_base()}.
@@ -319,13 +320,13 @@ abstract class App extends U\A6t\Base {
 		add_action(
 			'network_plugin_loaded', // Network active.
 			function ( string $loaded_file ) use ( $args ) {
-				realpath( $loaded_file ) === $args[ 0 ] && static::load();
+				U\Fs::realize( $loaded_file ) === $args[ 0 ] && static::load();
 			}
 		);
 		add_action(
 			'plugin_loaded', // Active on a specific site.
 			function ( string $loaded_file ) use ( $args ) {
-				realpath( $loaded_file ) === $args[ 0 ] && static::load();
+				U\Fs::realize( $loaded_file ) === $args[ 0 ] && static::load();
 			}
 		);
 	}
@@ -346,7 +347,7 @@ abstract class App extends U\A6t\Base {
 		add_action(
 			static::BRAND[ 'var_prefix' ] . 'theme_loaded',
 			function ( string $loaded_file ) use ( $args ) {
-				realpath( $loaded_file ) === $args[ 0 ] && static::load();
+				U\Fs::realize( $loaded_file ) === $args[ 0 ] && static::load();
 			}
 		);
 		do_action( static::BRAND[ 'var_prefix' ] . 'theme_loaded', $args[ 0 ] );

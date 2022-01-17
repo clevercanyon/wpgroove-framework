@@ -47,7 +47,7 @@ use Aws\Exception\AwsException;
  *
  * @since 2021-12-15
  */
-class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
+final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	/**
 	 * Project.
 	 *
@@ -67,7 +67,7 @@ class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 *
 	 * @since 2021-12-15
 	 */
-	protected const NAME = 'Composer/Hook/On_Post_Update_Cmd';
+	protected const NAME = 'Composer/On_Post_Update_Cmd';
 
 	/**
 	 * Constructor.
@@ -87,11 +87,10 @@ class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 				'description' => 'Updates project dependencies, symlinks, headers, SVN repos, and zip files. See ' . __CLASS__ . '::update()',
 				'options'     => [
 					'project-dir' => [
-						'optional'    => true,
+						'required'    => true,
 						'description' => 'Project directory path.',
-						'validator'   => fn( $value ) => $value && is_string( $value ) && is_dir( $value )
-							&& is_file( U\Dir::join( $value, '/composer.json' ) ),
-						'default'     => getcwd(),
+						'validator'   => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
+							&& is_file( U\Dir::join( $abs_path, '/composer.json' ) ),
 					],
 				],
 			],
@@ -106,9 +105,9 @@ class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 */
 	protected function update() : void {
 		try {
-			$this->project = new U\Dev\Project(
-				$this->get_option( 'project-dir' )
-			);
+			$project_dir   = U\Fs::abs( $this->get_option( 'project-dir' ) );
+			$this->project = new U\Dev\Project( $project_dir );
+
 			$this->maybe_run_wp_app_composer_updates();
 			$this->maybe_symlink_wp_app_locally();
 
@@ -171,8 +170,8 @@ class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		} else {
 			throw new U\Exception( 'Unknown WordPress app type.' );
 		}
-		if ( U\Fs::path_exists( $local_dir ) ) {
-			return; // Do not overwrite.
+		if ( U\Fs::exists( $local_dir ) ) {
+			return; // Do not overwrite existing path.
 		}
 		if ( ! is_writable( U\Dir::name( $local_dir ) ) ) {
 			throw new U\Exception( 'Local WordPress symlink failure. Directory not writable: `' . U\Dir::name( $local_dir ) . '`.' );
@@ -343,22 +342,30 @@ class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		}
 		// Adds text domain to everything in `._x/svn-comp/trunk`.
 		// This tool ignores everything in `.gitignore`, except `vendor/clevercanyon/*`.
-		// Therefore, we are adding the text domain to other clevercanyon packages, including the WP Groove framework.
+		// i.e., We're adding text domain to all clevercanyon packages, including the WP Groove framework.
 
+		if ( 'clevercanyon/wpgroove-framework' === $this->project->pkg_name ) {
+			$text_domain_bin_script = U\Dir::join( $this->project->dir, '/dev/cli-tools/i18n/text-domain' );
+		} else {
+			$text_domain_bin_script = U\Dir::join( $this->project->dir, '/vendor/clevercanyon/wpgroove-framework/dev/cli-tools/i18n/text-domain' );
+		}
 		U\CLI::run( [
-			[ U\Dir::join( $this->project->dir, '/vendor/clevercanyon/wpgroove-framework/dev/cli-tools/i18n/text-domain' ), 'add' ],
+			[ $text_domain_bin_script, 'add' ],
+			[ '--project-dir', $this->project->dir ],
+			[ '--work-dir', U\Dir::join( $svn_comp_dir, '/trunk' ) ],
 			[ '--text-domain', $app->headers->text_domain ],
-			[ '--dir', U\Dir::join( $svn_comp_dir, '/trunk' ) ],
 		] );
 		// Runs PHP Scoper on full `._x/svn-comp` directory; outputting to `._x/svn-distro`.
 		// PHP Scoper ignores files based on Finders in the `.scoper.cfg.php` file.
 		// We're not using that functionality, though, as we have already pruned the directory.
 
+		$scoper_bin_script = U\Dir::join( $this->project->dir, '/vendor/clevercanyon/php-js-utilities/dev/cli-tools/php-scoper/scoper' );
+
 		U\CLI::run( [
-			[ U\Dir::join( $this->project->dir, '/vendor/clevercanyon/php-js-utilities/dev/cli-tools/php-scoper/scoper' ), 'scope' ],
+			[ $scoper_bin_script, 'scope' ],
 			[ '--project-dir', $this->project->dir ],
+			[ '--work-dir', $svn_comp_dir ],
 			[ '--prefix', ucfirst( $this->project->pkg_name_hash ) ],
-			[ '--dir', $svn_comp_dir ],
 			[ '--output-dir', $svn_distro_dir ],
 			[ '--output-project-dir', U\Dir::join( $svn_distro_dir, '/trunk' ) ],
 			[ '--output-project-dir-entry-file', U\Dir::join( $svn_distro_dir, '/trunk/' . basename( $app->file ) ) ],

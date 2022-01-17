@@ -11,13 +11,13 @@
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/clevercanyon/php-js-utilities.git",
-                "reference": "52102819b34b7db3b38b8a425b8e00d279dc337e"
+                "url": "git@github.com:clevercanyon/php-js-utilities.git",
+                "reference": "3d5388fcaac3313e1ad1fe4753ea29f84052ebe3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities/zipball/52102819b34b7db3b38b8a425b8e00d279dc337e",
-                "reference": "52102819b34b7db3b38b8a425b8e00d279dc337e",
+                "url": "https://api.github.com/repos/clevercanyon/php-js-utilities/zipball/3d5388fcaac3313e1ad1fe4753ea29f84052ebe3",
+                "reference": "3d5388fcaac3313e1ad1fe4753ea29f84052ebe3",
                 "shasum": ""
             },
             "require": {
@@ -97,11 +97,7 @@
                 }
             ],
             "description": "CLEVER CANYON’s utilities for PHP/JS applications.",
-            "support": {
-                "issues": "https://github.com/clevercanyon/php-js-utilities/issues",
-                "source": "https://github.com/clevercanyon/php-js-utilities/tree/main"
-            },
-            "time": "2022-01-15T16:39:20+00:00"
+            "time": "2022-01-17T02:49:14+00:00"
         }
     ],
     "packages-dev": [
