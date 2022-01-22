@@ -57,7 +57,6 @@ trait On_Uninstall_Members {
 
 		try { // Fail softly.
 			$app = static::load( false );
-
 		} catch ( U\Fatal_Exception $exception ) {
 			error_log( 'Failed to load ' . static::app_type() . ' on: `' . current_action() . '`.' );
 			return; // Fail software.

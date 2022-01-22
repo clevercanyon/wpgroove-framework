@@ -186,7 +186,7 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		if ( ! is_writable( U\Dir::name( $local_dir ) ) ) {
 			throw new U\Exception( 'Local WordPress symlink failure. Directory not writable: `' . U\Dir::name( $local_dir ) . '`.' );
 		}
-		if ( ! symlink( $app->dir, $local_dir ) ) {
+		if ( ! U\Fs::make_link( $app->dir, $local_dir ) ) {
 			throw new U\Exception( 'Unexpected local WordPress symlink failure: `' . $local_dir . '`.' );
 		}
 		U\CLI::log( '[' . __FUNCTION__ . '()]: Symlinked: `' . $local_dir . '`' . "\n" . ' →  `' . $app->dir . '`.' );
@@ -495,7 +495,7 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		$zip_basename = $this->project->slug . '-v' . $this->project->version . '.zip';
 		$zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_basename );
 
-		if ( ! U\Fs::zip( $svn_repo_tag_dir . '->' . $this->project->slug, $zip_path ) ) {
+		if ( ! U\Fs::zip_er( $svn_repo_tag_dir . '->' . $this->project->slug, $zip_path ) ) {
 			throw new U\Exception(
 				'Failed to zip `./._x/svn-repo/tags/' . $this->project->version . '` directory.' .
 				' From: `' . $svn_repo_tag_dir . '->' . $this->project->slug . '`, to: `' . $zip_path . '`.'

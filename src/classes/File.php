@@ -40,29 +40,4 @@ use WP_Groove\{Framework as WPG};
  * @since 2021-12-15
  */
 final class File extends U\A6t\Stc_Utilities {
-	/**
-	 * Gets file MIME type.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @param string $file    File path.
-	 * @param string $default Optional default (fallback) MIME type.
-	 *                        Default is `application/octet-stream`.
-	 *
-	 * @return string MIME type.
-	 */
-	public static function mime_type( string $file, string $default = 'application/octet-stream' ) : string {
-		$mime_type = $default;
-		$ext       = U\File::ext( $file );
-
-		foreach ( get_allowed_mime_types() as $_mime => $_type ) {
-			$_mimes = explode( '|', $_mime );
-
-			if ( in_array( $ext, $_mimes, true ) ) {
-				$mime_type = $_type;
-				break;
-			}
-		}
-		return $mime_type;
-	}
 }

@@ -69,14 +69,18 @@ trait Instance_Members {
 	 * @param string ...$args {@see WPG\Traits\App\Magic\Constructable_Members::__construct()}.
 	 *
 	 * @throws U\Fatal_Exception On failure to determine app type.
+	 *
+	 * @note  This runs as the plugin is being loaded (i.e., require'd in `wp-settings.php`).
+	 *        WordPress hasn't updated {@see mb_internal_encoding()} at this point in `wp-settings.php`.
+	 *        Thus, it's important to steer away from `mb_*` functions. Or, pass an explicit encoding if necessary.
 	 */
 	final public static function add_instance_hooks( string ...$args ) : void {
 		assert( ! empty( $args[ 0 ] ) && is_string( $args[ 0 ] ) && is_file( $args[ 0 ] ) );
 		$args[ 0 ] = U\Fs::realize( $args[ 0 ] ); // Canonicalize and normalize.
 		assert( ! empty( $args[ 0 ] ) && is_file( $args[ 0 ] ) );
 
-		// Saves instance args for {@see WPG\A6t\App::load()}.
-		// Args also be used by {@see WPG\A6t\App::on_uninstall_base()}.
+		// Saves instance args for {@see WPG\I7e\App::load()}.
+		// Args also be used by {@see WPG\I7e\App::on_uninstall_base()}.
 
 		$app_type = static::app_type();
 		$cls      = get_called_class();
@@ -118,22 +122,10 @@ trait Instance_Members {
 				do_action( static::load()->var_prefix . 'deactivation', $network_wide );
 			}
 		);
-		// These fire when loaded by `wp-settings.php` in the normal course of things.
-		// Neither of these actions will fire on activation, deactivation, or uninstallation.
-		// ... which is as it should be. We have separate handlers for those events.
+		// `plugins_loaded` will not fire on activation, deactivation, or uninstallation.
+		// That's as it should be. The WP Groove framework has separate handlers for those events.
 
-		add_action(
-			'network_plugin_loaded', // Network active.
-			function ( string $loaded_file ) use ( $args ) {
-				U\Fs::realize( $loaded_file ) === $args[ 0 ] && static::load();
-			}
-		);
-		add_action(
-			'plugin_loaded', // Active on specific blog.
-			function ( string $loaded_file ) use ( $args ) {
-				U\Fs::realize( $loaded_file ) === $args[ 0 ] && static::load();
-			}
-		);
+		add_action( 'plugins_loaded', [ static::class, 'load' ], -( PHP_INT_MAX - 10000 ) );
 	}
 
 	/**
@@ -144,16 +136,10 @@ trait Instance_Members {
 	 * @param string ...$args {@see WPG\Traits\App\Magic\Constructable_Members::__construct()}.
 	 */
 	final protected static function add_theme_instance_hooks( string ...$args ) : void {
-		// Adds theme instance hooks (just one for now) and loads theme.
-		// There is no `plugin_loaded` equivalent for themes, so we create one.
+		// `after_setup_theme` will not fire on activation, deactivation, or uninstallation.
+		// That's as it should be. The WP Groove framework has separate handlers for those events.
 
-		add_action(
-			static::BRAND[ 'var_prefix' ] . 'theme_loaded',
-			function ( string $loaded_file ) use ( $args ) {
-				U\Fs::realize( $loaded_file ) === $args[ 0 ] && static::load();
-			}
-		);
-		do_action( static::BRAND[ 'var_prefix' ] . 'theme_loaded', $args[ 0 ] );
+		add_action( 'after_setup_theme', [ static::class, 'load' ], -( PHP_INT_MAX - 10000 ) );
 	}
 
 	/**

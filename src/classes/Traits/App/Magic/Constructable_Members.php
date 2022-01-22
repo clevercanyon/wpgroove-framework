@@ -100,8 +100,17 @@ trait Constructable_Members {
 		$this->after_setup_theme_hook_priority ??= 10;
 		$this->init_hook_priority              ??= 10;
 
+		if ( $this instanceof WPG\I7e\Plugin ) { // Not lower that plugin instance loader.
+			$this->plugins_loaded_hook_priority = max(
+				$this->plugins_loaded_hook_priority, -( PHP_INT_MAX - 10001 )
+			);
+		} elseif ( $this instanceof WPG\I7e\Theme ) { // Not lower that theme instance loader.
+			$this->after_setup_theme_hook_priority = max(
+				$this->after_setup_theme_hook_priority, -( PHP_INT_MAX - 10001 )
+			);
+		}
 		if ( $maybe_setup_hooks && $this->should_setup_hooks_base() ) {
-			$this->setup_hooks();
+			$this->setup_hooks(); // Let’s make some waves.
 		}
 	}
 
