@@ -24,13 +24,13 @@ namespace WP_Groove\Framework\Traits\App;
  * @since 2021-12-15
  */
 use Clever_Canyon\{Utilities as U};
+use WP_Groove\{Framework as WPG};
 
 /**
  * Framework.
  *
  * @since 2021-12-15
  */
-use WP_Groove\{Framework as WPG};
 
 // </editor-fold>
 
@@ -51,7 +51,7 @@ trait Members {
 	use WPG\Traits\App\Utilities\Instance_Members;
 
 	use WPG\Traits\App\Utilities\Property_Members;
-	use U\Traits\Base\Magic\Finals\Readable_Members;
+	use U\Traits\A6t\Base\Magic\Finals\Readable_Members;
 
 	use WPG\Traits\App\Hooks\On_Activation_Members;
 	use WPG\Traits\App\Hooks\On_Deactivation_Members;
