@@ -11,12 +11,22 @@
 // <editor-fold desc="Strict types, namespace, use statements, and other headers.">
 
 /**
+ * Lint configuration.
+ *
+ * @since        2021-12-15
+ *
+ * @noinspection PhpUnhandledExceptionInspection
+ * @noinspection PhpStaticAsDynamicMethodCallInspection
+ * phpcs:disable Generic.Commenting.DocComment.MissingShort
+ */
+
+/**
  * Declarations & namespace.
  *
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework;
+namespace WP_Groove\Framework\Tests\Tests;
 
 /**
  * Utilities.
@@ -24,6 +34,7 @@ namespace WP_Groove\Framework;
  * @since 2021-12-15
  */
 use Clever_Canyon\{Utilities as U};
+use Clever_Canyon\Utilities\{Tests as UT};
 
 /**
  * Framework.
@@ -35,9 +46,16 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * File utilities.
+ * Test case.
  *
  * @since 2021-12-15
+ * @coversDefaultClass \Clever_Canyon\Utilities\Arr
  */
-final class File extends U\A6t\Stc_Utilities {
+final class Hello_World_Tests extends UT\A6t\Tests {
+	/**
+	 * @covers ::value_first()
+	 */
+	public function test_hello_world() : void {
+		$this->assertSame( 'hello world', U\Arr::value_first( [ 'hello world' ] ), $this->message() );
+	}
 }
