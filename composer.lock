@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities.git",
-                "reference": "230f0fe1670043683a9a3920dabca0083c7e2343"
+                "reference": "68d8a1e73741a61451806dfc2c943f6b4903b17f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/230f0fe1670043683a9a3920dabca0083c7e2343",
-                "reference": "230f0fe1670043683a9a3920dabca0083c7e2343",
+                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/68d8a1e73741a61451806dfc2c943f6b4903b17f",
+                "reference": "68d8a1e73741a61451806dfc2c943f6b4903b17f",
                 "shasum": ""
             },
             "require": {
@@ -118,7 +118,7 @@
                 "issues": "https://github.com/clevercanyon/utilities/issues",
                 "source": "https://github.com/clevercanyon/utilities/tree/main"
             },
-            "time": "2022-02-14T17:40:09+00:00"
+            "time": "2022-02-14T18:52:10+00:00"
         },
         {
             "name": "dflydev/dot-access-data",

@@ -562,7 +562,6 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			$comp_dir_prune_config[ 'prune' ],
 			array_merge( $comp_dir_prune_config[ 'exceptions' ], [
 				'/^tests(?:$|\/)/ui',
-				'/^\.trunk\.php$/ui',
 				'/(?:^|.+\/)composer\.(?:json|lock)$/ui',
 			] ),
 		) ) {
@@ -602,15 +601,13 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			[ '--output-dir', $distro_tests_dir ],
 
 			[ '--output-project-dir', $distro_tests_dir ],
-			[ '--output-project-dir-entry-file', U\Dir::join( $distro_tests_dir, '/.trunk.php' ) ],
-
 			[ '--output-project-dir', U\Dir::join( $distro_tests_dir, '/trunk' ) ],
 			[ '--output-project-dir-entry-file', U\Dir::join( $distro_tests_dir, '/trunk/' . basename( $app->file ) ) ],
 		] );
 		U\CLI::log( '[' . __FUNCTION__ . '()]: Scoped: `' . $comp_tests_dir . '`' . "\n" . ' →  `' . $distro_tests_dir . '`.' );
 
 		// Prunes the `./._x/distro-tests` directory now.
-		// This prunes everything in `.gitignore`, except `vendor` (off by default), `tests`, and `.trunk.php`.
+		// This prunes everything in `.gitignore`, except `vendor` (off by default), and `tests`.
 		// It also prunes a bunch of other things; {@see Project::comp_dir_prune_config()}.
 
 		if ( ! U\Dir::prune(
@@ -618,7 +615,6 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			$comp_dir_prune_config[ 'prune' ],
 			array_merge( $comp_dir_prune_config[ 'exceptions' ], [
 				'/^tests(?:$|\/)/ui',
-				'/^\.trunk\.php$/ui',
 			] ),
 		) ) {
 			throw new U\Fatal_Exception( 'Failed to prune `./._x/distro-tests`.' );
