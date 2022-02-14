@@ -554,13 +554,14 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		U\CLI::log( '[' . __FUNCTION__ . '()]: Ran `composer install` in: `' . U\Dir::join( $comp_tests_dir, '/trunk' ) . '`.' );
 
 		// Prunes the `./._x/comp-tests` directory, which speeds up remaining tasks.
-		// This prunes everything in `.gitignore`, except: `vendor` (off by default), `tests`, and `composer.json|lock`.
+		// This prunes everything in `.gitignore`, except: `vendor` (including root), `tests`, and `composer.json|lock`.
 		// It also prunes a bunch of other things; {@see Project::comp_dir_prune_config()}.
 
 		if ( ! U\Dir::prune(
 			$comp_tests_dir,
 			$comp_dir_prune_config[ 'prune' ],
 			array_merge( $comp_dir_prune_config[ 'exceptions' ], [
+				'/^vendor(?:$|\/)/ui',
 				'/^tests(?:$|\/)/ui',
 				'/(?:^|.+\/)composer\.(?:json|lock)$/ui',
 			] ),
@@ -607,13 +608,14 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		U\CLI::log( '[' . __FUNCTION__ . '()]: Scoped: `' . $comp_tests_dir . '`' . "\n" . ' →  `' . $distro_tests_dir . '`.' );
 
 		// Prunes the `./._x/distro-tests` directory now.
-		// This prunes everything in `.gitignore`, except `vendor` (off by default), and `tests`.
+		// This prunes everything in `.gitignore`, except `vendor` (including root), and `tests`.
 		// It also prunes a bunch of other things; {@see Project::comp_dir_prune_config()}.
 
 		if ( ! U\Dir::prune(
 			$distro_tests_dir,
 			$comp_dir_prune_config[ 'prune' ],
 			array_merge( $comp_dir_prune_config[ 'exceptions' ], [
+				'/^vendor(?:$|\/)/ui',
 				'/^tests(?:$|\/)/ui',
 			] ),
 		) ) {
