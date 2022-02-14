@@ -215,54 +215,61 @@ final class Text_Domain extends U\A6t\CLI_Tool {
 		$i18n_function_args_started = false;
 		$found_i18n_text_domain     = false;
 
+		$prev_token_type                = null;
+		$last_non_whitespace_token_type = null;
+
 		$modified_file_contents = ''; // Initialize.
 		$text_domain            = addslashes( $text_domain );
 
-		foreach ( $tokens as $_i => $_token ) {
+		foreach ( $tokens as $_token ) {
 			if ( is_array( $_token ) ) {
-				[ $_token_type, $_token ] = $_token;
-				if (
-					T_STRING === $_token_type
-					&& in_array( mb_strtolower( $_token ), $this::I18N_FUNCTIONS, true )
-				) {
-					$round_brackets_balance     = 0;
-					$in_i18n_function           = true;
-					$i18n_function_args_started = false;
-					$found_i18n_text_domain     = false;
-				} elseif (
-					T_CONSTANT_ENCAPSED_STRING === $_token_type
-					&& ( "'" . $text_domain . "'" === $_token || '"' . $text_domain . '"' === $_token )
-				) {
-					if ( $in_i18n_function && $i18n_function_args_started ) {
-						$found_i18n_text_domain = true;
-					}
+				[ $_token_type, $_token_value ] = $_token;
+			} else {
+				$_token_type = $_token_value = $_token;
+			}
+			if ( T_STRING === $_token_type // Possible `__`, `_x`, `_n`, etc.
+				&& T_FUNCTION !== $last_non_whitespace_token_type // Skip `function __` definitions.
+				&& in_array( mb_strtolower( $_token_value ), $this::I18N_FUNCTIONS, true )
+			) {
+				$round_brackets_balance     = 0;
+				$in_i18n_function           = true;
+				$i18n_function_args_started = false;
+				$found_i18n_text_domain     = false;
+
+			} elseif ( T_CONSTANT_ENCAPSED_STRING === $_token_type
+				&& ( "'" . $text_domain . "'" === $_token_value || '"' . $text_domain . '"' === $_token_value )
+			) {
+				if ( $in_i18n_function && $i18n_function_args_started ) {
+					$found_i18n_text_domain = true;
 				}
-			} elseif ( '(' === $_token ) {
+			} elseif ( '(' === $_token_type ) {
 				++$round_brackets_balance;
 				$i18n_function_args_started = $in_i18n_function && 1 === $round_brackets_balance;
 
-			} elseif ( ')' === $_token ) {
+			} elseif ( ')' === $_token_type ) {
 				--$round_brackets_balance;
 
 				if ( $in_i18n_function && 0 === $round_brackets_balance ) {
 					if ( ! $found_i18n_text_domain ) {
-						$_token = ', ' . "'" . $text_domain . "'";
-						if (
-							isset( $tokens[ $_i - 1 ] )
-							&& is_array( $tokens[ $_i - 1 ] )
-							&& T_WHITESPACE === $tokens[ $_i - 1 ][ 0 ]
-						) {
+						$_token_value = ', ' . "'" . $text_domain . "'";
+
+						if ( T_WHITESPACE === $prev_token_type ) {
 							$modified_file_contents = trim( $modified_file_contents );
-							$_token                 .= ' '; // Mimic adherence to coding standards.
+							$_token_value           .= ' '; // Mimic adherence to coding standards.
 						}
-						$_token .= ')'; // Close bracket now.
+						$_token_value .= ')'; // Close bracket now.
 					}
 					$in_i18n_function           = false;
 					$i18n_function_args_started = false;
 					$found_i18n_text_domain     = false;
 				}
 			}
-			$modified_file_contents .= $_token;
+			$prev_token_type = $_token_type;
+
+			if ( T_WHITESPACE !== $_token_type ) {
+				$last_non_whitespace_token_type = $_token_type;
+			}
+			$modified_file_contents .= $_token_value;
 		}
 		return $modified_file_contents;
 	}
