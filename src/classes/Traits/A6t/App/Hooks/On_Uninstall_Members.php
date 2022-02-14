@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\App\Hooks;
+namespace WP_Groove\Framework\Traits\A6t\App\Hooks;
 
 /**
  * Utilities.
@@ -112,28 +112,26 @@ trait On_Uninstall_Members {
 	}
 
 	/**
-	 * Plugin: on `uninstall_{$this->subpath}` hook, via
-	 * {@see WPG\Traits\App\Hooks\On_Uninstall_Members::on_uninstall_base()}.
+	 * Plugin: on `uninstall_{$this->subpath}` hook, via {@see WPG\A6t\App::on_uninstall_base()}.
+	 *
+	 * DO NOT POPULATE. This is for extenders only.
 	 *
 	 * @since 2021-12-15
 	 *
 	 * @param WPG\I7e\Plugin $plugin Plugin instance.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public static function on_uninstall_plugin( WPG\I7e\Plugin $plugin ) : void {
 		// DO NOT POPULATE. This is for extenders only.
 	}
 
 	/**
-	 * Theme: on `switch_theme` hook, via
-	 * {@see WPG\Traits\App\Hooks\On_Uninstall_Members::on_uninstall_base()}.
+	 * Theme: on `switch_theme` hook, via {@see WPG\A6t\App::on_uninstall_base()}.
+	 *
+	 * DO NOT POPULATE. This is for extenders only.
 	 *
 	 * @since 2021-12-15
 	 *
 	 * @param WPG\I7e\Theme $theme Theme instance.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public static function on_uninstall_theme( WPG\I7e\Theme $theme ) : void {
 		// DO NOT POPULATE. This is for extenders only.

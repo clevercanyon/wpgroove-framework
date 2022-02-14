@@ -59,8 +59,9 @@ interface App extends U\I7e\Base {
 	 * @param bool $maybe_setup_hooks Control over hook setup, for use by constructor.
 	 *                                Default is `true`. Set to `false` when uninstalling.
 	 *
-	 * @throws U\Fatal_Exception If missing instance args.
 	 * @return WPG\I7e\App App instance for the called class.
+	 *
+	 * @throws U\Fatal_Exception If missing instance args.
 	 */
 	public static function load( bool $maybe_setup_hooks = true ) : WPG\I7e\App;
 
@@ -69,8 +70,9 @@ interface App extends U\I7e\Base {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @throws U\Fatal_Exception If missing instance.
 	 * @return WPG\I7e\App App instance for the called class.
+	 *
+	 * @throws U\Fatal_Exception If missing instance.
 	 */
 	public static function instance() : WPG\I7e\App;
 
@@ -92,20 +94,20 @@ interface App extends U\I7e\Base {
 	/**
 	 * Plugin: on `{$this->var_prefix}activation` hook.
 	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
 	 * @since 2021-12-15
 	 *
 	 * @param bool $network_wide True if activated network-wide.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public function on_plugin_activation( bool $network_wide ) : void;
 
 	/**
 	 * Theme: `after_switch_theme` hook.
 	 *
-	 * @since 2021-12-15
+	 * DO NOT POPULATE. This is for extenders only.
 	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
+	 * @since 2021-12-15
 	 */
 	public function on_theme_activation() : void;
 
@@ -123,11 +125,11 @@ interface App extends U\I7e\Base {
 	/**
 	 * Plugin: on `{$this->var_prefix}deactivation` hook.
 	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
 	 * @since 2021-12-15
 	 *
 	 * @param bool $network_wide True if deativated network-wide.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public function on_plugin_deactivation( bool $network_wide ) : void;
 
@@ -145,13 +147,13 @@ interface App extends U\I7e\Base {
 	/**
 	 * Theme: on `switch_theme` hook.
 	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
 	 * @since 2021-12-15
 	 *
 	 * @param string    $new_template New template name.
 	 * @param \WP_Theme $new_theme    New theme instance.
 	 * @param \WP_Theme $old_theme    Old theme instance.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public function on_theme_deactivation( string $new_template, \WP_Theme $new_theme, \WP_Theme $old_theme ) : void;
 
@@ -170,22 +172,22 @@ interface App extends U\I7e\Base {
 	/**
 	 * Plugin: on `uninstall_{$this->subpath}` hook, via {@see WPG\I7e\App::on_uninstall_base()}.
 	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
 	 * @since 2021-12-15
 	 *
 	 * @param WPG\I7e\Plugin $plugin Plugin instance.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public static function on_uninstall_plugin( WPG\I7e\Plugin $plugin ) : void;
 
 	/**
 	 * Theme: on `switch_theme` hook, via {@see WPG\I7e\App::on_uninstall_base()}.
 	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
 	 * @since 2021-12-15
 	 *
 	 * @param WPG\I7e\Theme $theme Theme instance.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public static function on_uninstall_theme( WPG\I7e\Theme $theme ) : void;
 
@@ -202,9 +204,9 @@ interface App extends U\I7e\Base {
 	/**
 	 * Plugin: on `plugins_loaded` hook.
 	 *
-	 * @since 2021-12-15
+	 * DO NOT POPULATE. This is for extenders only.
 	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
+	 * @since 2021-12-15
 	 */
 	public function on_plugins_loaded() : void;
 
@@ -220,9 +222,9 @@ interface App extends U\I7e\Base {
 	/**
 	 * Plugin|Theme: on `after_setup_theme` hook.
 	 *
-	 * @since 2021-12-15
+	 * DO NOT POPULATE. This is for extenders only.
 	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
+	 * @since 2021-12-15
 	 */
 	public function on_after_setup_theme() : void;
 
@@ -238,9 +240,9 @@ interface App extends U\I7e\Base {
 	/**
 	 * Plugin|Theme: on `init` hook.
 	 *
-	 * @since 2021-12-15
+	 * DO NOT POPULATE. This is for extenders only.
 	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
+	 * @since 2021-12-15
 	 */
 	public function on_init() : void;
 
@@ -251,8 +253,10 @@ interface App extends U\I7e\Base {
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $hook_name {@see do_action()}.
-	 * @param mixed  ...$args   {@see do_action()}.
+	 * @param string $hook_name {@see do_action()} for further details.
+	 *                          This must be auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed  ...$args   {@see do_action()} for further details.
 	 */
 	public function do_action( string $hook_name, /* mixed */ ...$args ) : void;
 
@@ -263,8 +267,10 @@ interface App extends U\I7e\Base {
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $hook_name {@see apply_filters()}.
-	 * @param mixed  ...$args   {@see apply_filters()}.
+	 * @param string $hook_name {@see apply_filters()} for further details.
+	 *                          This must be auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed  ...$args   {@see apply_filters()} for further details.
 	 *
 	 * @return mixed {@see apply_filters()}.
 	 */
@@ -277,47 +283,94 @@ interface App extends U\I7e\Base {
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $option  {@see get_option()}.
-	 * @param mixed  ...$args {@see get_option()}.
+	 * @param string $key     {@see get_option()} for further details.
+	 *                        This must be auto-prefixed using app's `var_prefix`.
 	 *
-	 * @return mixed {@see get_option()}.
+	 * @param mixed  $default Optional default return value, which by default must be `null`.
+	 *
+	 *                        * Unlike {@see get_option()}, the default here must be `null` instead of `false`.
+	 *                          Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 * @return mixed {@see get_option()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 *               * Unlike {@see get_option()}, this must return value with its original data type.
+	 *                 Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 *               * Unlike {@see get_option()}, this must return `null` on miss or failure.
+	 *                 Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
 	 */
-	public function get_option( string $option, /* mixed */ ...$args ); /* : mixed */
+	public function get_option( string $key, /* mixed */ $default = null ); /* : mixed */
 
 	/**
 	 * Plugin|Theme: {@see add_option()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $option  {@see add_option()}.
-	 * @param mixed  ...$args {@see add_option()}.
+	 * @param string $key      {@see add_option()} for further details.
+	 *                         This must be auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed  $value    Option value to store. Goes into DB table.
+	 *
+	 *                         * Passing `null` explicitly must {@see delete_option()}.
+	 *
+	 *                         * Unlike {@see add_option()}, this must store values w/ their original data type.
+	 *                           Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 * @param bool   $autoload Optional. Default must be `true` (autoload).
+	 *
+	 *                         * Unlike {@see add_option()}, this must be passed as third argument, not fourth.
+	 *                           The reason is because the third argument in {@see add_option()} is deprecated anyway.
+	 *
+	 *                         * Unlike {@see add_option()}, this must be passed as a boolean value, not as `yes|no` string.
+	 *                           The reason is because it's silly to pass `yes|no`; i.e., provides no added clarity.
+	 *                           In PHP 8+ this will make more sense when it can be passed as a named argument.
 	 *
 	 * @return bool {@see add_option()}.
 	 */
-	public function add_option( string $option, /* mixed */ ...$args ) : bool;
+	public function add_option( string $key, /* mixed */ $value, bool $autoload = true ) : bool;
 
 	/**
 	 * Plugin|Theme: {@see update_option()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $option  {@see update_option()}.
-	 * @param mixed  ...$args {@see update_option()}.
+	 * @param string    $key      {@see update_option()} for further details.
+	 *                            This must be auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed     $value    Option value to store. Goes into DB table.
+	 *
+	 *                            * Passing `null` explicitly must {@see delete_option()}.
+	 *
+	 *                            * Unlike {@see update_option()}, this must store values w/ their original data type.
+	 *                              Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 * @param bool|null $autoload Optional. Default must be `null`, just like {@see update_option()}.
+	 *
+	 *                            * Just like {@see update_option()}, if the option does not exist already,
+	 *                              then `null` must imply the default behavior, which is `true` (autoload).
+	 *
+	 *                            * Just like {@see update_option()}, autoload must only be modified for existing options
+	 *                              whenever the updated `$value` is actually changing from what it currently is in the DB.
+	 *
+	 *                            * Unlike {@see update_option()}, this must be passed as a boolean value, not as `yes|no` string.
+	 *                              The reason is because it's silly to pass `yes|no`; i.e., provides no added clarity.
+	 *                              In PHP 8+ this will make more sense when it can be passed as a named argument.
 	 *
 	 * @return bool {@see update_option()}.
 	 */
-	public function update_option( string $option, /* mixed */ ...$args ) : bool;
+	public function update_option( string $key, /* mixed */ $value, /* bool|null */ ?bool $autoload = null ) : bool;
 
 	/**
 	 * Plugin|Theme: {@see delete_option()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $option {@see delete_option()}.
+	 * @param string $key {@see delete_option()} for further details.
+	 *                    This must be auto-prefixed using app's `var_prefix`.
 	 *
 	 * @return bool {@see delete_option()}.
 	 */
-	public function delete_option( string $option ) : bool;
+	public function delete_option( string $key ) : bool;
 
 	// --- Site Option Utilities ----------------------------------------------
 
@@ -326,47 +379,73 @@ interface App extends U\I7e\Base {
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $option  {@see get_site_option()}.
-	 * @param mixed  ...$args {@see get_site_option()}.
+	 * @param string $key     {@see get_site_option()} for further details.
+	 *                        This must be auto-prefixed using app's `var_prefix`.
 	 *
-	 * @return mixed {@see get_site_option()}.
+	 * @param mixed  $default Optional default return value, which by default must be `null`.
+	 *
+	 *                        * Unlike {@see get_site_option()}, the default here must be `null` instead of `false`.
+	 *                          Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 * @return mixed {@see get_site_option()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 *               * Unlike {@see get_site_option()}, this must return value with its original data type.
+	 *                 Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 *               * Unlike {@see get_site_option()}, this must return `null` on miss or failure.
+	 *                 Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
 	 */
-	public function get_site_option( string $option, /* mixed */ ...$args ); /* : mixed */
+	public function get_site_option( string $key, /* mixed */ $default = null ); /* : mixed */
 
 	/**
 	 * Plugin|Theme: {@see add_site_option()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $option  {@see add_site_option()}.
-	 * @param mixed  ...$args {@see add_site_option()}.
+	 * @param string $key   {@see add_site_option()} for further details.
+	 *                      This must be auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed  $value Option value to store. Goes into DB table.
+	 *
+	 *                      * Passing `null` explicitly must {@see delete_site_option()}.
+	 *
+	 *                      * Unlike {@see add_site_option()}, this must store values w/ their original data type.
+	 *                        Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
 	 *
 	 * @return bool {@see add_site_option()}.
 	 */
-	public function add_site_option( string $option, /* mixed */ ...$args ) : bool;
+	public function add_site_option( string $key, /* mixed */ $value ) : bool;
 
 	/**
 	 * Plugin|Theme: {@see update_site_option()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $option  {@see update_site_option()}.
-	 * @param mixed  ...$args {@see update_site_option()}.
+	 * @param string $key   {@see update_site_option()} for further details.
+	 *                      This must be auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed  $value Option value to store. Goes into DB table.
+	 *
+	 *                      * Passing `null` explicitly must {@see delete_site_option()}.
+	 *
+	 *                      * Unlike {@see update_site_option()}, this must store values w/ their original data type.
+	 *                        Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
 	 *
 	 * @return bool {@see update_site_option()}.
 	 */
-	public function update_site_option( string $option, /* mixed */ ...$args ) : bool;
+	public function update_site_option( string $key, /* mixed */ $value ) : bool;
 
 	/**
 	 * Plugin|Theme: {@see delete_site_option()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $option {@see delete_site_option()}.
+	 * @param string $key {@see delete_site_option()} for further details.
+	 *                    This must be auto-prefixed using app's `var_prefix`.
 	 *
 	 * @return bool {@see delete_site_option()}.
 	 */
-	public function delete_site_option( string $option ) : bool;
+	public function delete_site_option( string $key ) : bool;
 
 	// --- Transient Utilities ------------------------------------------------
 
@@ -375,34 +454,58 @@ interface App extends U\I7e\Base {
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $transient {@see get_transient()}.
+	 * @param mixed $key_parts A single key part or a bundle containing multiple key parts.
+	 *                         These are key parts used to formulate an actual transient key identifier.
+	 *                         Whatever is passed, it must be serialized & hashed; i.e., converted to a string key.
+	 *                         The final transient key identifier must be auto-prefixed using app's `var_prefix`.
 	 *
-	 * @return mixed {@see get_transient()}.
+	 * @return mixed {@see get_transient()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 *               * Unlike {@see get_transient()}, this must return values w/ their original data type.
+	 *                 Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 *               * Unlike {@see get_transient()}, this must return `null` on miss or failure.
+	 *                 Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
 	 */
-	public function get_transient( string $transient ); /* : mixed */
+	public function get_transient( /* mixed */ $key_parts ); /* : mixed */
 
 	/**
 	 * Plugin|Theme: {@see set_transient()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $transient {@see set_transient()}.
-	 * @param mixed  ...$args   {@see set_transient()}.
+	 * @param mixed $key_parts  A single key part or a bundle containing multiple key parts.
+	 *                          These are key parts used to formulate an actual transient key identifier.
+	 *                          Whatever is passed, it must be serialized & hashed; i.e., converted to a string key.
+	 *                          The final transient key identifier must be auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed $value      Transient value to store. Goes into DB or potentially an in-memory cache.
+	 *
+	 *                          * Passing `null` explicitly must {@see delete_transient()}.
+	 *
+	 *                          * Unlike {@see set_transient()}, this must store values w/ their original data type.
+	 *                            Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 * @param int   $expires_in Default should be {@see U\Time::HOUR_IN_SECONDS} (one hour).
+	 *                          Should be `> 0`, else it should revert to default {@see U\Time::HOUR_IN_SECONDS}.
 	 *
 	 * @return bool {@see set_transient()}.
 	 */
-	public function set_transient( string $transient, /* mixed */ ...$args ) : bool;
+	public function set_transient( /* mixed */ $key_parts, /* mixed */ $value, int $expires_in = U\Time::HOUR_IN_SECONDS ) : bool;
 
 	/**
 	 * Plugin|Theme: {@see delete_transient()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $transient {@see delete_transient()}.
+	 * @param mixed $key_parts A single key part or a bundle containing multiple key parts.
+	 *                         These are key parts used to formulate an actual transient key identifier.
+	 *                         Whatever is passed, it must be serialized & hashed; i.e., converted to a string key.
+	 *                         The final transient key identifier must be auto-prefixed using app's `var_prefix`.
 	 *
 	 * @return bool {@see delete_transient()}.
 	 */
-	public function delete_transient( string $transient ) : bool;
+	public function delete_transient( /* mixed */ $key_parts ) : bool;
 
 	// --- Site Transient Utilities -------------------------------------------
 
@@ -411,32 +514,138 @@ interface App extends U\I7e\Base {
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $transient {@see get_site_transient()}.
+	 * @param mixed $key_parts A single key part or a bundle containing multiple key parts.
+	 *                         These are key parts used to formulate an actual transient key identifier.
+	 *                         Whatever is passed, it must be serialized & hashed; i.e., converted to a string key.
+	 *                         The final transient key identifier must be auto-prefixed using app's `var_prefix`.
 	 *
-	 * @return mixed {@see get_site_transient()}.
+	 * @return mixed {@see get_site_transient()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 *               * Unlike {@see get_site_transient()}, this must return values w/ their original data type.
+	 *                 Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 *               * Unlike {@see get_site_transient()}, this must return `null` on miss or failure.
+	 *                 Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
 	 */
-	public function get_site_transient( string $transient ); /* : mixed */
+	public function get_site_transient( /* mixed */ $key_parts ); /* : mixed */
 
 	/**
 	 * Plugin|Theme: {@see set_site_transient()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $transient {@see set_site_transient()}.
-	 * @param mixed  ...$args   {@see set_site_transient()}.
+	 * @param mixed $key_parts  A single key part or a bundle containing multiple key parts.
+	 *                          These are key parts used to formulate an actual transient key identifier.
+	 *                          Whatever is passed, it must be serialized & hashed; i.e., converted to a string key.
+	 *                          The final transient key identifier must be auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed $value      Transient value to store. Goes into DB or potentially an in-memory cache.
+	 *
+	 *                          * Passing `null` explicitly must {@see delete_site_transient()}.
+	 *
+	 *                          * Unlike {@see set_site_transient()}, this must store values w/ their original data type.
+	 *                            Made possible by {@see U\Str::serialize()}, {@see U\Str::maybe_unserialize()}.
+	 *
+	 * @param int   $expires_in Default should be {@see U\Time::HOUR_IN_SECONDS} (one hour).
+	 *                          Should be `> 0`, else it should revert to default {@see U\Time::HOUR_IN_SECONDS}.
 	 *
 	 * @return bool {@see set_site_transient()}.
 	 */
-	public function set_site_transient( string $transient, /* mixed */ ...$args ) : bool;
+	public function set_site_transient( /* mixed */ $key_parts, /* mixed */ $value, int $expires_in = U\Time::HOUR_IN_SECONDS ) : bool;
 
 	/**
 	 * Plugin|Theme: {@see delete_site_transient()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $transient {@see delete_site_transient()}.
+	 * @param mixed $key_parts A single key part or a bundle containing multiple key parts.
+	 *                         These are key parts used to formulate an actual transient key identifier.
+	 *                         Whatever is passed, it must be serialized & hashed; i.e., converted to a string key.
+	 *                         The final transient key identifier must be auto-prefixed using app's `var_prefix`.
 	 *
 	 * @return bool {@see delete_site_transient()}.
 	 */
-	public function delete_site_transient( string $transient ) : bool;
+	public function delete_site_transient( /* mixed */ $key_parts ) : bool;
+
+	// --- Notice Utilities ---------------------------------------------------
+
+	/**
+	 * Plugin|Theme: on `all_admin_notices` hook.
+	 *
+	 * @since 2021-12-30
+	 */
+	public function on_all_admin_notices_base() : void;
+
+	/**
+	 * Plugin|Theme: on `all_admin_notices` hook.
+	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
+	 * @since 2021-12-15
+	 */
+	public function on_all_admin_notices() : void;
+
+	/**
+	 * Plugin|Theme: gets admin notices.
+	 *
+	 * @since 2021-12-30
+	 *
+	 * @return WPG\Admin_Notice[] Admin notices.
+	 */
+	public function get_admin_notices() : array;
+
+	/**
+	 * Plugin|Theme: updates admin notices.
+	 *
+	 * @since 2021-12-30
+	 *
+	 * @param WPG\Admin_Notice[] $admin_notices New admin notices.
+	 *
+	 * @return bool True on success.
+	 */
+	public function update_admin_notices( array $admin_notices ) : bool;
+
+	/**
+	 * Plugin|Theme: gets admin notice.
+	 *
+	 * @since 2021-12-30
+	 *
+	 * @param string $idx Admin notice IDx.
+	 *
+	 * @return WPG\Admin_Notice|null Notice; else `null` on failure.
+	 */
+	public function get_admin_notice( string $idx ) /* : WPG\Admin_Notice|null */ : ?WPG\Admin_Notice;
+
+	/**
+	 * Plugin|Theme: updates admin notice.
+	 *
+	 * @since 2021-12-30
+	 *
+	 * @param WPG\Admin_Notice $admin_notice New admin notice.
+	 *
+	 * @return bool True on success.
+	 */
+	public function update_admin_notice( WPG\Admin_Notice $admin_notice ) : bool;
+
+	/**
+	 * Plugin|Theme: enqueues admin notice.
+	 *
+	 * @since 2021-12-30
+	 *
+	 * @param WPG\Admin_Notice|array|string $admin_notice Admin notice; props; or markup.
+	 *
+	 * @return bool True on success.
+	 */
+	public function enqueue_admin_notice( /* WPG\Admin_Notice|array|string */ $admin_notice ) : bool;
+
+	/**
+	 * Plugin|Theme: dequeues admin notice.
+	 *
+	 * @since 2021-12-30
+	 *
+	 * @param WPG\Admin_Notice|string $admin_notice Admin notice; or IDx.
+	 *
+	 * @return bool True on success.
+	 */
+	public function dequeue_admin_notice( /* WPG\Admin_Notice|string */ $admin_notice ) : bool;
 }

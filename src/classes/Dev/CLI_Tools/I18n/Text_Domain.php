@@ -125,7 +125,7 @@ final class Text_Domain extends U\A6t\CLI_Tool {
 					'text-domain' => [
 						'required'    => true,
 						'description' => 'Text domain; e.g., `wpgroove-my-plugin`.',
-						'validator'   => fn( $value ) => $value && is_string( $value ) && U\Str::is_slug( $value ),
+						'validator'   => fn( $value ) => $value && is_string( $value ) && U\Str::is_lede_slug( $value ),
 					],
 				],
 			],
@@ -171,17 +171,17 @@ final class Text_Domain extends U\A6t\CLI_Tool {
 	 * @param string $text_domain Text domain.
 	 * @param string $file        File path.
 	 *
-	 * @throws U\Exception On any failure.
+	 * @throws U\Fatal_Exception On any failure.
 	 */
 	protected function process_file( string $text_domain, string $file ) : void {
 		if ( ! $text_domain ) {
-			throw new U\Exception( 'Missing text domain.' );
+			throw new U\Fatal_Exception( 'Missing text domain.' );
 		}
 		if ( ! $file || ! is_readable( $file ) || ! is_writable( $file ) ) {
-			throw new U\Exception( 'Unable to process file: `' . $file . '`. Is it readable and writable?' );
+			throw new U\Fatal_Exception( 'Unable to process file: `' . $file . '`. Is it readable and writable?' );
 		}
-		if ( false === file_put_contents( $file, $this->process_string( $text_domain, file_get_contents( $file ) ) ) ) {
-			throw new U\Exception( 'Failed processing file: `' . $file . '`. Is the file readable and writable?' );
+		if ( ! U\File::write( $file, $this->process_string( $text_domain, U\File::read( $file ) ), false ) ) {
+			throw new U\Fatal_Exception( 'Failed processing file: `' . $file . '`. Is the file readable and writable?' );
 		}
 	}
 

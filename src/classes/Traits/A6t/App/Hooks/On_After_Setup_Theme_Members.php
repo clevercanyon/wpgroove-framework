@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\App\Hooks;
+namespace WP_Groove\Framework\Traits\A6t\App\Hooks;
 
 /**
  * Utilities.
@@ -49,7 +49,7 @@ trait On_After_Setup_Theme_Members {
 	 */
 	final public function on_after_setup_theme_base() : void {
 		if ( $this instanceof WPG\I7e\Theme ) {
-			$version = get_option( $this->var_prefix . 'version' ) ?: '';
+			$version = u\if_string( $this->get_option( 'version' ), '' );
 
 			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {
 				$this->on_activation_base();
@@ -61,9 +61,9 @@ trait On_After_Setup_Theme_Members {
 	/**
 	 * Plugin|Theme: on `after_setup_theme` hook.
 	 *
-	 * @since 2021-12-15
+	 * DO NOT POPULATE. This is for extenders only.
 	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
+	 * @since 2021-12-15
 	 */
 	public function on_after_setup_theme() : void {
 		// DO NOT POPULATE. This is for extenders only.

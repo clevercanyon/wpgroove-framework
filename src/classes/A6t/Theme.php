@@ -45,5 +45,5 @@ abstract class Theme extends WPG\A6t\App implements WPG\I7e\Theme {
 	 *
 	 * @since 2021-12-15
 	 */
-	use WPG\Traits\Theme\Members;
+	use WPG\Traits\A6t\Theme\Members;
 }

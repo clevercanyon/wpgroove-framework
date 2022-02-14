@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\App\Utilities;
+namespace WP_Groove\Framework\Traits\A6t\App\Utilities;
 
 /**
  * Utilities.
@@ -43,12 +43,30 @@ use WP_Groove\{Framework as WPG};
  */
 trait Action_Members {
 	/**
+	 * Plugin|Theme: {@see add_action()}.
+	 *
+	 * @since 2021-12-30
+	 *
+	 * @param string $hook_name {@see add_action()} for further details.
+	 *                          This gets auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed  ...$args   {@see add_action()} for further details.
+	 *
+	 * @return bool {@see add_action()}.
+	 */
+	final public function add_action( string $hook_name, /* mixed */ ...$args ) : bool {
+		return add_action( $this->var_prefix . $hook_name, ...$args );
+	}
+
+	/**
 	 * Plugin|Theme: {@see do_action()}.
 	 *
 	 * @since 2021-12-30
 	 *
-	 * @param string $hook_name {@see do_action()}.
-	 * @param mixed  ...$args   {@see do_action()}.
+	 * @param string $hook_name {@see do_action()} for further details.
+	 *                          This gets auto-prefixed using app's `var_prefix`.
+	 *
+	 * @param mixed  ...$args   {@see do_action()} for further details.
 	 */
 	final public function do_action( string $hook_name, /* mixed */ ...$args ) : void {
 		do_action( $this->var_prefix . $hook_name, ...$args );

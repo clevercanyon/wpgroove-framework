@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\App\Hooks;
+namespace WP_Groove\Framework\Traits\A6t\Plugin;
 
 /**
  * Utilities.
@@ -39,33 +39,13 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\I7e\Plugin
  */
-trait On_Plugins_Loaded_Members {
+trait Members {
 	/**
-	 * Plugin: on `plugins_loaded` hook.
+	 * Traits.
 	 *
-	 * @since 2021-12-15
+	 * @since 2021-12-28
 	 */
-	final public function on_plugins_loaded_base() : void {
-		if ( $this instanceof WPG\I7e\Plugin ) {
-			$version = get_option( $this->var_prefix . 'version' ) ?: '';
-
-			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {
-				$this->on_activation_base( false );
-				$this->on_plugin_activation( false );
-			}
-		}
-	}
-
-	/**
-	 * Plugin: on `plugins_loaded` hook.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
-	 */
-	public function on_plugins_loaded() : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
+	// Nothing to add at this time.
 }

@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\App\Utilities;
+namespace WP_Groove\Framework\Traits\A6t\App\Hooks;
 
 /**
  * Utilities.
@@ -41,18 +41,31 @@ use WP_Groove\{Framework as WPG};
  *
  * @see   WPG\I7e\App
  */
-trait Filter_Members {
+trait On_Plugins_Loaded_Members {
 	/**
-	 * Plugin|Theme: {@see apply_filters()}.
+	 * Plugin: on `plugins_loaded` hook.
 	 *
-	 * @since 2021-12-30
-	 *
-	 * @param string $hook_name {@see apply_filters()}.
-	 * @param mixed  ...$args   {@see apply_filters()}.
-	 *
-	 * @return mixed {@see apply_filters()}.
+	 * @since 2021-12-15
 	 */
-	final public function apply_filters( string $hook_name, /* mixed */ ...$args ) /* : mixed */ {
-		return apply_filters( $this->var_prefix . $hook_name, ...$args );
+	final public function on_plugins_loaded_base() : void {
+		if ( $this instanceof WPG\I7e\Plugin ) {
+			$version = u\if_string( $this->get_option( 'version' ), '' );
+
+			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {
+				$this->on_activation_base( false );
+				$this->on_plugin_activation( false );
+			}
+		}
+	}
+
+	/**
+	 * Plugin: on `plugins_loaded` hook.
+	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
+	 * @since 2021-12-15
+	 */
+	public function on_plugins_loaded() : void {
+		// DO NOT POPULATE. This is for extenders only.
 	}
 }

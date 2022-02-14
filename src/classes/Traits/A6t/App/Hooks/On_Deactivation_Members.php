@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\App\Hooks;
+namespace WP_Groove\Framework\Traits\A6t\App\Hooks;
 
 /**
  * Utilities.
@@ -56,11 +56,11 @@ trait On_Deactivation_Members {
 	/**
 	 * Plugin: on `{$this->var_prefix}deactivation` hook.
 	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
 	 * @since 2021-12-15
 	 *
 	 * @param bool $network_wide True if deativated network-wide.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public function on_plugin_deactivation( bool $network_wide ) : void {
 		// DO NOT POPULATE. This is for extenders only.
@@ -76,7 +76,7 @@ trait On_Deactivation_Members {
 	 * @param \WP_Theme $old_theme    Old theme instance.
 	 */
 	final public function on_theme_deactivation_base( string $new_template, \WP_Theme $new_theme, \WP_Theme $old_theme ) : void {
-		if ( get_option( $this->var_prefix . 'uninstall_on_deactivation' ) ) {
+		if ( $this->get_option( 'uninstall_on_deactivation' ) ) {
 			static::on_uninstall_base();
 		}
 	}
@@ -84,13 +84,13 @@ trait On_Deactivation_Members {
 	/**
 	 * Theme: on `switch_theme` hook.
 	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
 	 * @since 2021-12-15
 	 *
 	 * @param string    $new_template New template name.
 	 * @param \WP_Theme $new_theme    New theme instance.
 	 * @param \WP_Theme $old_theme    Old theme instance.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public function on_theme_deactivation( string $new_template, \WP_Theme $new_theme, \WP_Theme $old_theme ) : void {
 		// DO NOT POPULATE. This is for extenders only.

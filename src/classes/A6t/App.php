@@ -41,26 +41,9 @@ use WP_Groove\{Framework as WPG};
  */
 abstract class App extends U\A6t\Base implements WPG\I7e\App {
 	/**
-	 * Brand info.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @final Starting w/ PHP 8.1.0.
-	 */
-	private const BRAND = [
-		'name' => 'WP Groove',
-
-		'slug'        => 'wpgroove',
-		'slug_prefix' => 'wpgroove-',
-
-		'var'        => 'wpgroove',
-		'var_prefix' => 'wpgroove_',
-	];
-
-	/**
 	 * Traits.
 	 *
 	 * @since 2021-12-15
 	 */
-	use WPG\Traits\App\Members;
+	use WPG\Traits\A6t\App\Members;
 }

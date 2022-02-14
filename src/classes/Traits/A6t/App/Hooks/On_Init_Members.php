@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\App\Hooks;
+namespace WP_Groove\Framework\Traits\A6t\App\Hooks;
 
 /**
  * Utilities.
@@ -62,9 +62,9 @@ trait On_Init_Members {
 	/**
 	 * Plugin|Theme: on `init` hook.
 	 *
-	 * @since 2021-12-15
+	 * DO NOT POPULATE. This is for extenders only.
 	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
+	 * @since 2021-12-15
 	 */
 	public function on_init() : void {
 		// DO NOT POPULATE. This is for extenders only.

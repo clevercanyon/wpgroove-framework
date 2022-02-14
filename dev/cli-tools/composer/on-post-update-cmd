@@ -60,9 +60,9 @@ if ( ! getenv( 'COMPOSER_DEV_MODE' ) ) {
  * @since 2021-12-15
  */
 if ( is_dir( dirname( __FILE__, 4 ) . '/vendor' ) ) { // Possible symlink. That's OK here.
-	require_once dirname( __FILE__, 4 ) . '/vendor/clevercanyon/php-js-utilities/dev/utilities/load.php';
+	require_once dirname( __FILE__, 4 ) . '/vendor/clevercanyon/utilities/dev/utilities/load.php';
 } else { // Assume running as a dependency from inside of another project’s `/vendor` directory.
-	require_once dirname( __FILE__, 7 ) . '/vendor/clevercanyon/php-js-utilities/dev/utilities/load.php';
+	require_once dirname( __FILE__, 7 ) . '/vendor/clevercanyon/utilities/dev/utilities/load.php';
 }
 
 /**
@@ -73,11 +73,11 @@ if ( is_dir( dirname( __FILE__, 4 ) . '/vendor' ) ) { // Possible symlink. That'
 require_once D\Dir::join( D\CLI::project_dir(), '/vendor/autoload.php' );
 
 /**
- * Enables debugging mode.
+ * Sets debug mode.
  *
  * @since 2021-12-15
  */
-U\Env::config_debugging_mode();
+U\Env::set_debug_mode();
 
 /**
  * Handles `post-update-cmd` hook.

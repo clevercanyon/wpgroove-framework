@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\App\Utilities;
+namespace WP_Groove\Framework\Traits\A6t\App\Utilities;
 
 /**
  * Utilities.
@@ -43,7 +43,22 @@ use WP_Groove\{Framework as WPG};
  * @property-read $dir
  * @property-read $url
  * @property-read $subpath
+ *
+ * @property-read $type
  * @property-read $version
+ *
+ * @property-read $namespace_scope
+ * @property-read $namespace_crux
+ *
+ * @property-read $brand_n7m
+ * @property-read $brand_name
+ * @property-read $brand_namespace
+ *
+ * @property-read $brand_slug
+ * @property-read $brand_var
+ *
+ * @property-read $brand_slug_prefix
+ * @property-read $brand_var_prefix
  *
  * @property-read $name
  * @property-read $slug
@@ -51,13 +66,6 @@ use WP_Groove\{Framework as WPG};
  *
  * @property-read $slug_prefix
  * @property-read $var_prefix
- *
- * @property-read $brand_name
- * @property-read $brand_slug
- * @property-read $brand_var
- *
- * @property-read $brand_slug_prefix
- * @property-read $brand_var_prefix
  *
  * @property-read $unbranded_slug
  * @property-read $unbranded_var
@@ -94,6 +102,13 @@ trait Property_Members {
 	protected string $subpath;
 
 	/**
+	 * Plugin|Theme: app type.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $type;
+
+	/**
 	 * Plugin|Theme: version string.
 	 *
 	 * @since 2021-12-15
@@ -101,39 +116,25 @@ trait Property_Members {
 	protected string $version;
 
 	/**
-	 * Plugin|Theme: name (e.g., My App).
+	 * Plugin|Theme: namespace scope; e.g., `Xae3c7c368fe2e3c`
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $name;
+	protected string $namespace_scope;
 
 	/**
-	 * Plugin|Theme: slug (e.g., wpgroove-my-app).
+	 * Plugin|Theme: namespace crux; e.g., `WP_Groove\My_App`
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $slug;
+	protected string $namespace_crux;
 
 	/**
-	 * Plugin|Theme: var (e.g., wpgroove_my_app).
+	 * Plugin|Theme: brand n7m; e.g., `w6e`.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $var;
-
-	/**
-	 * Plugin|Theme: slug prefix (e.g., wpgroove-my-app--).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $slug_prefix;
-
-	/**
-	 * Plugin|Theme: var prefix (e.g., wpgroove_my_app__).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $var_prefix;
+	protected string $brand_n7m;
 
 	/**
 	 * Plugin|Theme: brand name (i.e., WP Groove).
@@ -141,6 +142,13 @@ trait Property_Members {
 	 * @since 2021-12-15
 	 */
 	protected string $brand_name;
+
+	/**
+	 * Brand namespace; e.g., `WP_Groove`.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $brand_namespace;
 
 	/**
 	 * Plugin|Theme: brand slug (i.e., wpgroove).
@@ -169,6 +177,41 @@ trait Property_Members {
 	 * @since 2021-12-15
 	 */
 	protected string $brand_var_prefix;
+
+	/**
+	 * Plugin|Theme: name (e.g., My App).
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $name;
+
+	/**
+	 * Plugin|Theme: slug (e.g., wpgroove-my-app).
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $slug;
+
+	/**
+	 * Plugin|Theme: var (e.g., wpgroove_my_app).
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $var;
+
+	/**
+	 * Plugin|Theme: slug prefix (e.g., wpgroove-my-app-x-).
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $slug_prefix;
+
+	/**
+	 * Plugin|Theme: var prefix (e.g., wpgroove_my_app_x_).
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $var_prefix;
 
 	/**
 	 * Plugin|Theme: unbranded slug (e.g., my-app).

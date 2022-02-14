@@ -45,5 +45,5 @@ abstract class Plugin extends WPG\A6t\App implements WPG\I7e\Plugin {
 	 *
 	 * @since 2021-12-15
 	 */
-	use WPG\Traits\Plugin\Members;
+	use WPG\Traits\A6t\Plugin\Members;
 }

@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\App\Hooks;
+namespace WP_Groove\Framework\Traits\A6t\App\Hooks;
 
 /**
  * Utilities.
@@ -54,7 +54,7 @@ trait On_Activation_Members {
 	 *                           This arg applicable to plugins only.
 	 */
 	final public function on_activation_base( bool $network_wide = false ) : void {
-		$previous_version = (string) $this->get_option( 'version' );
+		$previous_version = u\if_string( $this->get_option( 'version' ), '' );
 		$this->update_option( 'previous_version', $previous_version, false );
 		$this->update_option( 'version', $this->version, true );
 
@@ -67,11 +67,11 @@ trait On_Activation_Members {
 	/**
 	 * Plugin: on `{$this->var_prefix}activation` hook.
 	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
 	 * @since 2021-12-15
 	 *
 	 * @param bool $network_wide True if activated network-wide.
-	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
 	 */
 	public function on_plugin_activation( bool $network_wide ) : void {
 		// DO NOT POPULATE. This is for extenders only.
@@ -80,9 +80,9 @@ trait On_Activation_Members {
 	/**
 	 * Theme: `after_switch_theme` hook.
 	 *
-	 * @since 2021-12-15
+	 * DO NOT POPULATE. This is for extenders only.
 	 *
-	 * @note  DO NOT POPULATE. This is for extenders only.
+	 * @since 2021-12-15
 	 */
 	public function on_theme_activation() : void {
 		// DO NOT POPULATE. This is for extenders only.
