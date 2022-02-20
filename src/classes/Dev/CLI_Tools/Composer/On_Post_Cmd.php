@@ -43,11 +43,11 @@ use Aws\Exception\AwsException;
 // </editor-fold>
 
 /**
- * On `post-update-cmd` hook.
+ * On `post-(install|update)-cmd` hook.
  *
  * @since 2021-12-15
  */
-final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
+final class On_Post_Cmd extends U\A6t\CLI_Tool {
 	/**
 	 * Project.
 	 *
@@ -67,7 +67,7 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	 *
 	 * @since 2021-12-15
 	 */
-	protected const NAME = 'Composer/On_Post_Update_Cmd';
+	protected const NAME = 'Composer/On_Post_Cmd';
 
 	/**
 	 * Constructor.
@@ -81,7 +81,20 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 		parent::__construct( $args_to_parse );
 
 		$this->add_commands( [
-			'update' => [
+			'install' => [
+				'callback'    => [ $this, 'install' ],
+				'synopsis'    => 'Installs project dependencies, symlinks, headers, SVN repos, and zip files.',
+				'description' => 'Installs project dependencies, symlinks, headers, SVN repos, and zip files. See ' . __CLASS__ . '::install()',
+				'options'     => [
+					'project-dir' => [
+						'required'    => true,
+						'description' => 'Project directory path.',
+						'validator'   => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
+							&& is_file( U\Dir::join( $abs_path, '/composer.json' ) ),
+					],
+				],
+			],
+			'update'  => [
 				'callback'    => [ $this, 'update' ],
 				'synopsis'    => 'Updates project dependencies, symlinks, headers, SVN repos, and zip files.',
 				'description' => 'Updates project dependencies, symlinks, headers, SVN repos, and zip files. See ' . __CLASS__ . '::update()',
@@ -99,6 +112,38 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	}
 
 	/**
+	 * Command: `install`.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected function install() : void {
+		try {
+			U\CLI::heading( '[' . __METHOD__ . '()]: Installing ...' );
+
+			$project_dir   = U\Fs::abs( $this->get_option( 'project-dir' ) );
+			$this->project = new U\Dev\Project( $project_dir );
+
+			$this->maybe_run_wp_app_composer_install();
+			$this->maybe_symlink_wp_app_locally();
+
+			$this->maybe_sync_wp_plugin_headers();
+			$this->maybe_sync_wp_theme_headers();
+
+			$this->maybe_compile_wp_app_svn_repo();
+			$this->maybe_compile_wp_app_distro_tests();
+
+			$this->maybe_compile_wp_app_zip();
+			$this->maybe_s3_upload_wp_app_zip();
+
+			U\CLI::done( '[' . __METHOD__ . '()]: Install complete ✔.' );
+		} catch ( \Throwable $throwable ) {
+			U\CLI::error( $throwable->getMessage() );
+			U\CLI::error( $throwable->getTraceAsString() );
+			U\CLI::exit_status( 1 );
+		}
+	}
+
+	/**
 	 * Command: `update`.
 	 *
 	 * @since 2021-12-15
@@ -110,7 +155,7 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 			$project_dir   = U\Fs::abs( $this->get_option( 'project-dir' ) );
 			$this->project = new U\Dev\Project( $project_dir );
 
-			$this->maybe_run_wp_app_composer_updates();
+			$this->maybe_run_wp_app_composer_update();
 			$this->maybe_symlink_wp_app_locally();
 
 			$this->maybe_sync_wp_plugin_headers();
@@ -131,11 +176,28 @@ final class On_Post_Update_Cmd extends U\A6t\CLI_Tool {
 	}
 
 	/**
-	 * Maybe run WordPress app’s composer updates.
+	 * Maybe run WordPress app’s `$ composer install`.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected function maybe_run_wp_app_composer_updates() : void {
+	protected function maybe_run_wp_app_composer_install() : void {
+		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
+
+		if ( ! $this->project->is_wp_project() ) {
+			return; // Not applicable.
+		}
+		if ( $this->project->has_file( 'trunk/composer.json' ) ) {
+			U\CLI::run( [ 'composer', 'install' ], U\Dir::join( $this->project->dir, '/trunk' ) );
+		}
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Ran `composer install` in `' . U\Dir::join( $this->project->dir, '/trunk' ) . '`.' );
+	}
+
+	/**
+	 * Maybe run WordPress app’s `$ composer update`.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected function maybe_run_wp_app_composer_update() : void {
 		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
 
 		if ( ! $this->project->is_wp_project() ) {
