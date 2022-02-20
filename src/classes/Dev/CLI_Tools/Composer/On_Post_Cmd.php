@@ -87,9 +87,10 @@ final class On_Post_Cmd extends U\A6t\CLI_Tool {
 				'description' => 'Installs project dependencies, symlinks, headers, SVN repos, and zip files. See ' . __CLASS__ . '::install()',
 				'options'     => [
 					'project-dir' => [
-						'required'    => true,
-						'description' => 'Project directory path.',
-						'validator'   => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
+						'required'     => true,
+						'arg_required' => true,
+						'description'  => 'Project directory path.',
+						'validator'    => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
 							&& is_file( U\Dir::join( $abs_path, '/composer.json' ) ),
 					],
 				],
@@ -100,9 +101,10 @@ final class On_Post_Cmd extends U\A6t\CLI_Tool {
 				'description' => 'Updates project dependencies, symlinks, headers, SVN repos, and zip files. See ' . __CLASS__ . '::update()',
 				'options'     => [
 					'project-dir' => [
-						'required'    => true,
-						'description' => 'Project directory path.',
-						'validator'   => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
+						'required'     => true,
+						'arg_required' => true,
+						'description'  => 'Project directory path.',
+						'validator'    => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
 							&& is_file( U\Dir::join( $abs_path, '/composer.json' ) ),
 					],
 				],

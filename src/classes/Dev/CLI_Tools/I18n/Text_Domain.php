@@ -111,21 +111,24 @@ final class Text_Domain extends U\A6t\CLI_Tool {
 				'description' => 'Adds text domain to PHP files in a given directory. See ' . __CLASS__ . '::add()',
 				'options'     => [
 					'project-dir' => [
-						'required'    => true,
-						'description' => 'Project directory path.',
-						'validator'   => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
+						'required'     => true,
+						'arg_required' => true,
+						'description'  => 'Project directory path.',
+						'validator'    => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
 							&& is_file( U\Dir::join( $abs_path, '/composer.json' ) ),
 					],
 					'work-dir'    => [
-						'required'    => true,
-						'description' => 'Work directory path.',
-						'validator'   => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
+						'required'     => true,
+						'arg_required' => true,
+						'description'  => 'Work directory path.',
+						'validator'    => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
 							&& preg_match( '/\/\._[^\/]*\//u', $abs_path ),
 					],
 					'text-domain' => [
-						'required'    => true,
-						'description' => 'Text domain; e.g., `wpgroove-my-plugin`.',
-						'validator'   => fn( $value ) => $value && is_string( $value ) && U\Str::is_lede_slug( $value ),
+						'required'     => true,
+						'arg_required' => true,
+						'description'  => 'Text domain; e.g., `wpgroove-my-plugin`.',
+						'validator'    => fn( $value ) => $value && is_string( $value ) && U\Str::is_lede_slug( $value ),
 					],
 				],
 			],
