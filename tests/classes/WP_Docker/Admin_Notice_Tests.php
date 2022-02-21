@@ -26,7 +26,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Tests\Tests;
+namespace WP_Groove\Framework\Tests\WP_Docker;
 
 /**
  * Utilities.
@@ -49,9 +49,9 @@ use WP_Groove\{Framework as WPG};
  * Test case.
  *
  * @since 2021-12-15
- * @coversDefaultClass \Clever_Canyon\Utilities\Arr
+ * @coversDefaultClass \WP_Groove\Framework\Admin_Notice
  */
-final class Hello_World_Tests extends UT\A6t\Tests {
+final class Admin_Notice_Tests extends UT\A6t\Tests {
 	/**
 	 * @covers ::value_first()
 	 */

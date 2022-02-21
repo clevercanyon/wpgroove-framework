@@ -33,19 +33,19 @@
 	},
 	"autoload-dev"      : {
 		"psr-4" : {
-			"WP_Groove\\Framework\\Tests\\" : [ "./tests/classes" ]
+			"Clever_Canyon\\Utilities\\Tests\\" : [ "./vendor/clevercanyon/utilities/tests/classes" ],
+			"WP_Groove\\Framework\\Tests\\"     : [ "./tests/classes" ]
 		}
 	},
 	"scripts"           : {
 		"webpack"                  : "npx webpack --config ./dev/.libs/webpack/config.cjs",
-		"wp-docker"                : "./vendor/clevercanyon/utilities/dev/cli-tools/docker/wp/docker",
 
 		"phpunit"                  : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config.xml --no-coverage --no-logging",
 		"phpunit~distro"           : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config~distro.xml --no-coverage --no-logging",
 		"phpunit~coverage"         : "XDEBUG_MODE=coverage composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config.xml --no-logging",
 
-		"phpunit~wp-docker"        : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config.xml --no-coverage --no-logging --do-not-cache-result",
-		"phpunit~wp-docker~distro" : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config~distro.xml --no-coverage --no-logging --do-not-cache-result",
+		"phpunit~wp-docker"        : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config~wp-docker.xml --no-coverage --no-logging --do-not-cache-result",
+		"phpunit~wp-docker~distro" : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config~wp-docker~distro.xml --no-coverage --no-logging --do-not-cache-result",
 
 		"phpunit~ci"               : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config.xml --no-coverage",
 		"phpunit~ci~distro"        : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config~distro.xml --no-coverage",

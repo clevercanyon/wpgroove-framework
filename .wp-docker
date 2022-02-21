@@ -12,24 +12,16 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1;
-. ./dev/utilities/load.bash; # Loads utilities.
-. ./dev/utilities/bash/partials/loose-mode;
 
-# ---------------------------------------------------------------------------------------------------------------------
-# Determine WP Docker path.
-# ---------------------------------------------------------------------------------------------------------------------
+if [[ -f ./.cc-utilities ]]; then ccu_path=.;
+else ccu_path=./vendor/clevercanyon/utilities; fi;
+wp_docker="${ccu_path}"/dev/cli-tools/docker/wp/docker;
 
-if [[ -x ./dev/cli-tools/docker/wp/docker ]]; then
-    wp_docker_path=./dev/cli-tools/docker/wp/docker;
-else
-	wp_docker_path=./vendor/clevercanyon/utilities/dev/cli-tools/docker/wp/docker;
-fi;
-# ---------------------------------------------------------------------------------------------------------------------
-# Run `./.wp-docker [command] [args]`.
-# ---------------------------------------------------------------------------------------------------------------------
+. "${ccu_path}"/dev/utilities/load.bash; # Loads utilities.
+. "${ccu_path}"/dev/utilities/bash/partials/loose-mode;
 
 if [[ "${1:-}" == 'shell' || "${1:-}" == 'psysh' || "${1:-}" == 'wp-cli' ]]; then
-	CMD="$("${wp_docker_path}" "${@}" --prepare-cmd)";
+	CMD="$("${wp_docker}" "${@}" --prepare-cmd)";
 
 	if [[ "${CMD:0:4}" == 'CMD:' ]]; then
 		eval "${CMD:4}";
@@ -38,7 +30,7 @@ if [[ "${1:-}" == 'shell' || "${1:-}" == 'psysh' || "${1:-}" == 'wp-cli' ]]; the
 		echo 'Got: '"${CMD:4}"; exit 1;
 	fi;
 else
-	"${wp_docker_path}" "${@}";
+	"${wp_docker}" "${@}";
 fi;
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -106,10 +98,10 @@ fi;
 # A few more examples showing use of docker directly:
 # ---------------------------------------------------------------------------------------------------------------------
 # $ docker compose ls;
-# $ docker inspect [project-slug]-network;
-# $ docker logs [project-slug]-[container-short-alias];
-# $ docker inspect [project-slug]-[container-short-alias];
-# $ docker attach [project-slug]-[container-short-alias];
+# $ docker inspect  [project-slug]-network;
+# $ docker logs     [project-slug]-[container-short-alias];
+# $ docker inspect  [project-slug]-[container-short-alias];
+# $ docker attach   [project-slug]-[container-short-alias];
 # $ docker exec -it [project-slug]-[container-short-alias] bash --login;
 # $ docker inspect --format '[format]' [project-slug]-[container-short-alias];
 # ---------------------------------------------------------------------------------------------------------------------
