@@ -23,7 +23,9 @@ if [[ -f "${ccu_path}"/dev/utilities/load.bash ]]; then
 	. "${ccu_path}"/dev/utilities/bash/partials/require-root;
 	. "${ccu_path}"/dev/utilities/bash/partials/require-wp-docker;
 else
-	echo 'Missing required dependencies. Have you run `composer install` yet?'; exit 1;
+	echo 'Missing required dependency: `'"${ccu_path}"'`';
+	echo 'Have you run `composer install` yet?';
+	exit 1; # Exit w/ error status.
 fi;
 # ---------------------------------------------------------------------------------------------------------------------
 # Define a few variables.
@@ -208,7 +210,7 @@ fi;
 # ---------------------------------------------------------------------------------------------------------------------
 
 if [[ -x "${PROJECT_DIR}"/dev/.libs/docker/wp/entry~prj.bash ]]; then
-	"${PROJECT_DIR}"/dev/.libs/docker/wp/entry~prj.bash;
+	. "${PROJECT_DIR}"/dev/.libs/docker/wp/entry~prj.bash;
 fi;
 # ---------------------------------------------------------------------------------------------------------------------
 # Start Apache.
