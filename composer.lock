@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities.git",
-                "reference": "dd765c1240628395ff2a4bb443e3d51837bff5eb"
+                "reference": "1d9941b1ac152ba47030016024e478257e065ce9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/dd765c1240628395ff2a4bb443e3d51837bff5eb",
-                "reference": "dd765c1240628395ff2a4bb443e3d51837bff5eb",
+                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/1d9941b1ac152ba47030016024e478257e065ce9",
+                "reference": "1d9941b1ac152ba47030016024e478257e065ce9",
                 "shasum": ""
             },
             "require": {
@@ -34,6 +34,7 @@
                 "ext-intl": "*",
                 "ext-memcached": "*",
                 "ext-pcntl": "*",
+                "ext-pdo": "*",
                 "ext-posix": "*",
                 "ext-session": "*",
                 "ext-zip": "*",
@@ -119,7 +120,7 @@
                 "issues": "https://github.com/clevercanyon/utilities/issues",
                 "source": "https://github.com/clevercanyon/utilities/tree/main"
             },
-            "time": "2022-02-20T10:11:55+00:00"
+            "time": "2022-02-21T09:11:45+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -959,12 +960,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/standards.git",
-                "reference": "5d7afe064e8492712760dc162c6b4db10cb6cebc"
+                "reference": "906a44bb6d100d0f644fdb821d8cbc10e9468d90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/standards/zipball/5d7afe064e8492712760dc162c6b4db10cb6cebc",
-                "reference": "5d7afe064e8492712760dc162c6b4db10cb6cebc",
+                "url": "https://api.github.com/repos/clevercanyon/standards/zipball/906a44bb6d100d0f644fdb821d8cbc10e9468d90",
+                "reference": "906a44bb6d100d0f644fdb821d8cbc10e9468d90",
                 "shasum": ""
             },
             "require": {
@@ -992,7 +993,7 @@
                 "issues": "https://github.com/clevercanyon/standards/issues",
                 "source": "https://github.com/clevercanyon/standards/tree/main"
             },
-            "time": "2022-02-14T00:45:25+00:00"
+            "time": "2022-02-21T09:09:44+00:00"
         },
         {
             "name": "clevercanyon/utilities-dev",
@@ -1000,12 +1001,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities-dev.git",
-                "reference": "81dd09952e4abb4dd1962372435b917808b2f8c0"
+                "reference": "9d202fa12e590b9fbdf730820edb9561ef0a29cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities-dev/zipball/81dd09952e4abb4dd1962372435b917808b2f8c0",
-                "reference": "81dd09952e4abb4dd1962372435b917808b2f8c0",
+                "url": "https://api.github.com/repos/clevercanyon/utilities-dev/zipball/9d202fa12e590b9fbdf730820edb9561ef0a29cb",
+                "reference": "9d202fa12e590b9fbdf730820edb9561ef0a29cb",
                 "shasum": ""
             },
             "require": {
@@ -1049,7 +1050,7 @@
                 "issues": "https://github.com/clevercanyon/utilities-dev/issues",
                 "source": "https://github.com/clevercanyon/utilities-dev/tree/main"
             },
-            "time": "2022-02-19T20:11:44+00:00"
+            "time": "2022-02-21T09:09:55+00:00"
         },
         {
             "name": "clevercanyon/utilities-dev-npm",
@@ -2012,16 +2013,16 @@
         },
         {
             "name": "phar-io/version",
-            "version": "3.1.1",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phar-io/version.git",
-                "reference": "15a90844ad40f127afd244c0cad228de2a80052a"
+                "reference": "4f7fd7836c6f332bb2933569e566a0d6c4cbed74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phar-io/version/zipball/15a90844ad40f127afd244c0cad228de2a80052a",
-                "reference": "15a90844ad40f127afd244c0cad228de2a80052a",
+                "url": "https://api.github.com/repos/phar-io/version/zipball/4f7fd7836c6f332bb2933569e566a0d6c4cbed74",
+                "reference": "4f7fd7836c6f332bb2933569e566a0d6c4cbed74",
                 "shasum": ""
             },
             "require": {
@@ -2057,9 +2058,9 @@
             "description": "Library for handling version information and constraints",
             "support": {
                 "issues": "https://github.com/phar-io/version/issues",
-                "source": "https://github.com/phar-io/version/tree/3.1.1"
+                "source": "https://github.com/phar-io/version/tree/3.2.1"
             },
-            "time": "2022-02-07T21:56:48+00:00"
+            "time": "2022-02-21T01:04:05+00:00"
         },
         {
             "name": "php-stubs/woocommerce-stubs",
