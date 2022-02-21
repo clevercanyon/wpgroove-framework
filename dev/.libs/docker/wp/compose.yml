@@ -38,10 +38,10 @@ networks :
         name        : '${WP_DOCKER_COMPOSE_PROJECT_SLUG}-network'
         ipam        :
             driver : 'default'
-            config :
-                -
-                    subnet  : '172.72.0.0/16'
-                    gateway : '172.72.0.1'
+            # config :
+            #     -
+            #         subnet  : '172.72.0.0/16'
+            #         gateway : '172.72.0.1'
 volumes  :
     sql-data :
         name : '${WP_DOCKER_COMPOSE_PROJECT_SLUG}-sql-data'
