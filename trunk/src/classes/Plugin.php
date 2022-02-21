@@ -11,22 +11,12 @@
 // <editor-fold desc="Strict types, namespace, use statements, and other headers.">
 
 /**
- * Lint configuration.
- *
- * @since        2021-12-15
- *
- * @noinspection PhpUnhandledExceptionInspection
- * @noinspection PhpStaticAsDynamicMethodCallInspection
- * phpcs:disable Generic.Commenting.DocComment.MissingShort
- */
-
-/**
  * Declarations & namespace.
  *
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Tests\WP_Docker;
+namespace WP_Groove\Framework_Plugin;
 
 /**
  * Utilities.
@@ -34,7 +24,6 @@ namespace WP_Groove\Framework\Tests\WP_Docker;
  * @since 2021-12-15
  */
 use Clever_Canyon\{Utilities as U};
-use Clever_Canyon\Utilities\{Tests as UT};
 
 /**
  * Framework.
@@ -43,19 +32,38 @@ use Clever_Canyon\Utilities\{Tests as UT};
  */
 use WP_Groove\{Framework as WPG};
 
+/**
+ * Plugin.
+ *
+ * @since 2021-12-15
+ */
+use WP_Groove\{Framework_Plugin as WP};
+
 // </editor-fold>
 
 /**
- * Test case.
+ * Plugin.
  *
  * @since 2021-12-15
- * @coversDefaultClass \WP_Groove\Framework\Admin_Notice
  */
-final class Admin_Notice_Tests extends UT\A6t\Tests {
+class Plugin extends WPG\A6t\Plugin {
 	/**
-	 * @covers ::value_first()
+	 * On `plugins_loaded` hook.
+	 *
+	 * @since 2021-12-15
 	 */
-	public function test_hello_world() : void {
-		$this->assertSame( 'hello world', U\Arr::value_first( [ 'hello world' ] ), $this->message() );
+	public function on_plugins_loaded() : void {
+		parent::on_plugins_loaded();
+		// Nothing for now.
+	}
+
+	/**
+	 * On `init` hook.
+	 *
+	 * @since 2021-12-15
+	 */
+	public function on_init() : void {
+		parent::on_init();
+		// Nothing for now.
 	}
 }
