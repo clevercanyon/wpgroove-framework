@@ -15,10 +15,18 @@ cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1;
 
 if [[ -f ./.cc-utilities ]]; then ccu_path=.;
 else ccu_path=./vendor/clevercanyon/utilities; fi;
+
 wp_docker="${ccu_path}"/dev/cli-tools/docker/wp/docker;
 
-. "${ccu_path}"/dev/utilities/load.bash; # Loads utilities.
-. "${ccu_path}"/dev/utilities/bash/partials/loose-mode;
+if [[ -f "${ccu_path}"/dev/utilities/load.bash && -x "${wp_docker}" ]]; then
+	. "${ccu_path}"/dev/utilities/load.bash; # Loads utilities.
+	. "${ccu_path}"/dev/utilities/bash/partials/loose-mode;
+else
+	echo 'Missing required dependencies. Have you run `composer install` yet?'; exit 1;
+fi;
+# ---------------------------------------------------------------------------------------------------------------------
+# Runs command in one of two ways; depending on requestion action.
+# ---------------------------------------------------------------------------------------------------------------------
 
 if [[ "${1:-}" == 'shell' || "${1:-}" == 'psysh' || "${1:-}" == 'wp-cli' ]]; then
 	CMD="$("${wp_docker}" "${@}" --prepare-cmd)";
