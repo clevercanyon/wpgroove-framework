@@ -187,7 +187,8 @@ final class On_Post_Cmd extends U\A6t\CLI_Tool {
 
 		if ( ! $this->project->is_wp_project()
 			// Special exception for WP Groove framework.
-			// It has a `trunk/plugin.php` file for testing purposes.
+			// It's not a WP project, strictly speaking, but it
+			// has a `trunk/plugin.php` file for testing purposes.
 			&& 'clevercanyon/wpgroove-framework' !== $this->project->name
 		) {
 			return; // Not applicable.
@@ -208,7 +209,8 @@ final class On_Post_Cmd extends U\A6t\CLI_Tool {
 
 		if ( ! $this->project->is_wp_project()
 			// Special exception for WP Groove framework.
-			// It has a `trunk/plugin.php` file for testing purposes.
+			// It's not a WP project, strictly speaking, but it
+			// has a `trunk/plugin.php` file for testing purposes.
 			&& 'clevercanyon/wpgroove-framework' !== $this->project->name
 		) {
 			return; // Not applicable.
