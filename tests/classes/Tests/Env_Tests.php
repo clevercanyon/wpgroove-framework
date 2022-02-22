@@ -26,7 +26,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Tests\WP_Docker;
+namespace WP_Groove\Framework\Tests\Tests;
 
 /**
  * Utilities.
@@ -57,18 +57,13 @@ use WP_Groove\{Framework_Plugin as WP};
  * Test case.
  *
  * @since 2021-12-15
- * @coversDefaultClass \WP_Groove\Framework_Plugin\Plugin
+ * @coversDefaultClass \Clever_Canyon\Utilities\Env
  */
-final class Plugin_Tests extends WPGT\A6t\Tests {
+final class Env_Tests extends WPGT\A6t\Tests {
 	/**
-	 * @covers ::instance()
-	 * @covers ::__construct()
+	 * @covers ::in_test_mode()
 	 */
-	public function test_plugin() : void {
-		$plugin = WP\Plugin::instance();
-
-		u\dump( $plugin );
-
-		$this->assertSame( 'wpgroove-framework-plugin', $plugin->slug, $this->message() );
+	public function test_in_test_mode() : void {
+		$this->assertSame( true, U\Env::in_test_mode(), $this->message() );
 	}
 }

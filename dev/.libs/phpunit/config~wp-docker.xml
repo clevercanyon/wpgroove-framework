@@ -15,7 +15,7 @@
 <phpunit
 	colors="true"
 
-	forceCoversAnnotation="true"
+	forceCoversAnnotation="false"
 	beStrictAboutCoversAnnotation="false"
 
 	beStrictAboutOutputDuringTests="true"
