@@ -36,7 +36,7 @@
 			"Clever_Canyon\\Utilities\\Tests\\" : [ "./vendor/clevercanyon/utilities/tests/classes" ],
 			"WP_Groove\\Framework\\Tests\\"     : [ "./tests/classes" ]
 		},
-		"files" : [ "./trunk/plugin.php" ]
+		"files" : [ "./.trunk.php" ]
 	},
 	"scripts"           : {
 		"webpack"                  : "npx webpack --config ./dev/.libs/webpack/config.cjs",
