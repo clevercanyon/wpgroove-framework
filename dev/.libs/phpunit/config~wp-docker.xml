@@ -34,7 +34,7 @@
     <testsuites>
         <testsuite name="tests">
             <directory suffix="Tests.php">../../../tests/classes/Tests</directory>
-            <directory suffix="Tests.php">../../../tests/classes/WP_Docker/Tests</directory>
+            <directory suffix="Tests.php">../../../tests/classes/WP_Docker</directory>
         </testsuite>
     </testsuites>
 
