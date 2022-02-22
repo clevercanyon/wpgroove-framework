@@ -58,7 +58,7 @@
 		"clevercanyon" : {
 			"$extends-packages" : [ "clevercanyon/utilities" ],
 			"&"                 : {
-				"brand"                   : {
+				"brand"            : {
 					"data" : {
 						"n7m" : "w6e"
 					},
@@ -69,7 +69,7 @@
 						}
 					}
 				},
-				"project"                 : {
+				"project"          : {
 					"data" : {
 						"version"        : "1.0.0",
 						"stable_tag"     : "1.0.0",
@@ -79,7 +79,7 @@
 						"name"           : "WP Groove: WordPress Framework"
 					}
 				},
-				"post_update_cmd_handler" : {
+				"post_cmd_handler" : {
 					"symlink_local_packages" : {
 						"$concat" : {
 							"vendor" : [

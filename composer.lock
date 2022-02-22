@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6a4fe90c3a97047c51849fce3cb9057c",
+    "content-hash": "17eb59c846a32531f6280feea4182ee4",
     "packages": [
         {
             "name": "clevercanyon/utilities",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities.git",
-                "reference": "40b35b8cd70d7b161db652ea5a30c09e213d429d"
+                "reference": "323214791587dee301f70a685cbd9e51d1432030"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/40b35b8cd70d7b161db652ea5a30c09e213d429d",
-                "reference": "40b35b8cd70d7b161db652ea5a30c09e213d429d",
+                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/323214791587dee301f70a685cbd9e51d1432030",
+                "reference": "323214791587dee301f70a685cbd9e51d1432030",
                 "shasum": ""
             },
             "require": {
@@ -78,7 +78,7 @@
                                 "exclude-files": []
                             }
                         },
-                        "post_update_cmd_handler": {
+                        "post_cmd_handler": {
                             "symlink_local_packages": {
                                 "vendor": [
                                     "clevercanyon/standards",
@@ -120,7 +120,7 @@
                 "issues": "https://github.com/clevercanyon/utilities/issues",
                 "source": "https://github.com/clevercanyon/utilities/tree/main"
             },
-            "time": "2022-02-21T23:36:46+00:00"
+            "time": "2022-02-22T03:01:18+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
