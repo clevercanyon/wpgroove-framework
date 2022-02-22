@@ -137,7 +137,7 @@ trait Constructable_Members {
 		 * Assertions take effect in development and testing environments,
 		 * but are optimized completely away to have zero cost in production.
 		 */
-		assert( U\Str::is_namespace_scope( $this->namespace_scope ) );
+		assert( ! $this->namespace_scope || U\Str::is_namespace_scope( $this->namespace_scope ) );
 		assert( U\Str::is_namespace_crux( $this->namespace_crux, $this->brand_n7m ) );
 
 		assert( U\Str::is_brand_slug( $this->brand_slug, $brand->slug ) );

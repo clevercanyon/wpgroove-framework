@@ -117,14 +117,14 @@ trait Instance_Members {
 
 		register_activation_hook(
 			$args[ 0 ], // Plugin file.
-			function ( bool $network_wide ) {
-				static::load()->do_action( 'activation', $network_wide );
+			function ( ?bool $network_wide = null ) {
+				static::load()->do_action( 'activation', $network_wide ?: false );
 			}
 		);
 		register_deactivation_hook(
 			$args[ 0 ], // Plugin file.
-			function ( bool $network_wide ) {
-				static::load()->do_action( 'deactivation', $network_wide );
+			function ( ?bool $network_wide = null ) {
+				static::load()->do_action( 'deactivation', $network_wide ?: false );
 			}
 		);
 		// `plugins_loaded` will not fire on activation, deactivation, or uninstallation.

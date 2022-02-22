@@ -61,14 +61,11 @@ use WP_Groove\{Framework_Plugin as WP};
  */
 final class Plugin_Tests extends WPGT\A6t\Tests {
 	/**
+	 * @covers ::load()
 	 * @covers ::instance()
-	 * @covers ::__construct()
 	 */
 	public function test_plugin() : void {
 		$plugin = WP\Plugin::instance();
-
-		u\dump( $plugin );
-
-		$this->assertSame( 'wpgroove-framework-plugin', $plugin->slug, $this->message() );
+		$this->assertSame( 'w6e', $plugin->brand_n7m, $this->message() );
 	}
 }
