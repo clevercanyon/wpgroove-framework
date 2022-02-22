@@ -25,12 +25,17 @@
 	beStrictAboutResourceUsageDuringSmallTests="true"
 
 	defaultTestSuite="tests"
-	bootstrap="../../../vendor/autoload.php"
+	bootstrap="../../../tests/bootstrap.php"
 	cacheResultFile="../../../._x/phpunit/~wp-docker/result.cache"
 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
 >
+	<php>
+		<env name="IS_PHPUNIT" value="1" />
+        <env name="IS_PHPUNIT_WP_DOCKER" value="1" />
+    </php>
+
     <testsuites>
         <testsuite name="tests">
             <directory suffix="Tests.php">../../../tests/classes/Tests</directory>

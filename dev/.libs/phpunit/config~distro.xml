@@ -25,12 +25,17 @@
 	beStrictAboutResourceUsageDuringSmallTests="true"
 
 	defaultTestSuite="tests"
-	bootstrap="../../../._x/distro-tests/vendor/scoper-autoload.php"
+	bootstrap="../../../._x/distro-tests/tests/bootstrap.php"
 	cacheResultFile="../../../._x/phpunit/~distro/result.cache"
 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
 >
+    <php>
+		<env name="IS_PHPUNIT" value="1" />
+        <env name="IS_PHPUNIT_DISTRO" value="1" />
+    </php>
+
     <testsuites>
         <testsuite name="tests">
             <directory suffix="Tests.php">../../../._x/distro-tests/tests/classes/Tests</directory>
