@@ -85,9 +85,8 @@ U\Env::set_debug_mode();
  * @since 2021-12-15
  */
 if ( 'update' === ( $argv[ 1 ] ?? '' ) ) {
-	new U\Dev\CLI_Tools\Composer\On_Post_Cmd( [ 'update', '--project-dir', D\CLI::project_dir() ] );
 	new WPG\Dev\CLI_Tools\Composer\On_Post_Cmd( [ 'update', '--project-dir', D\CLI::project_dir() ] );
 } else {
-	new U\Dev\CLI_Tools\Composer\On_Post_Cmd( [ 'symlink', '--project-dir', D\CLI::project_dir() ] );
+	new WPG\Dev\CLI_Tools\Composer\On_Post_Cmd( [ 'symlink', '--project-dir', D\CLI::project_dir() ] );
 	U\CLI::run( [ $argv[ 0 ], 'update' ] ); // Separate process, after symlinks.
 }

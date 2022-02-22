@@ -80,13 +80,13 @@ require_once D\Dir::join( D\CLI::project_dir(), '/vendor/autoload.php' );
 U\Env::set_debug_mode();
 
 /**
- * Handles `post-install-cmd` hook.
+ * Handles compilation.
  *
  * @since 2021-12-15
  */
-if ( 'install' === ( $argv[ 1 ] ?? '' ) ) {
-	new WPG\Dev\CLI_Tools\Composer\On_Post_Cmd( [ 'install', '--project-dir', D\CLI::project_dir() ] );
+if ( 'compile' === ( $argv[ 1 ] ?? '' ) ) {
+	new WPG\Dev\CLI_Tools\Composer\Compiler( [ 'compile', '--project-dir', D\CLI::project_dir() ] );
 } else {
-	new WPG\Dev\CLI_Tools\Composer\On_Post_Cmd( [ 'symlink', '--project-dir', D\CLI::project_dir() ] );
-	U\CLI::run( [ $argv[ 0 ], 'install' ] ); // Separate process, after symlinks.
+	new WPG\Dev\CLI_Tools\Composer\Compiler( [ 'symlink', '--project-dir', D\CLI::project_dir() ] );
+	U\CLI::run( [ $argv[ 0 ], 'compile' ] ); // Separate process, after symlinks.
 }

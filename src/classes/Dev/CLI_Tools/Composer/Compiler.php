@@ -43,11 +43,11 @@ use Aws\Exception\AwsException;
 // </editor-fold>
 
 /**
- * On `post-(install|update)-cmd` hooks.
+ * On `post-(install|update)-cmd` hook.
  *
  * @since 2021-12-15
  */
-final class On_Post_Cmd extends Operations {
+final class Compiler extends Operations {
 	/**
 	 * Version.
 	 *
@@ -60,7 +60,7 @@ final class On_Post_Cmd extends Operations {
 	 *
 	 * @since 2021-12-15
 	 */
-	protected const NAME = 'Composer/On_Post_Cmd';
+	protected const NAME = 'Composer/Compiler';
 
 	/**
 	 * Constructor.
@@ -88,24 +88,10 @@ final class On_Post_Cmd extends Operations {
 					],
 				],
 			],
-			'install' => [
-				'callback'    => [ $this, 'install' ],
-				'synopsis'    => 'Syncs Composer install with other parts of the project. Only in dev mode.',
-				'description' => 'Syncs Composer install with other parts of the project. Only in dev mode. See ' . __CLASS__ . '::install()',
-				'options'     => [
-					'project-dir' => [
-						'required'     => true,
-						'arg_required' => true,
-						'description'  => 'Project directory path.',
-						'validator'    => fn( $value ) => ( $abs_path = $this->v6e_abs_path( $value, 'dir' ) )
-							&& is_file( U\Dir::join( $abs_path, '/composer.json' ) ),
-					],
-				],
-			],
-			'update'  => [
-				'callback'    => [ $this, 'update' ],
-				'synopsis'    => 'Syncs Composer update with other parts of the project. Only in dev mode.',
-				'description' => 'Syncs Composer update with other parts of the project. Only in dev mode. See ' . __CLASS__ . '::update()',
+			'compile' => [
+				'callback'    => [ $this, 'compile' ],
+				'synopsis'    => 'Compiles project. Only in dev mode.',
+				'description' => 'Compiles project. Only in dev mode. See ' . __CLASS__ . '::compile()',
 				'options'     => [
 					'project-dir' => [
 						'required'     => true,
@@ -147,58 +133,42 @@ final class On_Post_Cmd extends Operations {
 	}
 
 	/**
-	 * Command: `install`.
+	 * Command: `compile`.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected function install() : void {
+	protected function compile() : void {
 		if ( ! U\Env::var( 'COMPOSER_DEV_MODE' ) ) {
 			return; // Not applicable.
 		}
 		try {
-			U\CLI::heading( '[' . __METHOD__ . '()]: Installing ...' );
+			U\CLI::heading( '[' . __METHOD__ . '()]: Compiling ...' );
 
 			$project_dir   = U\Fs::abs( $this->get_option( 'project-dir' ) );
 			$this->project = new U\Dev\Project( $project_dir );
 
 			$this->maybe_setup_dotfiles();
-			$this->maybe_run_npm_install();
-			$this->maybe_run_wp_app_composer_install();
 
-			$this->maybe_sync_wp_plugin_headers();
-			$this->maybe_sync_wp_theme_headers();
-
-			U\CLI::done( '[' . __METHOD__ . '()]: Install complete ✔.' );
-		} catch ( \Throwable $throwable ) {
-			U\CLI::error( $throwable->getMessage() );
-			U\CLI::error( $throwable->getTraceAsString() );
-			U\CLI::exit_status( 1 );
-		}
-	}
-
-	/**
-	 * Command: `update`.
-	 *
-	 * @since 2021-12-15
-	 */
-	protected function update() : void {
-		if ( ! U\Env::var( 'COMPOSER_DEV_MODE' ) ) {
-			return; // Not applicable.
-		}
-		try {
-			U\CLI::heading( '[' . __METHOD__ . '()]: Updating ...' );
-
-			$project_dir   = U\Fs::abs( $this->get_option( 'project-dir' ) );
-			$this->project = new U\Dev\Project( $project_dir );
-
-			$this->maybe_setup_dotfiles();
 			$this->maybe_run_npm_update();
+			$this->maybe_run_npx_webpack();
 			$this->maybe_run_wp_app_composer_update();
 
 			$this->maybe_sync_wp_plugin_headers();
 			$this->maybe_sync_wp_theme_headers();
 
-			U\CLI::done( '[' . __METHOD__ . '()]: Update complete ✔.' );
+			$this->maybe_compile_distro_lib_dir();
+			$this->maybe_compile_distro_lib_tests_dir();
+
+			$this->maybe_compile_distro_lib_zip();
+			$this->maybe_s3_upload_distro_lib_zip();
+
+			$this->maybe_compile_wp_app_svn_repo();
+			$this->maybe_compile_wp_app_distro_tests();
+
+			$this->maybe_compile_wp_app_zip();
+			$this->maybe_s3_upload_wp_app_zip();
+
+			U\CLI::done( '[' . __METHOD__ . '()]: Compilation complete ✔.' );
 		} catch ( \Throwable $throwable ) {
 			U\CLI::error( $throwable->getMessage() );
 			U\CLI::error( $throwable->getTraceAsString() );
