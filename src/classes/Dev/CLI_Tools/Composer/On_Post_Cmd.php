@@ -185,7 +185,11 @@ final class On_Post_Cmd extends U\A6t\CLI_Tool {
 	protected function maybe_run_wp_app_composer_install() : void {
 		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
 
-		if ( ! $this->project->is_wp_project() ) {
+		if ( ! $this->project->is_wp_project()
+			// Special exception for WP Groove framework.
+			// It has a `trunk/plugin.php` file for testing purposes.
+			&& 'clevercanyon/wpgroove-framework' !== $this->project->name
+		) {
 			return; // Not applicable.
 		}
 		if ( $this->project->has_file( 'trunk/composer.json' ) ) {
@@ -202,7 +206,11 @@ final class On_Post_Cmd extends U\A6t\CLI_Tool {
 	protected function maybe_run_wp_app_composer_update() : void {
 		U\CLI::output( '[' . __FUNCTION__ . '()]: Maybe; looking ...' );
 
-		if ( ! $this->project->is_wp_project() ) {
+		if ( ! $this->project->is_wp_project()
+			// Special exception for WP Groove framework.
+			// It has a `trunk/plugin.php` file for testing purposes.
+			&& 'clevercanyon/wpgroove-framework' !== $this->project->name
+		) {
 			return; // Not applicable.
 		}
 		if ( $this->project->has_file( 'trunk/composer.json' ) ) {
