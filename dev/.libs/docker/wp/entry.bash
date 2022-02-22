@@ -14,16 +14,16 @@
 # Source a few dependencies.
 # ---------------------------------------------------------------------------------------------------------------------
 
-if [[ -f "${WP_DOCKER_HOST_PROJECT_DIR}"/.cc-utilities ]];
-	then ccu_path="${WP_DOCKER_HOST_PROJECT_DIR}";
-else ccu_path="${WP_DOCKER_HOST_PROJECT_DIR}"/vendor/clevercanyon/utilities; fi;
+if [[ -f "${WP_DOCKER_HOST_PROJECT_DIR}"/.c10n-utilities ]];
+	then c10n_utilities_path="${WP_DOCKER_HOST_PROJECT_DIR}";
+else c10n_utilities_path="${WP_DOCKER_HOST_PROJECT_DIR}"/vendor/clevercanyon/utilities; fi;
 
-if [[ -f "${ccu_path}"/dev/utilities/load.bash ]]; then
-	. "${ccu_path}"/dev/utilities/load.bash;
-	. "${ccu_path}"/dev/utilities/bash/partials/require-root;
-	. "${ccu_path}"/dev/utilities/bash/partials/require-wp-docker;
+if [[ -f "${c10n_utilities_path}"/dev/utilities/load.bash ]]; then
+	. "${c10n_utilities_path}"/dev/utilities/load.bash;
+	. "${c10n_utilities_path}"/dev/utilities/bash/partials/require-root;
+	. "${c10n_utilities_path}"/dev/utilities/bash/partials/require-wp-docker;
 else
-	echo 'Missing required dependency: `'"${ccu_path}"'`';
+	echo 'Missing required dependency: `'"${c10n_utilities_path}"'`';
 	echo 'Have you run `composer install` yet?';
 	exit 1; # Exit w/ error status.
 fi;

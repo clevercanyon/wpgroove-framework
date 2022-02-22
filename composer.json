@@ -38,20 +38,8 @@
 		}
 	},
 	"scripts"           : {
-		"webpack"                  : "npx webpack --config ./dev/.libs/webpack/config.cjs",
-
-		"phpunit"                  : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config.xml --no-coverage --no-logging",
-		"phpunit~distro"           : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config~distro.xml --no-coverage --no-logging",
-		"phpunit~coverage"         : "XDEBUG_MODE=coverage composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config.xml --no-logging",
-
-		"phpunit~wp-docker"        : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config~wp-docker.xml --no-coverage --no-logging --do-not-cache-result",
-		"phpunit~wp-docker~distro" : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config~wp-docker~distro.xml --no-coverage --no-logging --do-not-cache-result",
-
-		"phpunit~ci"               : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config.xml --no-coverage",
-		"phpunit~ci~distro"        : "composer exec --profile -- phpunit --configuration ./dev/.libs/phpunit/config~distro.xml --no-coverage",
-
-		"post-install-cmd"         : "[ $COMPOSER_DEV_MODE -eq 0 ] || ./dev/cli-tools/composer/on-post-install-cmd",
-		"post-update-cmd"          : "[ $COMPOSER_DEV_MODE -eq 0 ] || ./dev/cli-tools/composer/on-post-update-cmd"
+		"post-install-cmd" : "[ $COMPOSER_DEV_MODE -eq 0 ] || ./dev/cli-tools/composer/on-post-install-cmd",
+		"post-update-cmd"  : "[ $COMPOSER_DEV_MODE -eq 0 ] || ./dev/cli-tools/composer/on-post-update-cmd"
 	},
 	"extra"             : {
 		"clevercanyon" : {

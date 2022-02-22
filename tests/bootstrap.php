@@ -73,6 +73,9 @@ $GLOBALS[ 'wp_filter' ][ 'plugins_loaded' ][ -( PHP_INT_MAX - 10001 ) ][] = [
 	'function'      => function () {
 		require_once dirname( __FILE__, 2 ) . '/vendor/autoload.php';
 		require_once dirname( __FILE__, 2 ) . '/trunk/plugin.php';
+
+		echo 'WordPress loaded.';
+		exit;
 	},
 ];
 require_once getenv( 'WP_DOCKER_WORDPRESS_DIR' ) . '/wp-load.php';
