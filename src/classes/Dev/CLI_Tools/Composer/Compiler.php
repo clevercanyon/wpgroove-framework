@@ -76,8 +76,8 @@ final class Compiler extends Operations {
 		$this->add_commands( [
 			'symlink' => [
 				'callback'    => [ $this, 'symlink' ],
-				'synopsis'    => 'Updates project symlinks. Only in dev mode.',
-				'description' => 'Updates project symlinks. Only in dev mode. See ' . __CLASS__ . '::symlink()',
+				'synopsis'    => 'Updates project symlinks.',
+				'description' => 'Updates project symlinks. See ' . __CLASS__ . '::symlink()',
 				'options'     => [
 					'project-dir' => [
 						'required'     => true,
@@ -90,8 +90,8 @@ final class Compiler extends Operations {
 			],
 			'compile' => [
 				'callback'    => [ $this, 'compile' ],
-				'synopsis'    => 'Compiles project. Only in dev mode.',
-				'description' => 'Compiles project. Only in dev mode. See ' . __CLASS__ . '::compile()',
+				'synopsis'    => 'Compiles project.',
+				'description' => 'Compiles project. See ' . __CLASS__ . '::compile()',
 				'options'     => [
 					'project-dir' => [
 						'required'     => true,
@@ -112,9 +112,6 @@ final class Compiler extends Operations {
 	 * @since 2021-12-15
 	 */
 	protected function symlink() : void {
-		if ( ! U\Env::var( 'COMPOSER_DEV_MODE' ) ) {
-			return; // Not applicable.
-		}
 		try {
 			U\CLI::heading( '[' . __METHOD__ . '()]: Symlinking ...' );
 
@@ -127,7 +124,7 @@ final class Compiler extends Operations {
 			U\CLI::done( '[' . __METHOD__ . '()]: Symlinking complete ✔.' );
 		} catch ( \Throwable $throwable ) {
 			U\CLI::error( $throwable->getMessage() );
-			U\CLI::error( $throwable->getTraceAsString() );
+			U\CLI::log( $throwable->getTraceAsString() );
 			U\CLI::exit_status( 1 );
 		}
 	}
@@ -138,9 +135,6 @@ final class Compiler extends Operations {
 	 * @since 2021-12-15
 	 */
 	protected function compile() : void {
-		if ( ! U\Env::var( 'COMPOSER_DEV_MODE' ) ) {
-			return; // Not applicable.
-		}
 		try {
 			U\CLI::heading( '[' . __METHOD__ . '()]: Compiling ...' );
 
@@ -171,7 +165,7 @@ final class Compiler extends Operations {
 			U\CLI::done( '[' . __METHOD__ . '()]: Compilation complete ✔.' );
 		} catch ( \Throwable $throwable ) {
 			U\CLI::error( $throwable->getMessage() );
-			U\CLI::error( $throwable->getTraceAsString() );
+			U\CLI::log( $throwable->getTraceAsString() );
 			U\CLI::exit_status( 1 );
 		}
 	}

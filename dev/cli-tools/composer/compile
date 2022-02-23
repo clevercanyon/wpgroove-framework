@@ -46,15 +46,6 @@ if ( 'cli' !== PHP_SAPI ) {
 }
 
 /**
- * Dev mode only.
- *
- * @since 2021-12-15
- */
-if ( ! getenv( 'COMPOSER_DEV_MODE' ) ) {
-	exit( 1 ); // Dev mode only.
-}
-
-/**
  * Requires dev utilities.
  *
  * @since 2021-12-15

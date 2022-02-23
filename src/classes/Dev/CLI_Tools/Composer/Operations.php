@@ -166,6 +166,10 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			}
 			$plugin_file_contents        = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $plugin->headers->{$_prop}, $plugin_file_contents );
 			$plugin_readme_file_contents = preg_replace( '/^(\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $plugin->headers->{$_prop}, $plugin_readme_file_contents );
+
+			if ( 'name' === $_prop ) { // Updates plugin name in `readme.txt` file.
+				$plugin_readme_file_contents = preg_replace( '/^\={3}[^=\v]*\={3}/ui', '=== ' . $plugin->headers->{$_prop} . ' ===', $plugin_readme_file_contents, 1 );
+			}
 		}
 		$plugin_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@slug\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->slug ) . "'" . '${2} // @slug', $plugin_file_contents );
 		$plugin_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@name\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->name ) . "'" . '${2} // @name', $plugin_file_contents );
@@ -218,6 +222,10 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			$theme_functions_file_contents = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_functions_file_contents );
 			$theme_style_file_contents     = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_style_file_contents );
 			$theme_readme_file_contents    = preg_replace( '/^(\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_readme_file_contents );
+
+			if ( 'name' === $_prop ) { // Updates theme name in `readme.txt` file.
+				$theme_readme_file_contents = preg_replace( '/^\={3}[^=\v]*\={3}/ui', '=== ' . $theme->headers->{$_prop} . ' ===', $theme_readme_file_contents, 1 );
+			}
 		}
 		$theme_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@slug\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->slug ) . "'" . '${2} // @slug', $theme_file_contents );
 		$theme_file_contents = preg_replace( '/^(\h*)["\'][^"\']*["\']\h*(,)?\h*\/\/\h*@name\h*$/uim', '${1}' . "'" . U\Str::esc_sq( $this->project->name ) . "'" . '${2} // @name', $theme_file_contents );

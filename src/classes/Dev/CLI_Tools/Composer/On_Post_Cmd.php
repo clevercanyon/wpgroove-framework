@@ -141,7 +141,7 @@ final class On_Post_Cmd extends Operations {
 			U\CLI::done( '[' . __METHOD__ . '()]: Symlinking complete ✔.' );
 		} catch ( \Throwable $throwable ) {
 			U\CLI::error( $throwable->getMessage() );
-			U\CLI::error( $throwable->getTraceAsString() );
+			U\CLI::log( $throwable->getTraceAsString() );
 			U\CLI::exit_status( 1 );
 		}
 	}
@@ -171,7 +171,7 @@ final class On_Post_Cmd extends Operations {
 			U\CLI::done( '[' . __METHOD__ . '()]: Install complete ✔.' );
 		} catch ( \Throwable $throwable ) {
 			U\CLI::error( $throwable->getMessage() );
-			U\CLI::error( $throwable->getTraceAsString() );
+			U\CLI::log( $throwable->getTraceAsString() );
 			U\CLI::exit_status( 1 );
 		}
 	}
@@ -201,7 +201,7 @@ final class On_Post_Cmd extends Operations {
 			U\CLI::done( '[' . __METHOD__ . '()]: Update complete ✔.' );
 		} catch ( \Throwable $throwable ) {
 			U\CLI::error( $throwable->getMessage() );
-			U\CLI::error( $throwable->getTraceAsString() );
+			U\CLI::log( $throwable->getTraceAsString() );
 			U\CLI::exit_status( 1 );
 		}
 	}
