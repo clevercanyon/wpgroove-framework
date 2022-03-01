@@ -138,9 +138,9 @@ final class On_Post_Cmd extends Operations {
 			$this->maybe_symlink_local_repos();
 			$this->maybe_symlink_wp_app_locally();
 
-			U\CLI::done( '[' . __METHOD__ . '()]: Symlinking complete ✔.' );
+			U\CLI::success( '[' . __METHOD__ . '()]: Symlinking complete ✔.' );
 		} catch ( \Throwable $throwable ) {
-			U\CLI::error( $throwable->getMessage() );
+			U\CLI::danger_hilite( $throwable->getMessage() );
 			U\CLI::log( $throwable->getTraceAsString() );
 			U\CLI::exit_status( 1 );
 		}
@@ -168,9 +168,9 @@ final class On_Post_Cmd extends Operations {
 			$this->maybe_sync_wp_plugin_headers();
 			$this->maybe_sync_wp_theme_headers();
 
-			U\CLI::done( '[' . __METHOD__ . '()]: Install complete ✔.' );
+			U\CLI::success( '[' . __METHOD__ . '()]: Install complete ✔.' );
 		} catch ( \Throwable $throwable ) {
-			U\CLI::error( $throwable->getMessage() );
+			U\CLI::danger_hilite( $throwable->getMessage() );
 			U\CLI::log( $throwable->getTraceAsString() );
 			U\CLI::exit_status( 1 );
 		}
@@ -198,9 +198,9 @@ final class On_Post_Cmd extends Operations {
 			$this->maybe_sync_wp_plugin_headers();
 			$this->maybe_sync_wp_theme_headers();
 
-			U\CLI::done( '[' . __METHOD__ . '()]: Update complete ✔.' );
+			U\CLI::success( '[' . __METHOD__ . '()]: Update complete ✔.' );
 		} catch ( \Throwable $throwable ) {
-			U\CLI::error( $throwable->getMessage() );
+			U\CLI::danger_hilite( $throwable->getMessage() );
 			U\CLI::log( $throwable->getTraceAsString() );
 			U\CLI::exit_status( 1 );
 		}

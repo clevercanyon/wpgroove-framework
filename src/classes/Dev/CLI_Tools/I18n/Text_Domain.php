@@ -158,9 +158,9 @@ final class Text_Domain extends U\A6t\CLI_Tool {
 				$this->process_file( $text_domain, $_php_file->getPathname() );
 				U\CLI::log( '[' . __FUNCTION__ . '()]: Processed: `' . $_php_file->getPathname() . '`.' );
 			}
-			U\CLI::done( '[' . __METHOD__ . '()]: Complete ✔.' );
+			U\CLI::success( '[' . __METHOD__ . '()]: Complete ✔.' );
 		} catch ( \Throwable $throwable ) {
-			U\CLI::error( $throwable->getMessage() );
+			U\CLI::danger_hilite( $throwable->getMessage() );
 			U\CLI::log( $throwable->getTraceAsString() );
 			U\CLI::exit_status( 1 );
 		}
