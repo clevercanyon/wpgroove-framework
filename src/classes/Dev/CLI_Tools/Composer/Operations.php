@@ -109,7 +109,7 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			return; // Not applicable.
 		}
 		if ( $this->project->has_file( 'trunk/composer.json' ) ) {
-			U\CLI::run( [ 'composer', 'install' ], U\Dir::join( $this->project->dir, '/trunk' ) );
+			U\CLI::run( [ 'composer', 'install', '--no-interaction' ], U\Dir::join( $this->project->dir, '/trunk' ) );
 		}
 		U\CLI::log( '[' . __FUNCTION__ . '()]: Ran `composer install` in `' . U\Dir::join( $this->project->dir, '/trunk' ) . '`.' );
 	}
@@ -131,7 +131,7 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			return; // Not applicable.
 		}
 		if ( $this->project->has_file( 'trunk/composer.json' ) ) {
-			U\CLI::run( [ 'composer', 'update' ], U\Dir::join( $this->project->dir, '/trunk' ) );
+			U\CLI::run( [ 'composer', 'update', '--no-interaction' ], U\Dir::join( $this->project->dir, '/trunk' ) );
 		}
 		U\CLI::log( '[' . __FUNCTION__ . '()]: Ran `composer update` in `' . U\Dir::join( $this->project->dir, '/trunk' ) . '`.' );
 	}
@@ -306,7 +306,7 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 		// The autoloader is optimized here, as we are compiling for production.
 
 		U\CLI::run( [
-			[ 'composer', 'install' ],
+			[ 'composer', 'install', '--no-interaction' ],
 			[ '--profile', '--no-dev', '--no-scripts', '--no-plugins' ],
 			[ '--optimize-autoloader', '--classmap-authoritative' ],
 		], U\Dir::join( $svn_comp_dir, '/trunk' ) );
@@ -493,14 +493,14 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			);
 		}
 		U\CLI::run( [
-			[ 'composer', 'install' ],
+			[ 'composer', 'install', '--no-interaction' ],
 			[ '--profile', '--no-dev', '--no-scripts', '--no-plugins' ],
 			[ '--optimize-autoloader', '--classmap-authoritative' ],
 		], $comp_tests_dir );
 		U\CLI::log( '[' . __FUNCTION__ . '()]: Ran `composer install` in: `' . $comp_tests_dir . '`.' );
 
 		U\CLI::run( [
-			[ 'composer', 'install' ],
+			[ 'composer', 'install', '--no-interaction' ],
 			[ '--profile', '--no-dev', '--no-scripts', '--no-plugins' ],
 			[ '--optimize-autoloader', '--classmap-authoritative' ],
 		], U\Dir::join( $comp_tests_dir, '/trunk' ) );
