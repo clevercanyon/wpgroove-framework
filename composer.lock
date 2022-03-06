@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities.git",
-                "reference": "2fe541eec726d85172b22250d6f568a0b5957059"
+                "reference": "9251340816008f5d2764e1ab5bd357010785649a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/2fe541eec726d85172b22250d6f568a0b5957059",
-                "reference": "2fe541eec726d85172b22250d6f568a0b5957059",
+                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/9251340816008f5d2764e1ab5bd357010785649a",
+                "reference": "9251340816008f5d2764e1ab5bd357010785649a",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                 "issues": "https://github.com/clevercanyon/utilities/issues",
                 "source": "https://github.com/clevercanyon/utilities/tree/main"
             },
-            "time": "2022-03-05T09:50:13+00:00"
+            "time": "2022-03-05T20:50:59+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -1489,12 +1489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/standards.git",
-                "reference": "882621b5da7a5283def4d83afff50f53b7c9f46f"
+                "reference": "2b3467c5969e72120757c990bdc33c04f0d1914c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/standards/zipball/882621b5da7a5283def4d83afff50f53b7c9f46f",
-                "reference": "882621b5da7a5283def4d83afff50f53b7c9f46f",
+                "url": "https://api.github.com/repos/clevercanyon/standards/zipball/2b3467c5969e72120757c990bdc33c04f0d1914c",
+                "reference": "2b3467c5969e72120757c990bdc33c04f0d1914c",
                 "shasum": ""
             },
             "require": {
@@ -1522,7 +1522,7 @@
                 "issues": "https://github.com/clevercanyon/standards/issues",
                 "source": "https://github.com/clevercanyon/standards/tree/main"
             },
-            "time": "2022-03-04T12:20:39+00:00"
+            "time": "2022-03-05T20:46:57+00:00"
         },
         {
             "name": "clevercanyon/utilities-dev",
@@ -1530,12 +1530,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities-dev.git",
-                "reference": "5ad85f29fcf7b708d88b43ff889c2f7419c276a2"
+                "reference": "7af24709ccd04552fe7f7ff9e517c328e35273af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities-dev/zipball/5ad85f29fcf7b708d88b43ff889c2f7419c276a2",
-                "reference": "5ad85f29fcf7b708d88b43ff889c2f7419c276a2",
+                "url": "https://api.github.com/repos/clevercanyon/utilities-dev/zipball/7af24709ccd04552fe7f7ff9e517c328e35273af",
+                "reference": "7af24709ccd04552fe7f7ff9e517c328e35273af",
                 "shasum": ""
             },
             "require": {
@@ -1583,7 +1583,7 @@
                 "issues": "https://github.com/clevercanyon/utilities-dev/issues",
                 "source": "https://github.com/clevercanyon/utilities-dev/tree/main"
             },
-            "time": "2022-03-05T09:49:57+00:00"
+            "time": "2022-03-05T20:47:27+00:00"
         },
         {
             "name": "clevercanyon/utilities-dev-npm",
@@ -3128,16 +3128,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.16",
+            "version": "9.5.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "5ff8c545a50226c569310a35f4fa89d79f1ddfdc"
+                "reference": "5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5ff8c545a50226c569310a35f4fa89d79f1ddfdc",
-                "reference": "5ff8c545a50226c569310a35f4fa89d79f1ddfdc",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f",
+                "reference": "5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f",
                 "shasum": ""
             },
             "require": {
@@ -3215,7 +3215,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.16"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.17"
             },
             "funding": [
                 {
@@ -3227,7 +3227,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-23T17:10:58+00:00"
+            "time": "2022-03-05T16:54:31+00:00"
         },
         {
             "name": "psr/container",
@@ -4477,16 +4477,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.4.5",
+            "version": "v5.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "797680071ea8f71b94eb958680c50d0e002638f5"
+                "reference": "d53a45039974952af7f7ebc461ccdd4295e29440"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/797680071ea8f71b94eb958680c50d0e002638f5",
-                "reference": "797680071ea8f71b94eb958680c50d0e002638f5",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/d53a45039974952af7f7ebc461ccdd4295e29440",
+                "reference": "d53a45039974952af7f7ebc461ccdd4295e29440",
                 "shasum": ""
             },
             "require": {
@@ -4521,7 +4521,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/filesystem/tree/v5.4.5"
+                "source": "https://github.com/symfony/filesystem/tree/v5.4.6"
             },
             "funding": [
                 {
@@ -4537,7 +4537,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-27T10:31:47+00:00"
+            "time": "2022-03-02T12:42:23+00:00"
         },
         {
             "name": "symfony/finder",

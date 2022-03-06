@@ -129,7 +129,7 @@ trait Instance_Members {
 		);
 		// `plugins_loaded` will not fire on activation, deactivation, or uninstallation.
 		// That's as it should be. The WP Groove framework has separate handlers for those events.
-		add_action( 'plugins_loaded', [ static::class, 'load' ], -( PHP_INT_MAX - 10000 ) );
+		add_action( 'plugins_loaded', [ static::class, 'load' ], -( PHP_INT_MAX - 10000 ), 0 );
 	}
 
 	/**
@@ -142,7 +142,7 @@ trait Instance_Members {
 	final protected static function add_theme_instance_hooks( string ...$args ) : void {
 		// `after_setup_theme` will not fire on activation, deactivation, or uninstallation.
 		// That's as it should be. The WP Groove framework has separate handlers for those events.
-		add_action( 'after_setup_theme', [ static::class, 'load' ], -( PHP_INT_MAX - 10000 ) );
+		add_action( 'after_setup_theme', [ static::class, 'load' ], -( PHP_INT_MAX - 10000 ), 0 );
 	}
 
 	/**
