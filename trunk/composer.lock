@@ -130,12 +130,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/wpgroove-framework.git",
-                "reference": "c10e4423e148a33abd8ef4f1bc0e8cd53e049f78"
+                "reference": "4fe382427471ee5b6a52a7c546dd7aadedeb7cda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/wpgroove-framework/zipball/c10e4423e148a33abd8ef4f1bc0e8cd53e049f78",
-                "reference": "c10e4423e148a33abd8ef4f1bc0e8cd53e049f78",
+                "url": "https://api.github.com/repos/clevercanyon/wpgroove-framework/zipball/4fe382427471ee5b6a52a7c546dd7aadedeb7cda",
+                "reference": "4fe382427471ee5b6a52a7c546dd7aadedeb7cda",
                 "shasum": ""
             },
             "require": {
@@ -208,7 +208,7 @@
                 "issues": "https://github.com/clevercanyon/wpgroove-framework/issues",
                 "source": "https://github.com/clevercanyon/wpgroove-framework/tree/main"
             },
-            "time": "2022-03-06T09:02:27+00:00"
+            "time": "2022-03-06T09:14:45+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
