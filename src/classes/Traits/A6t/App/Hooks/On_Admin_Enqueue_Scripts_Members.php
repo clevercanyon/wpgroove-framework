@@ -48,9 +48,24 @@ trait On_Admin_Enqueue_Scripts_Members {
 	 * @since 2021-12-15
 	 */
 	final public function on_admin_enqueue_scripts_base() : void {
-		$url = $this->url . '/vendor/clevercanyon/' . $this->brand_slug_prefix . 'framework/src/assets/admin/styles/';
-		$url = U\URL::add_query_vars( [ 'slug_prefix' => $this->slug_prefix ], $url );
-		wp_enqueue_style( $this->slug_prefix . 'base', $url, [], $this->version, 'all' );
+		$this->on_admin_enqueue_scripts_base_css();
+	}
+
+	/**
+	 * Plugin|Theme: on `admin_enqueue_scripts` hook.
+	 *
+	 * Handles enqueing of base CSS.
+	 *
+	 * @since 2021-12-15
+	 */
+	final protected function on_admin_enqueue_scripts_base_css() : void {
+		if ( ! $this->needs[ 'admin_base_css' ] ) {
+			return; // Not applicable.
+		}
+		$nonce_action = $this->var_prefix . 'admin_base_css';
+		$url          = wp_nonce_url( self_admin_url(), $nonce_action, $nonce_action );
+
+		wp_enqueue_style( $this->slug_prefix . 'admin-base', $url, [], $this->version, 'all' );
 	}
 
 	/**

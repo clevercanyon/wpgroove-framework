@@ -39,8 +39,12 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  *
+ * @property-read $org
+ * @property-read $brand
+ *
  * @property-read $file
  * @property-read $dir
+ * @property-read $fw_dir
  * @property-read $url
  * @property-read $subpath
  *
@@ -49,16 +53,6 @@ use WP_Groove\{Framework as WPG};
  *
  * @property-read $namespace_scope
  * @property-read $namespace_crux
- *
- * @property-read $brand_n7m
- * @property-read $brand_name
- * @property-read $brand_namespace
- *
- * @property-read $brand_slug
- * @property-read $brand_var
- *
- * @property-read $brand_slug_prefix
- * @property-read $brand_var_prefix
  *
  * @property-read $name
  * @property-read $slug
@@ -70,9 +64,26 @@ use WP_Groove\{Framework as WPG};
  * @property-read $unbranded_slug
  * @property-read $unbranded_var
  *
+ * @property-read $needs
+ * @property-read $hook_priorities
+ *
  * @see   WPG\I7e\App
  */
 trait Property_Members {
+	/**
+	 * Plugin|Theme: org data.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected object $org;
+
+	/**
+	 * Plugin|Theme: brand data.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected object $brand;
+
 	/**
 	 * Plugin|Theme: absolute file path.
 	 *
@@ -86,6 +97,13 @@ trait Property_Members {
 	 * @since 2021-12-15
 	 */
 	protected string $dir;
+
+	/**
+	 * Plugin|Theme: absolute framework dir path.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $fw_dir;
 
 	/**
 	 * Plugin|Theme: URL to directory.
@@ -128,55 +146,6 @@ trait Property_Members {
 	 * @since 2021-12-15
 	 */
 	protected string $namespace_crux;
-
-	/**
-	 * Plugin|Theme: brand n7m; e.g., `w6e`.
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_n7m;
-
-	/**
-	 * Plugin|Theme: brand name (i.e., WP Groove).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_name;
-
-	/**
-	 * Brand namespace; e.g., `WP_Groove`.
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_namespace;
-
-	/**
-	 * Plugin|Theme: brand slug (i.e., wpgroove).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_slug;
-
-	/**
-	 * Plugin|Theme: brand var (i.e., wpgroove).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_var;
-
-	/**
-	 * Plugin|Theme: brand slug prefix (i.e., wpgroove-).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_slug_prefix;
-
-	/**
-	 * Plugin|Theme: brand var prefix (i.e., wpgroove_).
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $brand_var_prefix;
 
 	/**
 	 * Plugin|Theme: name (e.g., My App).
@@ -228,25 +197,18 @@ trait Property_Members {
 	protected string $unbranded_var;
 
 	/**
-	 * Plugin: plugins loaded hook priority.
+	 * Plugin|Theme: needs; e.g., `admin_base_css`.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected int $plugins_loaded_hook_priority;
+	protected array $needs; // Features.
 
 	/**
-	 * Plugin|Theme: after setup theme hook priority.
+	 * Plugin|Theme: hook priorities; e.g., `init`.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected int $after_setup_theme_hook_priority;
-
-	/**
-	 * Plugin|Theme: init hook priority.
-	 *
-	 * @since 2021-12-15
-	 */
-	protected int $init_hook_priority;
+	protected array $hook_priorities;
 
 	/**
 	 * Plugin|Theme: static app instances.

@@ -48,7 +48,34 @@ trait On_Admin_Init_Members {
 	 * @since 2021-12-15
 	 */
 	final public function on_admin_init_base() : void {
-		// Nothing for now.
+		$this->on_admin_init_css_base();
+	}
+
+	/**
+	 * Plugin|Theme: on `admin_init` hook.
+	 *
+	 * Handles base CSS generation.
+	 *
+	 * @since 2021-12-15
+	 */
+	final protected function on_admin_init_css_base() : void {
+		if ( ! $this->needs[ 'admin_base_css' ] ) {
+			return; // Not applicable.
+		}
+		$nonce_action = $this->var_prefix . 'admin_base_css';
+		$nonce        = u\if_string( U\URL::current_query_var( $nonce_action ), '' );
+
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, $nonce_action ) ) {
+			return; // Not applicable.
+		}
+		U\HTTP::enable_caching();
+		header( 'content-type: text/css; charset=utf-8' );
+
+		$css_file = U\Dir::join( $this->fw_dir, '/src/assets/admin/webpack/index.min.css' );
+		$css      = is_readable( $css_file ) ? file_get_contents( $css_file ) : '';
+		$css      = preg_replace( '/\.slug-prefix-/u', '.' . $this->slug_prefix, $css );
+
+		exit( $css ); // phpcs:ignore -- output ok.
 	}
 
 	/**

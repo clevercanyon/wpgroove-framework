@@ -302,7 +302,7 @@ final class Admin_Notice extends U\A6t\Base {
 	protected function classes() : string {
 		$classes = [ 'notice' ];
 
-		$classes[] = $this->app->brand_slug_prefix . 'notice';
+		$classes[] = $this->app->brand->slug_prefix . 'notice';
 		$classes[] = $this->app->slug_prefix . 'notice';
 
 		switch ( $this->type ) {
@@ -338,12 +338,12 @@ final class Admin_Notice extends U\A6t\Base {
 	protected function markup() : string {
 		$markup = $this->markup;
 
-		$app_says = // Identify app.
-			'<div style="opacity:0.5;">' .
+		$app = // Identify app.
+			'<div class="x-app">' .
 			esc_html( $this->app->name ) .
 			'</div>';
 
-		return $app_says . "\n\n"
+		return $app . "\n\n"
 			. U\HTML::markup( $markup );
 	}
 }

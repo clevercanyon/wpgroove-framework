@@ -1,3 +1,14 @@
 .slug-prefix-notice {
-	font-size : 12px;
+	position      : relative;
+	margin-bottom : 30px;
+
+	> .x-app {
+		position      : absolute;
+		top           : calc(100%);
+		left          : 5px;
+		background    : #eee;
+		border        : 1px solid #ccc;
+		border-width  : 0 1px 1px;
+		border-radius : 0 0 4px 4px;
+	}
 }

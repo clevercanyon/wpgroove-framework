@@ -66,6 +66,6 @@ final class Plugin_Tests extends WPGT\A6t\Tests {
 	 */
 	public function test_plugin() : void {
 		$plugin = WP\Plugin::instance();
-		$this->assertSame( 'w6e', $plugin->brand_n7m, $this->message() );
+		$this->assertSame( 'w6e', $plugin->brand->n7m, $this->message() );
 	}
 }
