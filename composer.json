@@ -67,6 +67,9 @@
 						"name"           : "WP Groove: WordPress Framework"
 					}
 				},
+				"webpack"          : {
+					"assetDirs" : [ "../../../src/assets/admin" ]
+				},
 				"post_cmd_handler" : {
 					"symlink_local_packages" : {
 						"$concat" : {

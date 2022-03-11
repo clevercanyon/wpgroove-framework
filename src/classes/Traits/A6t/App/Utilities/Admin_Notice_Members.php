@@ -110,9 +110,10 @@ trait Admin_Notice_Members {
 		$transient_admin_notices = []; // Initialize.
 
 		foreach ( $admin_notices as $_idx => $_admin_notice ) {
-			$transient_admin_notices[ $_idx ] = $_admin_notice->props( 'own:public...protected' );
+			$transient_admin_notices[ $_idx ] = $_admin_notice->props( 'own:public...protected', true );
 		}
 		$this->ins_cache( 'get_admin_notices', null );
+
 		return $this->set_site_transient( 'admin_notices', $transient_admin_notices, U\Time::DAY_IN_SECONDS * 90 );
 	}
 

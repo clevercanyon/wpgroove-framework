@@ -52,7 +52,7 @@ final class Admin_Notice extends U\A6t\Base {
 	 *
 	 * @since 2022-01-28
 	 */
-	protected WPG\I7e\App $app;
+	private WPG\I7e\App $app;
 
 	/**
 	 * Notice IDx.
@@ -338,33 +338,12 @@ final class Admin_Notice extends U\A6t\Base {
 	protected function markup() : string {
 		$markup = $this->markup;
 
-		$app_says = // Identifies app.
-			'<span style="opacity:0.5;">' .
-			sprintf(
-			// translators: `%1$s` is a title; e.g., `Acme Plugin`.
-				_x( '%1$s <em>says</em>', 'admin-notice-says' ),
-				esc_html( $this->app->name . ' ' . $this->app->type )
-			) .
-			'…</span>';
+		$app_says = // Identify app.
+			'<div style="opacity:0.5;">' .
+			esc_html( $this->app->name ) .
+			'</div>';
 
-		switch ( true ) {
-			case ( ! U\HTML::is( $markup ) || ! U\HTML::has_block_tags( $markup ) ):
-				// Simply prepend; easy peasy.
-				$markup = $app_says . ' ' . $markup;
-				break;
-
-			case ( U\HTML::starts_with_tag( $markup, [ 'p' ] ) ):
-				// Inject into `<p>` tag.
-				$markup = preg_replace_callback(
-					'/^(?<open_tag>\<p(?:\s*\/|\s+[^<>]*)?\>)/ui',
-					fn( $m ) => $m[ 'open_tag' ] . $app_says . ' ',
-					$markup
-				);
-				break;
-
-			default: // Prepend <p></p> tag.
-				$markup = '<p>' . $app_says . '</p>' . "\n\n" . $markup;
-		}
-		return U\HTML::markup( $markup );
+		return $app_says . "\n\n"
+			. U\HTML::markup( $markup );
 	}
 }

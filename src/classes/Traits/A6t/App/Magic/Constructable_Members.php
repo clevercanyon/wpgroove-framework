@@ -229,7 +229,15 @@ trait Constructable_Members {
 		add_action( 'init', [ $this, 'on_init_base' ], $this->init_hook_priority );
 		add_action( 'init', [ $this, 'on_init' ], $this->init_hook_priority );
 
-		add_action( 'all_admin_notices', [ $this, 'on_all_admin_notices_base' ] );
-		add_action( 'all_admin_notices', [ $this, 'on_all_admin_notices' ] );
+		if ( is_admin() ) { // Admin-only hooks.
+			add_action( 'admin_init', [ $this, 'on_admin_init_base' ] );
+			add_action( 'admin_init', [ $this, 'on_admin_init' ] );
+
+			add_action( 'admin_enqueue_scripts', [ $this, 'on_admin_enqueue_scripts_base' ] );
+			add_action( 'admin_enqueue_scripts', [ $this, 'on_admin_enqueue_scripts' ] );
+
+			add_action( 'all_admin_notices', [ $this, 'on_all_admin_notices_base' ] );
+			add_action( 'all_admin_notices', [ $this, 'on_all_admin_notices' ] );
+		}
 	}
 }

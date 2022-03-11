@@ -91,5 +91,7 @@ trait Members {
 	use WPG\Traits\A6t\App\Utilities\Action_Members;
 	use WPG\Traits\A6t\App\Utilities\Filter_Members;
 
+	use WPG\Traits\A6t\App\Hooks\On_Admin_Init_Members;
+	use WPG\Traits\A6t\App\Hooks\On_Admin_Enqueue_Scripts_Members;
 	use WPG\Traits\A6t\App\Utilities\Admin_Notice_Members;
 }
