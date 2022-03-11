@@ -80,7 +80,9 @@ trait Members {
 
 	use WPG\Traits\A6t\App\Hooks\On_Plugins_Loaded_Members;
 	use WPG\Traits\A6t\App\Hooks\On_After_Setup_Theme_Members;
+
 	use WPG\Traits\A6t\App\Hooks\On_Init_Members;
+	use WPG\Traits\A6t\App\Hooks\On_REST_API_Init_Members;
 
 	use WPG\Traits\A6t\App\Utilities\Option_Members;
 	use WPG\Traits\A6t\App\Utilities\Site_Option_Members;

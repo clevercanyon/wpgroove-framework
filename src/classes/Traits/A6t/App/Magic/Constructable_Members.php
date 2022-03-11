@@ -117,6 +117,7 @@ trait Constructable_Members {
 		$this->hook_priorities[ 'plugins_loaded' ]    ??= 10;
 		$this->hook_priorities[ 'after_setup_theme' ] ??= 10;
 		$this->hook_priorities[ 'init' ]              ??= 10;
+		$this->hook_priorities[ 'rest_api_init' ]     ??= 10;
 		$this->hook_priorities[ 'admin_init' ]        ??= 10;
 
 		if ( $this instanceof WPG\A6t\Plugin ) { // Not lower that plugin instance loader.
@@ -227,6 +228,9 @@ trait Constructable_Members {
 
 		add_action( 'init', [ $this, 'on_init_base' ], $this->hook_priorities[ 'init' ] );
 		add_action( 'init', [ $this, 'on_init' ], $this->hook_priorities[ 'init' ] );
+
+		add_action( 'rest_api_init', [ $this, 'on_rest_api_init_base' ], $this->hook_priorities[ 'rest_api_init' ] );
+		add_action( 'rest_api_init', [ $this, 'on_rest_api_init' ], $this->hook_priorities[ 'rest_api_init' ] );
 
 		if ( is_admin() ) { // Admin-only hooks.
 			add_action( 'admin_init', [ $this, 'on_admin_init_base' ], $this->hook_priorities[ 'admin_init' ] );
