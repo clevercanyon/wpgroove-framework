@@ -142,9 +142,9 @@ final class Compiler extends Operations {
 			$this->project = new U\Dev\Project( $project_dir );
 
 			$this->maybe_setup_dotfiles();
-
 			$this->maybe_run_npm_update();
 			$this->maybe_run_npx_webpack();
+
 			$this->maybe_run_wp_app_composer_update();
 
 			$this->maybe_sync_wp_plugin_headers();

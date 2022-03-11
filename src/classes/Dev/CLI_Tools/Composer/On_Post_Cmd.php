@@ -163,6 +163,7 @@ final class On_Post_Cmd extends Operations {
 
 			$this->maybe_setup_dotfiles();
 			$this->maybe_run_npm_install();
+
 			$this->maybe_run_wp_app_composer_install();
 
 			$this->maybe_sync_wp_plugin_headers();
@@ -193,6 +194,8 @@ final class On_Post_Cmd extends Operations {
 
 			$this->maybe_setup_dotfiles();
 			$this->maybe_run_npm_update();
+			$this->maybe_run_npx_webpack();
+
 			$this->maybe_run_wp_app_composer_update();
 
 			$this->maybe_sync_wp_plugin_headers();
