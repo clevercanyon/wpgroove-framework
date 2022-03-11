@@ -3,7 +3,7 @@ jQuery( 'document' ).ready( function ( $ ) {
 
 	const s = window[ '%%wp_localize_script_var%%' ];
 
-	$( '.' + s.app.slugPrefix + 'notice.is-persistent.is-dismissable .notice-dismiss' ).on( 'click', function () {
+	$( '#wpbody' ).on( 'click', '.' + s.app.slugPrefix + 'notice.is-persistent.is-dismissable .notice-dismiss', function () {
 		const $this   = $( this );
 		const $notice = $this.closest( '.' + s.app.slugPrefix + 'notice' );
 
