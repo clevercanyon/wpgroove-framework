@@ -44,9 +44,11 @@ use WP_Groove\{Framework as WPG};
  *
  * @property-read $file
  * @property-read $dir
- * @property-read $fw_dir
  * @property-read $url
  * @property-read $subpath
+ *
+ * @property-read $vendor_dir
+ * @property-read $framework_dir
  *
  * @property-read $type
  * @property-read $version
@@ -85,25 +87,18 @@ trait Property_Members {
 	protected object $brand;
 
 	/**
-	 * Plugin|Theme: absolute file path.
+	 * Plugin|Theme: file path.
 	 *
 	 * @since 2021-12-15
 	 */
 	protected string $file;
 
 	/**
-	 * Plugin|Theme: absolute dir path.
+	 * Plugin|Theme: directory path.
 	 *
 	 * @since 2021-12-15
 	 */
 	protected string $dir;
-
-	/**
-	 * Plugin|Theme: absolute framework dir path.
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $fw_dir;
 
 	/**
 	 * Plugin|Theme: URL to directory.
@@ -118,6 +113,20 @@ trait Property_Members {
 	 * @since 2021-12-15
 	 */
 	protected string $subpath;
+
+	/**
+	 * Plugin|Theme: vendor directory path.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $vendor_dir;
+
+	/**
+	 * Plugin|Theme: framework directory path.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $framework_dir;
 
 	/**
 	 * Plugin|Theme: app type.

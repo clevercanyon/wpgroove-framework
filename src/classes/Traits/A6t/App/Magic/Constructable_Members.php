@@ -76,9 +76,8 @@ trait Constructable_Members {
 		assert( $slug && U\Str::is_lede_slug( $slug, $this->brand->slug_prefix ) );
 		assert( $version && U\Str::is_version( $version ) );
 
-		$this->file   = U\Fs::normalize( $file );
-		$this->dir    = U\Dir::name( $this->file );
-		$this->fw_dir = U\Dir::join( $this->dir, '/vendor/' . $this->org->slug . '/' . $this->brand->slug_prefix . 'framework' );
+		$this->file = U\Fs::normalize( $file );
+		$this->dir  = U\Dir::name( $this->file );
 
 		if ( $this instanceof WPG\I7e\Plugin ) {
 			$this->url     = rtrim( plugins_url( '', $this->file ), '/' );
@@ -92,6 +91,9 @@ trait Constructable_Members {
 				'Unable to determine app type for class: `' . static::class . '`.'
 			);
 		}
+		$this->vendor_dir    = U\Env::static_var( 'W6E_VENDOR_DIR' ) ?: U\Dir::join( $this->dir, '/vendor' );
+		$this->framework_dir = U\Dir::name( $this->vendor_dir, '/' . $this->org->slug . '/' . $this->brand->slug_prefix . 'framework' );
+
 		$this->type    = static::app_type();
 		$this->version = $version; // e.g., `1.0.0`.
 

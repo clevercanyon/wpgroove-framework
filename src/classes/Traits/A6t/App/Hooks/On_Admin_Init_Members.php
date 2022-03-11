@@ -71,7 +71,7 @@ trait On_Admin_Init_Members {
 		U\HTTP::enable_caching();
 		header( 'content-type: text/css; charset=utf-8' );
 
-		$css_file = U\Dir::join( $this->fw_dir, '/src/assets/admin/webpack/index.min.css' );
+		$css_file = U\Dir::join( $this->framework_dir, '/src/assets/admin/webpack/index.min.css' );
 		$css      = is_readable( $css_file ) ? file_get_contents( $css_file ) : '';
 		$css      = preg_replace( '/\.slug-prefix-/u', '.' . $this->slug_prefix, $css );
 
