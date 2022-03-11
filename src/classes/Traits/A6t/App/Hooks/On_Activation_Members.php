@@ -35,11 +35,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait On_Activation_Members {
 	/**
@@ -58,7 +58,7 @@ trait On_Activation_Members {
 		$this->update_option( 'previous_version', $previous_version, false );
 		$this->update_option( 'version', $this->version, true );
 
-		if ( $this instanceof WPG\I7e\Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			// This fires {@see on_uninstall_plugin()} before it runs.
 			register_uninstall_hook( $this->file, [ static::class, 'on_uninstall_base' ] );
 		}

@@ -35,11 +35,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait Action_Members {
 	/**

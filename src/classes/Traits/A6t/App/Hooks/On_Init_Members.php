@@ -35,11 +35,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait On_Init_Members {
 	/**
@@ -48,11 +48,11 @@ trait On_Init_Members {
 	 * @since 2021-12-15
 	 */
 	final public function on_init_base() : void {
-		if ( $this instanceof WPG\I7e\Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
 				load_plugin_textdomain( $this->slug, false, U\Dir::name( $this->subpath, '/languages' ) );
 			}
-		} elseif ( $this instanceof WPG\I7e\Theme ) {
+		} elseif ( $this instanceof WPG\A6t\Theme ) {
 			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
 				load_theme_textdomain( $this->slug, U\Dir::join( $this->dir, '/languages' ) );
 			}

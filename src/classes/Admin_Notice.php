@@ -52,7 +52,7 @@ final class Admin_Notice extends U\A6t\Base {
 	 *
 	 * @since 2022-01-28
 	 */
-	private WPG\I7e\App $app;
+	private WPG\A6t\App $app;
 
 	/**
 	 * Notice IDx.
@@ -134,7 +134,7 @@ final class Admin_Notice extends U\A6t\Base {
 	/**
 	 * Constructor.
 	 *
-	 * @param WPG\I7e\App $app   App.
+	 * @param WPG\A6t\App $app   App.
 	 * @param array       $props Props.
 	 *
 	 * Props array:
@@ -172,7 +172,7 @@ final class Admin_Notice extends U\A6t\Base {
 	 * int     $dismissed      Time dismissed. Set as a UTC timestamp.
 	 *                         Default is `0` (not dismissed yet).
 	 */
-	public function __construct( WPG\I7e\App $app, array $props ) {
+	public function __construct( WPG\A6t\App $app, array $props ) {
 		parent::__construct();
 		$this->app = $app;
 
@@ -256,7 +256,7 @@ final class Admin_Notice extends U\A6t\Base {
 	protected function display() : void {
 		$this->displayed = U\Time::utc();
 		?>
-		<div class="<?php echo esc_attr( $this->classes() ); ?>">
+		<div class="<?php echo esc_attr( $this->classes() ); ?>" data-idx="<?php echo esc_attr( $this->idx ); ?>">
 			<?php echo $this->markup(); // phpcs:ignore -- output ok. ?>
 		</div>
 		<?php
@@ -322,6 +322,9 @@ final class Admin_Notice extends U\A6t\Base {
 			default: // Default type.
 				$classes[] = 'notice-info';
 		}
+		if ( $this->persistent ) {
+			$classes[] = 'is-persistent';
+		}
 		if ( $this->dismissable ) {
 			$classes[] = 'is-dismissible';
 		}
@@ -339,7 +342,8 @@ final class Admin_Notice extends U\A6t\Base {
 		$markup = $this->markup;
 
 		$app = // Identify app.
-			'<div class="x-app">' .
+			// Please unhide via CSS.
+			'<div class="-app-label" hidden>' .
 			esc_html( $this->app->name ) .
 			'</div>';
 

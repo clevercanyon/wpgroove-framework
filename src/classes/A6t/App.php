@@ -39,7 +39,7 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  */
-abstract class App extends U\A6t\Base implements WPG\I7e\App {
+abstract class App extends U\A6t\Base {
 	/**
 	 * Traits.
 	 *

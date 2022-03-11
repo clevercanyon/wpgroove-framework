@@ -35,11 +35,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait On_Uninstall_Members {
 	/**
@@ -63,10 +63,10 @@ trait On_Uninstall_Members {
 		}
 		// App-specific uninstall routines.
 
-		if ( $app instanceof WPG\I7e\Theme ) {
+		if ( $app instanceof WPG\A6t\Theme ) {
 			static::on_uninstall_theme( $app );
 
-		} elseif ( $app instanceof WPG\I7e\Plugin ) {
+		} elseif ( $app instanceof WPG\A6t\Plugin ) {
 			static::on_uninstall_plugin( $app );
 		}
 		// Base uninstall routines.
@@ -118,9 +118,9 @@ trait On_Uninstall_Members {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @param WPG\I7e\Plugin $plugin Plugin instance.
+	 * @param WPG\A6t\Plugin $plugin Plugin instance.
 	 */
-	public static function on_uninstall_plugin( WPG\I7e\Plugin $plugin ) : void {
+	public static function on_uninstall_plugin( WPG\A6t\Plugin $plugin ) : void {
 		// DO NOT POPULATE. This is for extenders only.
 	}
 
@@ -131,9 +131,9 @@ trait On_Uninstall_Members {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @param WPG\I7e\Theme $theme Theme instance.
+	 * @param WPG\A6t\Theme $theme Theme instance.
 	 */
-	public static function on_uninstall_theme( WPG\I7e\Theme $theme ) : void {
+	public static function on_uninstall_theme( WPG\A6t\Theme $theme ) : void {
 		// DO NOT POPULATE. This is for extenders only.
 	}
 }

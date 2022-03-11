@@ -35,11 +35,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait On_Plugins_Loaded_Members {
 	/**
@@ -48,7 +48,7 @@ trait On_Plugins_Loaded_Members {
 	 * @since 2021-12-15
 	 */
 	final public function on_plugins_loaded_base() : void {
-		if ( $this instanceof WPG\I7e\Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			$version = u\if_string( $this->get_option( 'version' ), '' );
 
 			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {

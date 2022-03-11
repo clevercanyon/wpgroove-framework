@@ -35,46 +35,13 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait Admin_Notice_Members {
-	/**
-	 * Plugin|Theme: on `all_admin_notices` hook.
-	 *
-	 * @since 2021-12-30
-	 */
-	final public function on_all_admin_notices_base() : void {
-		$update_admin_notices = false; // Initialize.
-		$admin_notices        = $this->get_admin_notices();
-
-		foreach ( $admin_notices as $_idx => $_admin_notice ) {
-			$_admin_notice->maybe_display();
-
-			if ( $_admin_notice->should_dequeue() ) {
-				unset( $admin_notices[ $_idx ] );
-				$update_admin_notices = true;
-			}
-		}
-		if ( $update_admin_notices ) {
-			$this->update_admin_notices( $admin_notices );
-		}
-	}
-
-	/**
-	 * Plugin|Theme: on `all_admin_notices` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_all_admin_notices() : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
-
 	/**
 	 * Plugin|Theme: gets admin notices.
 	 *

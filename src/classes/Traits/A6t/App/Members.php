@@ -35,11 +35,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait Members {
 	/**
@@ -93,5 +93,7 @@ trait Members {
 
 	use WPG\Traits\A6t\App\Hooks\On_Admin_Init_Members;
 	use WPG\Traits\A6t\App\Hooks\On_Admin_Enqueue_Scripts_Members;
+
 	use WPG\Traits\A6t\App\Utilities\Admin_Notice_Members;
+	use WPG\Traits\A6t\App\Hooks\On_Admin_Notice_Members;
 }

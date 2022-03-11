@@ -35,11 +35,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait Constructable_Members {
 	/**
@@ -79,11 +79,11 @@ trait Constructable_Members {
 		$this->file = U\Fs::normalize( $file );
 		$this->dir  = U\Dir::name( $this->file );
 
-		if ( $this instanceof WPG\I7e\Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			$this->url     = rtrim( plugins_url( '', $this->file ), '/' );
 			$this->subpath = U\Fs::normalize( plugin_basename( $this->file ) );
 
-		} elseif ( $this instanceof WPG\I7e\Theme ) {
+		} elseif ( $this instanceof WPG\A6t\Theme ) {
 			$this->url     = rtrim( get_template_directory_uri(), '/' );
 			$this->subpath = ''; // Not applicable.
 		} else {
@@ -92,7 +92,7 @@ trait Constructable_Members {
 			);
 		}
 		$this->vendor_dir    = U\Env::static_var( 'W6E_VENDOR_DIR' ) ?: U\Dir::join( $this->dir, '/vendor' );
-		$this->framework_dir = U\Dir::name( $this->vendor_dir, '/' . $this->org->slug . '/' . $this->brand->slug_prefix . 'framework' );
+		$this->framework_dir = U\Dir::join( $this->vendor_dir, '/' . $this->org->slug . '/' . $this->brand->slug_prefix . 'framework' );
 
 		$this->type    = static::app_type();
 		$this->version = $version; // e.g., `1.0.0`.
@@ -110,8 +110,8 @@ trait Constructable_Members {
 		$this->unbranded_slug = mb_substr( $this->slug, mb_strlen( $this->brand->slug_prefix ) ); // e.g., `my-plugin`.
 		$this->unbranded_var  = mb_substr( $this->var, mb_strlen( $this->brand->var_prefix ) );   // e.g., `my_plugin`.
 
-		$this->needs                     ??= [];
-		$this->needs[ 'admin_base_css' ] ??= false;
+		$this->needs                         ??= [];
+		$this->needs[ 'admin_base_webpack' ] ??= false;
 
 		$this->hook_priorities                        ??= [];
 		$this->hook_priorities[ 'plugins_loaded' ]    ??= 10;
@@ -119,11 +119,11 @@ trait Constructable_Members {
 		$this->hook_priorities[ 'init' ]              ??= 10;
 		$this->hook_priorities[ 'admin_init' ]        ??= 10;
 
-		if ( $this instanceof WPG\I7e\Plugin ) { // Not lower that plugin instance loader.
+		if ( $this instanceof WPG\A6t\Plugin ) { // Not lower that plugin instance loader.
 			$this->hook_priorities[ 'plugins_loaded' ] = max(
 				$this->hook_priorities[ 'plugins_loaded' ], -( PHP_INT_MAX - 10001 )
 			);
-		} elseif ( $this instanceof WPG\I7e\Theme ) { // Not lower that theme instance loader.
+		} elseif ( $this instanceof WPG\A6t\Theme ) { // Not lower that theme instance loader.
 			$this->hook_priorities[ 'after_setup_theme' ] = max(
 				$this->hook_priorities[ 'after_setup_theme' ], -( PHP_INT_MAX - 10001 )
 			);
@@ -203,7 +203,7 @@ trait Constructable_Members {
 	 * @since 2021-12-15
 	 */
 	final protected function setup_hooks() : void {
-		if ( $this instanceof WPG\I7e\Plugin ) {
+		if ( $this instanceof WPG\A6t\Plugin ) {
 			$this->add_action( 'activation', [ $this, 'on_activation_base' ] );
 			$this->add_action( 'activation', [ $this, 'on_plugin_activation' ] );
 
@@ -213,7 +213,7 @@ trait Constructable_Members {
 			add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded_base' ], $this->hook_priorities[ 'plugins_loaded' ] );
 			add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded' ], $this->hook_priorities[ 'plugins_loaded' ] );
 
-		} elseif ( $this instanceof WPG\I7e\Theme ) {
+		} elseif ( $this instanceof WPG\A6t\Theme ) {
 			add_action( 'after_switch_theme', [ $this, 'on_activation_base' ] );
 			add_action( 'after_switch_theme', [ $this, 'on_theme_activation' ] );
 
@@ -231,6 +231,9 @@ trait Constructable_Members {
 		if ( is_admin() ) { // Admin-only hooks.
 			add_action( 'admin_init', [ $this, 'on_admin_init_base' ], $this->hook_priorities[ 'admin_init' ] );
 			add_action( 'admin_init', [ $this, 'on_admin_init' ], $this->hook_priorities[ 'admin_init' ] );
+
+			add_action( 'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss', [ $this, 'on_wp_ajax_admin_notice_dismiss_base' ] );
+			add_action( 'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss', [ $this, 'on_wp_ajax_admin_notice_dismiss' ] );
 
 			add_action( 'admin_enqueue_scripts', [ $this, 'on_admin_enqueue_scripts_base' ] );
 			add_action( 'admin_enqueue_scripts', [ $this, 'on_admin_enqueue_scripts' ] );

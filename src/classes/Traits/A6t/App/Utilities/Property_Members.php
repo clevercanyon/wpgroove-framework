@@ -35,7 +35,7 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
@@ -69,7 +69,7 @@ use WP_Groove\{Framework as WPG};
  * @property-read $needs
  * @property-read $hook_priorities
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait Property_Members {
 	/**

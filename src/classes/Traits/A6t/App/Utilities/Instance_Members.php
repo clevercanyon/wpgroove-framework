@@ -35,11 +35,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait Instance_Members {
 	/**
@@ -57,9 +57,9 @@ trait Instance_Members {
 		if ( null !== $type ) {
 			return $type; // Saves time.
 		}
-		if ( is_a( static::class, WPG\I7e\Plugin::class, true ) ) {
+		if ( is_a( static::class, WPG\A6t\Plugin::class, true ) ) {
 			return $type = 'plugin';
-		} elseif ( is_a( static::class, WPG\I7e\Theme::class, true ) ) {
+		} elseif ( is_a( static::class, WPG\A6t\Theme::class, true ) ) {
 			return $type = 'theme';
 		}
 		throw new U\Fatal_Exception( 'Unable to determine app type for class: `' . static::class . '`.' );
@@ -154,11 +154,11 @@ trait Instance_Members {
 	 *                                Default is `true`. Set to `false` when uninstalling.
 	 *                                {@see WPG\A6t\App::__construct()}.
 	 *
-	 * @return WPG\I7e\App App instance for the called class.
+	 * @return WPG\A6t\App App instance for the called class.
 	 *
 	 * @throws U\Fatal_Exception If missing instance args.
 	 */
-	final public static function load( bool $maybe_setup_hooks = true ) : WPG\I7e\App {
+	final public static function load( bool $maybe_setup_hooks = true ) : WPG\A6t\App {
 		if ( ! isset( static::$instances[ static::class ][ '&' ] ) ) {
 			if ( ! isset( static::$instances[ static::class ][ 'args' ] ) ) {
 				throw new U\Fatal_Exception( 'Missing ' . static::app_type() . ' instance args for class: `' . static::class . '`.' );
@@ -175,11 +175,11 @@ trait Instance_Members {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @return WPG\I7e\App App instance for the called class.
+	 * @return WPG\A6t\App App instance for the called class.
 	 *
 	 * @throws U\Fatal_Exception If missing instance.
 	 */
-	final public static function instance() : WPG\I7e\App {
+	final public static function instance() : WPG\A6t\App {
 		if ( ! isset( static::$instances[ static::class ][ '&' ] ) ) {
 			throw new U\Fatal_Exception( 'Missing ' . static::app_type() . ' instance for class: `' . static::class . '`.' );
 		}

@@ -35,11 +35,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Interface members.
+ * Class members.
  *
  * @since 2021-12-15
  *
- * @see   WPG\I7e\App
+ * @see   WPG\A6t\App
  */
 trait On_Admin_Enqueue_Scripts_Members {
 	/**
@@ -48,24 +48,45 @@ trait On_Admin_Enqueue_Scripts_Members {
 	 * @since 2021-12-15
 	 */
 	final public function on_admin_enqueue_scripts_base() : void {
-		$this->on_admin_enqueue_scripts_base_css();
+		$this->on_admin_enqueue_scripts_base_webpack();
 	}
 
 	/**
 	 * Plugin|Theme: on `admin_enqueue_scripts` hook.
 	 *
-	 * Handles enqueing of base CSS.
+	 * Handles enqueing of base webpack.
 	 *
 	 * @since 2021-12-15
 	 */
-	final protected function on_admin_enqueue_scripts_base_css() : void {
-		if ( ! $this->needs[ 'admin_base_css' ] ) {
+	final protected function on_admin_enqueue_scripts_base_webpack() : void {
+		if ( ! $this->needs[ 'admin_base_webpack' ] ) {
 			return; // Not applicable.
 		}
-		$nonce_action = $this->var_prefix . 'admin_base_css';
-		$url          = wp_nonce_url( self_admin_url(), $nonce_action, $nonce_action );
+		$style_var  = $this->var_prefix . 'admin_base_webpack_style';
+		$style_slug = $this->slug_prefix . 'admin-base-webpack-style';
 
-		wp_enqueue_style( $this->slug_prefix . 'admin-base', $url, [], $this->version, 'all' );
+		$script_var  = $this->var_prefix . 'admin_base_webpack_script';
+		$script_slug = $this->slug_prefix . 'admin-base-webpack-script';
+
+		$self_admin_url = self_admin_url(); // Used multipe times.
+		$style_url      = wp_nonce_url( $self_admin_url, $style_slug, $style_var );
+		$script_url     = wp_nonce_url( $self_admin_url, $script_slug, $script_var );
+
+		wp_enqueue_style( $style_slug, $style_url, [], $this->version, 'all' );
+		wp_enqueue_script( $script_slug, $script_url, [ 'jquery' ], $this->version, true );
+
+		wp_localize_script( $script_slug, $script_var, [
+			'app'  => [
+				'slugPrefix' => $this->slug_prefix,
+				'varPrefix'  => $this->var_prefix,
+			],
+			'ajax' => [
+				'nonces' => [
+					'adminNoticeDismiss' => wp_create_nonce( 'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss' ),
+				],
+				'url'    => rtrim( $self_admin_url, '/' ) . '/admin-ajax.php',
+			],
+		] );
 	}
 
 	/**
