@@ -28,7 +28,7 @@ Please [contact WP Groove](https://wpgroove.com/contact) for support. Please all
 
 == Screenshots ==
 
-1. Screenshot.
+1. [https://i.ibb.co/Htxs04m/screenshot-1.png Screenshot 1.]
 
 == Changelog ==
 

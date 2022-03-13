@@ -76,20 +76,19 @@ trait Constructable_Members {
 		assert( $slug && U\Str::is_lede_slug( $slug, $this->brand->slug_prefix ) );
 		assert( $version && U\Str::is_version( $version ) );
 
-		$this->file = U\Fs::normalize( $file );
-		$this->dir  = U\Dir::name( $this->file );
+		$this->file         = U\Fs::normalize( $file );
+		$this->dir          = U\Dir::name( $this->file );
+		$this->dir_basename = basename( $this->dir );
 
 		if ( $this instanceof WPG\A6t\Plugin ) {
-			$this->url     = rtrim( plugins_url( '', $this->file ), '/' );
-			$this->subpath = U\Fs::normalize( plugin_basename( $this->file ) );
+			$this->dir_url      = rtrim( plugins_url( '', $this->file ), '/' );
+			$this->file_subpath = U\Fs::normalize( plugin_basename( $this->file ) );
 
 		} elseif ( $this instanceof WPG\A6t\Theme ) {
-			$this->url     = rtrim( get_template_directory_uri(), '/' );
-			$this->subpath = ''; // Not applicable.
+			$this->dir_url      = rtrim( get_template_directory_uri(), '/' );
+			$this->file_subpath = U\Dir::subpath( get_theme_root( $this->dir_basename ), $this->file );
 		} else {
-			throw new U\Fatal_Exception(
-				'Unable to determine app type for class: `' . static::class . '`.'
-			);
+			throw new U\Fatal_Exception( 'Unable to determine app type for class: `' . static::class . '`.' );
 		}
 		$this->vendor_dir    = U\Env::static_var( 'W6E_VENDOR_DIR' ) ?: U\Dir::join( $this->dir, '/vendor' );
 		$this->framework_dir = U\Dir::join( $this->vendor_dir, '/' . $this->org->slug . '/' . $this->brand->slug_prefix . 'framework' );

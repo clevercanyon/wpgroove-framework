@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\A6t\App\Hooks;
+namespace WP_Groove\Framework\Traits\WC\Utilities;
 
 /**
  * Utilities.
@@ -32,6 +32,13 @@ use Clever_Canyon\{Utilities as U};
  */
 use WP_Groove\{Framework as WPG};
 
+/**
+ * File-specific.
+ *
+ * @since 2022-03-12
+ */
+use LicenseManagerForWooCommerce\Models\Resources\License as LMFWC_License;
+
 // </editor-fold>
 
 /**
@@ -39,34 +46,30 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  *
- * @see   WPG\A6t\App
+ * @see   WPG\WC
  */
-trait On_Init_Members {
+trait License_Members {
 	/**
-	 * Plugin|Theme: on `init` hook.
+	 * Gets a WooCommerce license by key.
 	 *
-	 * @since 2021-12-15
+	 * @since 2022-03-12
+	 *
+	 * @param string $key License key.
+	 *
+	 * @return LMFWC_License|null Product, else `null`.
 	 */
-	final public function on_init_base() : void {
-		if ( $this instanceof WPG\A6t\Plugin ) {
-			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
-				load_plugin_textdomain( $this->slug, false, U\Dir::name( $this->file_subpath, '/languages' ) );
-			}
-		} elseif ( $this instanceof WPG\A6t\Theme ) {
-			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
-				load_theme_textdomain( $this->slug, U\Dir::join( $this->dir, '/languages' ) );
-			}
+	public static function license_by_key( string $key ) : ?LMFWC_License {
+		if ( ! class_exists( LMFWC_License::class ) ) {
+			return null; // Not possible.
 		}
-	}
-
-	/**
-	 * Plugin|Theme: on `init` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_init() : void {
-		// DO NOT POPULATE. This is for extenders only.
+		if ( ! $key ) {
+			return null; // Not possible.
+		}
+		try {
+			$license = lmfwc_get_license( $key );
+		} catch ( \Exception $exception ) {
+			$license = null;
+		}
+		return $license instanceof LMFWC_License ? $license : null;
 	}
 }

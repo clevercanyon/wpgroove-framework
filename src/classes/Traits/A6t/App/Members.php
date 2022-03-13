@@ -24,6 +24,12 @@ namespace WP_Groove\Framework\Traits\A6t\App;
  * @since 2021-12-15
  */
 use Clever_Canyon\{Utilities as U};
+
+/**
+ * Framework.
+ *
+ * @since 2021-12-15
+ */
 use WP_Groove\{Framework as WPG};
 
 /**
@@ -83,6 +89,8 @@ trait Members {
 
 	use WPG\Traits\A6t\App\Hooks\On_Init_Members;
 	use WPG\Traits\A6t\App\Hooks\On_REST_API_Init_Members;
+
+	use WPG\Traits\A6t\App\Utilities\Multisite_Members;
 
 	use WPG\Traits\A6t\App\Utilities\Option_Members;
 	use WPG\Traits\A6t\App\Utilities\Site_Option_Members;

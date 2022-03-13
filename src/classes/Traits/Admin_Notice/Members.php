@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework;
+namespace WP_Groove\Framework\Traits\Admin_Notice;
 
 /**
  * Utilities.
@@ -35,15 +35,23 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Admin notice class.
+ * Class members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\Admin_Notice
  */
-final class Admin_Notice extends U\A6t\Base {
+trait Members {
 	/**
 	 * Traits.
 	 *
-	 * @since 2022-01-28
+	 * @since 2021-12-28
 	 */
-	use WPG\Traits\Admin_Notice\Members;
+	use WPG\Traits\Admin_Notice\Magic\Constructable_Members;
+	use WPG\Traits\Admin_Notice\Utilities\Property_Members;
+	use U\Traits\A6t\Base\Magic\Readable_Members;
+
+	use WPG\Traits\Admin_Notice\Utilities\Queue_Members;
+	use WPG\Traits\Admin_Notice\Utilities\Markup_Members;
+	use WPG\Traits\Admin_Notice\Utilities\Display_Members;
 }

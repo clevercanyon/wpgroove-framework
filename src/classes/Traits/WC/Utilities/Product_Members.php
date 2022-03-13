@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework;
+namespace WP_Groove\Framework\Traits\WC\Utilities;
 
 /**
  * Utilities.
@@ -35,15 +35,32 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Admin notice class.
+ * Class members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\WC
  */
-final class Admin_Notice extends U\A6t\Base {
+trait Product_Members {
 	/**
-	 * Traits.
+	 * Gets a WooCommerce product by slug.
 	 *
-	 * @since 2022-01-28
+	 * @since 2022-03-12
+	 *
+	 * @param string $slug Product slug.
+	 *
+	 * @return \WC_Product|null Product, else `null`.
 	 */
-	use WPG\Traits\Admin_Notice\Members;
+	public static function product_by_slug( string $slug ) : ?\WC_Product {
+		if ( ! class_exists( \WC_Product::class ) ) {
+			return null; // Not possible.
+		}
+		if ( ! $slug ) {
+			return null; // Not possible.
+		}
+		$product = get_page_by_path( $slug, OBJECT, 'product' );
+		$product = $product ? wc_get_product( $product ) : null;
+
+		return $product instanceof \WC_Product ? $product : null;
+	}
 }

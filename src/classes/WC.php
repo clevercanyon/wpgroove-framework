@@ -35,15 +35,15 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Admin notice class.
+ * WooCommerce utilities.
  *
  * @since 2021-12-15
  */
-final class Admin_Notice extends U\A6t\Base {
+final class WC extends U\A6t\Stc_Utilities {
 	/**
 	 * Traits.
 	 *
 	 * @since 2022-01-28
 	 */
-	use WPG\Traits\Admin_Notice\Members;
+	use WPG\Traits\WC\Members;
 }

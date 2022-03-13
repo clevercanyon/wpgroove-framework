@@ -44,8 +44,10 @@ use WP_Groove\{Framework as WPG};
  *
  * @property-read $file
  * @property-read $dir
- * @property-read $url
- * @property-read $subpath
+ *
+ * @property-read $file_subpath
+ * @property-read $dir_basename
+ * @property-read $dir_url
  *
  * @property-read $vendor_dir
  * @property-read $framework_dir
@@ -101,18 +103,25 @@ trait Property_Members {
 	protected string $dir;
 
 	/**
-	 * Plugin|Theme: URL to directory.
+	 * Plugin|Theme: file subpath.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $url;
+	protected string $file_subpath;
 
 	/**
-	 * Plugin: subpath (i.e., plugin basename).
+	 * Plugin|Theme: directory basename.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected string $subpath;
+	protected string $dir_basename;
+
+	/**
+	 * Plugin|Theme: directory URL.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $dir_url;
 
 	/**
 	 * Plugin|Theme: vendor directory path.

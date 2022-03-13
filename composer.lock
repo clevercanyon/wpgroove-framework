@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ca04176f988d8d5d2fff8d0958e8444",
+    "content-hash": "4123a0bb026e4f3e320755fe138cca1f",
     "packages": [
         {
             "name": "clevercanyon/utilities",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities.git",
-                "reference": "0d81a97ba44282e55aeab5d3462ac7d094e5498c"
+                "reference": "28ca9a9d734ce6b541508e048829eaefc27b6cce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/0d81a97ba44282e55aeab5d3462ac7d094e5498c",
-                "reference": "0d81a97ba44282e55aeab5d3462ac7d094e5498c",
+                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/28ca9a9d734ce6b541508e048829eaefc27b6cce",
+                "reference": "28ca9a9d734ce6b541508e048829eaefc27b6cce",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                 "issues": "https://github.com/clevercanyon/utilities/issues",
                 "source": "https://github.com/clevercanyon/utilities/tree/main"
             },
-            "time": "2022-03-11T14:03:49+00:00"
+            "time": "2022-03-13T14:40:11+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -1530,12 +1530,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities-dev.git",
-                "reference": "7af24709ccd04552fe7f7ff9e517c328e35273af"
+                "reference": "8bd105dffd99774a9c5f598a89b9e1f0c9f436ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities-dev/zipball/7af24709ccd04552fe7f7ff9e517c328e35273af",
-                "reference": "7af24709ccd04552fe7f7ff9e517c328e35273af",
+                "url": "https://api.github.com/repos/clevercanyon/utilities-dev/zipball/8bd105dffd99774a9c5f598a89b9e1f0c9f436ec",
+                "reference": "8bd105dffd99774a9c5f598a89b9e1f0c9f436ec",
                 "shasum": ""
             },
             "require": {
@@ -1583,7 +1583,7 @@
                 "issues": "https://github.com/clevercanyon/utilities-dev/issues",
                 "source": "https://github.com/clevercanyon/utilities-dev/tree/main"
             },
-            "time": "2022-03-05T20:47:27+00:00"
+            "time": "2022-03-13T14:39:11+00:00"
         },
         {
             "name": "clevercanyon/utilities-dev-npm",
@@ -1625,12 +1625,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/wpgroove-framework-dev.git",
-                "reference": "32e658abcba14ee45f4cc19779eb3b537fa532d8"
+                "reference": "dd4c007276a32a8626c5cc1eb92a664d756bf5df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/wpgroove-framework-dev/zipball/32e658abcba14ee45f4cc19779eb3b537fa532d8",
-                "reference": "32e658abcba14ee45f4cc19779eb3b537fa532d8",
+                "url": "https://api.github.com/repos/clevercanyon/wpgroove-framework-dev/zipball/dd4c007276a32a8626c5cc1eb92a664d756bf5df",
+                "reference": "dd4c007276a32a8626c5cc1eb92a664d756bf5df",
                 "shasum": ""
             },
             "require": {
@@ -1654,7 +1654,7 @@
                 "issues": "https://github.com/clevercanyon/wpgroove-framework-dev/issues",
                 "source": "https://github.com/clevercanyon/wpgroove-framework-dev/tree/main"
             },
-            "time": "2022-03-05T09:50:30+00:00"
+            "time": "2022-03-13T14:40:23+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",

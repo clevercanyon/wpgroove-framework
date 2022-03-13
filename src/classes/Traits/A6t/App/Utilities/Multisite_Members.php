@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\A6t\App\Hooks;
+namespace WP_Groove\Framework\Traits\A6t\App\Utilities;
 
 /**
  * Utilities.
@@ -41,32 +41,27 @@ use WP_Groove\{Framework as WPG};
  *
  * @see   WPG\A6t\App
  */
-trait On_Init_Members {
+trait Multisite_Members {
 	/**
-	 * Plugin|Theme: on `init` hook.
+	 * Plugin|Theme: Is network active?
 	 *
-	 * @since 2021-12-15
+	 * @since 2022-03-12
+	 *
+	 * @return bool `true` if network active.
+	 *
+	 * @throws U\Fatal_Exception On unexpected app type.
 	 */
-	final public function on_init_base() : void {
-		if ( $this instanceof WPG\A6t\Plugin ) {
-			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
-				load_plugin_textdomain( $this->slug, false, U\Dir::name( $this->file_subpath, '/languages' ) );
-			}
-		} elseif ( $this instanceof WPG\A6t\Theme ) {
-			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
-				load_theme_textdomain( $this->slug, U\Dir::join( $this->dir, '/languages' ) );
-			}
+	final public function is_network_active() : bool {
+		if ( ! is_multisite() ) {
+			return false; // Not applicable.
 		}
-	}
+		if ( $this instanceof WPG\A6t\Plugin ) {
+			return is_plugin_active_for_network( $this->file_subpath );
 
-	/**
-	 * Plugin|Theme: on `init` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_init() : void {
-		// DO NOT POPULATE. This is for extenders only.
+		} elseif ( $this instanceof WPG\A6t\Theme ) {
+			$allowed_themes = u\if_array( get_site_option( 'allowedthemes' ), [] );
+			return $allowed_themes && ! empty( $allowed_themes[ $this->dir_basename ] );
+		}
+		throw new U\Fatal_Exception( 'Unable to determine app type for class: `' . static::class . '`.' );
 	}
 }

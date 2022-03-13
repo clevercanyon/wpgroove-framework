@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework;
+namespace WP_Groove\Framework\Traits\WC;
 
 /**
  * Utilities.
@@ -35,15 +35,18 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Admin notice class.
+ * Class members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\WC
  */
-final class Admin_Notice extends U\A6t\Base {
+trait Members {
 	/**
 	 * Traits.
 	 *
-	 * @since 2022-01-28
+	 * @since 2021-12-28
 	 */
-	use WPG\Traits\Admin_Notice\Members;
+	use WPG\Traits\WC\Utilities\Product_Members;
+	use WPG\Traits\WC\Utilities\License_Members;
 }

@@ -62,7 +62,7 @@
 						"version"        : "1.0.0",
 						"stable_tag"     : "1.0.0",
 
-						"layout"         : "distro-lib",
+						"layout"         : "library",
 						"namespace_crux" : "WP_Groove\\Framework",
 						"name"           : "WP Groove: WordPress Framework"
 					}
