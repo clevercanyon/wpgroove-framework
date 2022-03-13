@@ -105,6 +105,7 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			// It's not a WP project, strictly speaking, but it
 			// has a `trunk/plugin.php` file for testing purposes.
 			&& 'clevercanyon/wpgroove-framework' !== $this->project->pkg_name
+			&& 'clevercanyon/wpgroove-framework-pro' !== $this->project->pkg_name
 		) {
 			return; // Not applicable.
 		}
@@ -127,6 +128,7 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			// It's not a WP project, strictly speaking, but it
 			// has a `trunk/plugin.php` file for testing purposes.
 			&& 'clevercanyon/wpgroove-framework' !== $this->project->pkg_name
+			&& 'clevercanyon/wpgroove-framework-pro' !== $this->project->pkg_name
 		) {
 			return; // Not applicable.
 		}

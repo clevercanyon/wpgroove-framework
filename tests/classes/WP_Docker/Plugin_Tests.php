@@ -34,7 +34,7 @@ namespace WP_Groove\Framework\Tests\WP_Docker;
  * @since 2021-12-15
  */
 use Clever_Canyon\{Utilities as U};
-use Clever_Canyon\Utilities\{Tests as UT};
+use Clever_Canyon\Utilities\{Tests as U_Tests};
 
 /**
  * Framework.
@@ -42,7 +42,7 @@ use Clever_Canyon\Utilities\{Tests as UT};
  * @since 2021-12-15
  */
 use WP_Groove\{Framework as WPG};
-use WP_Groove\Framework\{Tests as WPGT};
+use WP_Groove\Framework\{Tests as WPG_Tests};
 
 /**
  * Plugin.
@@ -59,7 +59,7 @@ use WP_Groove\{Framework_Plugin as WP};
  * @since 2021-12-15
  * @coversDefaultClass \WP_Groove\Framework_Plugin\Plugin
  */
-final class Plugin_Tests extends WPGT\A6t\Tests {
+final class Plugin_Tests extends WPG_Tests\A6t\Base {
 	/**
 	 * @covers ::load()
 	 * @covers ::instance()

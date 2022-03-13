@@ -33,7 +33,7 @@ namespace WP_Groove\Framework\Tests\A6t;
  * @since 2021-12-15
  */
 use Clever_Canyon\{Utilities as U};
-use Clever_Canyon\Utilities\{Tests as UT};
+use Clever_Canyon\Utilities\{Tests as U_Tests};
 
 /**
  * Framework.
@@ -41,7 +41,7 @@ use Clever_Canyon\Utilities\{Tests as UT};
  * @since 2021-12-15
  */
 use WP_Groove\{Framework as WPG};
-use WP_Groove\Framework\{Tests as WPGT};
+use WP_Groove\Framework\{Tests as WPG_Tests};
 
 /**
  * Plugin.
@@ -57,7 +57,7 @@ use WP_Groove\{Framework_Plugin as WP};
  *
  * @since 2021-12-15
  */
-abstract class Tests extends UT\A6t\Tests {
+abstract class Base extends U_Tests\A6t\Base {
 	/**
 	 * Fires before the first method is run.
 	 *

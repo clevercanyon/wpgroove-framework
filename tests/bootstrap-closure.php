@@ -34,7 +34,8 @@ namespace WP_Groove\Framework\Tests;
  * @since 2021-12-15
  */
 if ( ! getenv( 'IS_PHPUNIT' ) ) {
-	exit( 'Not a PHPUnit environment.' );
+	echo 'Not a PHPUnit environment.';
+	exit( 1 ); // Error status.
 }
 
 /**
@@ -44,7 +45,8 @@ if ( ! getenv( 'IS_PHPUNIT' ) ) {
  */
 if ( ! is_file( '/wp-docker/image/setup-complete' )
 	|| ! getenv( 'WP_DOCKER_WORDPRESS_DIR' ) ) {
-	exit( 'Not a WP Docker environment.' );
+	echo 'Not a WP Docker environment.';
+	exit( 1 ); // Error status.
 }
 
 /**
