@@ -47,13 +47,12 @@ trait On_Plugins_Loaded_Members {
 	 *
 	 * @since 2021-12-15
 	 */
-	final public function on_plugins_loaded_base() : void {
+	final public function fw_on_plugins_loaded() : void {
 		if ( $this instanceof WPG\A6t\Plugin ) {
 			$version = u\if_string( $this->get_option( 'version' ), '' );
 
 			if ( ! $version || version_compare( $version, $this->version, '<' ) ) {
-				$this->on_activation_base( false );
-				$this->on_plugin_activation( false );
+				$this->do_action( 'activation', $this->is_network_active() );
 			}
 		}
 	}

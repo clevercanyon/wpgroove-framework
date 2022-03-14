@@ -42,6 +42,9 @@ use WP_Groove\{Framework as WPG};
  * @property-read $org
  * @property-read $brand
  *
+ * @property-read $type
+ * @property-read $version
+ *
  * @property-read $file
  * @property-read $dir
  *
@@ -51,9 +54,6 @@ use WP_Groove\{Framework as WPG};
  *
  * @property-read $vendor_dir
  * @property-read $framework_dir
- *
- * @property-read $type
- * @property-read $version
  *
  * @property-read $namespace_scope
  * @property-read $namespace_crux
@@ -87,6 +87,20 @@ trait Property_Members {
 	 * @since 2021-12-15
 	 */
 	protected object $brand;
+
+	/**
+	 * Plugin|Theme: app type.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $type;
+
+	/**
+	 * Plugin|Theme: version string.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected string $version;
 
 	/**
 	 * Plugin|Theme: file path.
@@ -136,20 +150,6 @@ trait Property_Members {
 	 * @since 2021-12-15
 	 */
 	protected string $framework_dir;
-
-	/**
-	 * Plugin|Theme: app type.
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $type;
-
-	/**
-	 * Plugin|Theme: version string.
-	 *
-	 * @since 2021-12-15
-	 */
-	protected string $version;
 
 	/**
 	 * Plugin|Theme: namespace scope; e.g., `Xae3c7c368fe2e3c`
@@ -215,7 +215,7 @@ trait Property_Members {
 	protected string $unbranded_var;
 
 	/**
-	 * Plugin|Theme: needs; e.g., `admin_base_css`.
+	 * Plugin|Theme: needs; e.g., `admin_webpack`.
 	 *
 	 * @since 2021-12-15
 	 */

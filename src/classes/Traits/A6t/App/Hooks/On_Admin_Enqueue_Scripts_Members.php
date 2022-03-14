@@ -47,8 +47,8 @@ trait On_Admin_Enqueue_Scripts_Members {
 	 *
 	 * @since 2021-12-15
 	 */
-	final public function on_admin_enqueue_scripts_base() : void {
-		$this->on_admin_enqueue_scripts_base_webpack();
+	final public function fw_on_admin_enqueue_scripts() : void {
+		$this->fw_on_admin_enqueue_scripts_webpack();
 	}
 
 	/**
@@ -58,15 +58,15 @@ trait On_Admin_Enqueue_Scripts_Members {
 	 *
 	 * @since 2021-12-15
 	 */
-	final protected function on_admin_enqueue_scripts_base_webpack() : void {
-		if ( ! $this->needs[ 'admin_base_webpack' ] ) {
+	final protected function fw_on_admin_enqueue_scripts_webpack() : void {
+		if ( ! $this->needs[ 'admin_webpack' ] ) {
 			return; // Not applicable.
 		}
-		$style_var  = $this->var_prefix . 'admin_base_webpack_style';
-		$style_slug = $this->slug_prefix . 'admin-base-webpack-style';
+		$style_var  = $this->var_prefix . 'admin_webpack_style';
+		$style_slug = $this->slug_prefix . 'admin-webpack-style';
 
-		$script_var  = $this->var_prefix . 'admin_base_webpack_script';
-		$script_slug = $this->slug_prefix . 'admin-base-webpack-script';
+		$script_var  = $this->var_prefix . 'admin_webpack_script';
+		$script_slug = $this->slug_prefix . 'admin-webpack-script';
 
 		$self_admin_url = self_admin_url(); // Used multipe times.
 		$style_url      = wp_nonce_url( $self_admin_url, $style_slug, $style_var );

@@ -47,7 +47,7 @@ trait On_Init_Members {
 	 *
 	 * @since 2021-12-15
 	 */
-	final public function on_init_base() : void {
+	final public function fw_on_init() : void {
 		if ( $this instanceof WPG\A6t\Plugin ) {
 			if ( is_dir( U\Dir::join( $this->dir, '/languages' ) ) ) {
 				load_plugin_textdomain( $this->slug, false, U\Dir::name( $this->file_subpath, '/languages' ) );

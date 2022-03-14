@@ -47,7 +47,7 @@ trait On_Admin_Notice_Members {
 	 *
 	 * @since 2021-12-30
 	 */
-	final public function on_all_admin_notices_base() : void {
+	final public function fw_on_all_admin_notices() : void {
 		$update_admin_notices = false; // Initialize.
 		$admin_notices        = $this->get_admin_notices();
 
@@ -80,7 +80,7 @@ trait On_Admin_Notice_Members {
 	 *
 	 * @since 2022-03-11
 	 */
-	final public function on_wp_ajax_admin_notice_dismiss_base() : void {
+	final public function fw_on_wp_ajax_admin_notice_dismiss() : void {
 		check_admin_referer( 'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss' );
 		$idx = u\if_string( U\URL::current_post_var( $this->var_prefix . 'admin_notice_dismiss' ), '' );
 

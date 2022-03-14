@@ -51,7 +51,10 @@ trait Constructable_Members {
 	 * @param string $name              App name; e.g., `My App`.
 	 * @param string $slug              App slug; e.g., `wpgroove-my-app`.
 	 * @param string $version           Current version string; e.g., `1.0.0`.
-	 * @param bool   $maybe_setup_hooks Maybe setup hooks? Set to `false` when uninstalling.
+	 *
+	 * @param bool   $maybe_setup_hooks Control over hook setup when loading.
+	 *                                  Default is `true`. Set to `false` when uninstalling.
+	 *                                  {@see WPG\A6t\App::load()} for default value of `true`.
 	 *
 	 * @throws U\Fatal_Exception On failure to determine app type.
 	 *
@@ -60,6 +63,9 @@ trait Constructable_Members {
 	final protected function __construct( string $file, string $name, string $slug, string $version, bool $maybe_setup_hooks ) {
 		parent::__construct();
 
+		/**
+		 * Org & brand properties.
+		 */
 		$this->brand = U\Brand::get( 'w6e' );
 		$this->org   = U\Brand::get( $this->brand->org_n7m );
 
@@ -76,6 +82,15 @@ trait Constructable_Members {
 		assert( $slug && U\Str::is_lede_slug( $slug, $this->brand->slug_prefix ) );
 		assert( $version && U\Str::is_version( $version ) );
 
+		/**
+		 * App type & version properties.
+		 */
+		$this->type    = static::app_type(); // e.g., `plugin`, `theme`.
+		$this->version = $version;           // e.g., `1.0.0`, `1.0.1`, etc.
+
+		/**
+		 * Filesystem properties.
+		 */
 		$this->file         = U\Fs::normalize( $file );
 		$this->dir          = U\Dir::name( $this->file );
 		$this->dir_basename = basename( $this->dir );
@@ -93,11 +108,11 @@ trait Constructable_Members {
 		$this->vendor_dir    = U\Env::static_var( 'W6E_VENDOR_DIR' ) ?: U\Dir::join( $this->dir, '/vendor' );
 		$this->framework_dir = U\Dir::join( $this->vendor_dir, '/' . $this->org->slug . '/' . $this->brand->slug_prefix . 'framework' );
 
-		$this->type    = static::app_type();
-		$this->version = $version; // e.g., `1.0.0`.
-
-		$this->namespace_scope = U\Pkg::namespace_scope( static::class );
-		$this->namespace_crux  = U\Pkg::namespace_crux( static::class );
+		/**
+		 * Namespace, slug, & var properties.
+		 */
+		$this->namespace_scope = U\Pkg::namespace_scope( static::class ); // e.g., `Xae3c7c368fe2e3c`.
+		$this->namespace_crux  = U\Pkg::namespace_crux( static::class );  // e.g., `WP_Groove\My_Plugin`.
 
 		$this->name = $name;                             // e.g., `My Plugin`.
 		$this->slug = $slug;                             // e.g., `wpgroove-my-plugin`.
@@ -109,25 +124,35 @@ trait Constructable_Members {
 		$this->unbranded_slug = mb_substr( $this->slug, mb_strlen( $this->brand->slug_prefix ) ); // e.g., `my-plugin`.
 		$this->unbranded_var  = mb_substr( $this->var, mb_strlen( $this->brand->var_prefix ) );   // e.g., `my_plugin`.
 
-		$this->needs                         ??= [];
-		$this->needs[ 'admin_base_webpack' ] ??= false;
+		/**
+		 * App’s feature needs.
+		 */
+		$this->needs                    ??= [];
+		$this->needs[ 'admin_webpack' ] ??= false;
 
-		$this->hook_priorities                        ??= [];
-		$this->hook_priorities[ 'plugins_loaded' ]    ??= 10;
-		$this->hook_priorities[ 'after_setup_theme' ] ??= 10;
-		$this->hook_priorities[ 'init' ]              ??= 10;
-		$this->hook_priorities[ 'rest_api_init' ]     ??= 10;
-		$this->hook_priorities[ 'admin_init' ]        ??= 10;
+		/**
+		 * App’s hook priorities.
+		 */
+		$this->hook_priorities                            ??= [];
+		$this->hook_priorities[ 'plugins_loaded' ]        ??= 10;
+		$this->hook_priorities[ 'after_setup_theme' ]     ??= 10;
+		$this->hook_priorities[ 'init' ]                  ??= 10;
+		$this->hook_priorities[ 'rest_api_init' ]         ??= 10;
+		$this->hook_priorities[ 'admin_init' ]            ??= 10;
+		$this->hook_priorities[ 'admin_enqueue_scripts' ] ??= 10;
+		$this->hook_priorities[ 'all_admin_notices' ]     ??= 10;
+		$this->hook_priorities[ 'wp_ajax' ]               ??= 10;
 
-		if ( $this instanceof WPG\A6t\Plugin ) { // Not lower that plugin instance loader.
+		if ( $this instanceof WPG\A6t\Plugin ) { // Not lower than plugin instance loader.
 			$this->hook_priorities[ 'plugins_loaded' ] = max(
 				$this->hook_priorities[ 'plugins_loaded' ], -( PHP_INT_MAX - 10001 )
 			);
-		} elseif ( $this instanceof WPG\A6t\Theme ) { // Not lower that theme instance loader.
+		} elseif ( $this instanceof WPG\A6t\Theme ) { // Not lower than theme instance loader.
 			$this->hook_priorities[ 'after_setup_theme' ] = max(
 				$this->hook_priorities[ 'after_setup_theme' ], -( PHP_INT_MAX - 10001 )
 			);
 		}
+
 		/**
 		 * PHP assertions run in debug mode only.
 		 * https://www.php.net/manual/en/function.assert.php
@@ -166,10 +191,16 @@ trait Constructable_Members {
 		assert( U\Str::is_namespace_crux( $this->namespace_crux, $this->brand->n7m, $this->unbranded_slug ) );
 
 		/**
-		 * Let's get our WP Groove on.
+		 * Maybe setup hooks.
 		 */
-		if ( $maybe_setup_hooks && $this->should_setup_hooks_base() ) {
-			$this->setup_hooks(); // Let’s make some waves.
+		if ( $maybe_setup_hooks
+			&& $this->fw_should_setup_hooks()
+			&& $this->fwp_should_setup_hooks()
+			&& $this->should_setup_hooks()
+		) {
+			$this->fw_setup_hooks();  // Sets up core framework hooks.
+			$this->fwp_setup_hooks(); // Gives our separate pro framework an easy way in.
+			$this->setup_hooks();     // Sets up any other app-specific hooks.
 		}
 	}
 
@@ -178,10 +209,24 @@ trait Constructable_Members {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @return bool Should run setup?
+	 * @return bool Should setup hooks?
 	 */
-	final protected function should_setup_hooks_base() : bool {
-		return $this->should_setup_hooks();
+	final protected function fw_should_setup_hooks() : bool {
+		return true; // Nothing to check, for now.
+	}
+
+	/**
+	 * Plugin|Theme: should setup hooks?
+	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 * i.e., This is for our separate pro framework only.
+	 *
+	 * @since 2021-12-15
+	 *
+	 * @return bool Should setup hooks?
+	 */
+	protected function fwp_should_setup_hooks() : bool {
+		return true; // DO NOT POPULATE. This is for our separate pro framework only.
 	}
 
 	/**
@@ -191,7 +236,7 @@ trait Constructable_Members {
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @return bool Should run setup?
+	 * @return bool Should setup hooks?
 	 */
 	protected function should_setup_hooks() : bool {
 		return true; // DO NOT POPULATE. This is for extenders only.
@@ -202,47 +247,74 @@ trait Constructable_Members {
 	 *
 	 * @since 2021-12-15
 	 */
-	final protected function setup_hooks() : void {
+	final protected function fw_setup_hooks() : void {
+		/**
+		 * Activation & deactivation hooks.
+		 */
+		if ( $this instanceof WPG\A6t\Theme ) {
+			add_action( 'after_switch_theme', fn() => $this->do_action( 'activation', $this->is_network_active() ), 10, 0 );
+			add_action( 'switch_theme', fn() => $this->do_action( 'deactivation', $this->is_network_active() ), 10, 0 );
+		}
+		$this->add_action( 'activation', [ $this, 'fw_on_activation' ], 10, 1 );
+		$this->add_action( 'activation', [ $this, 'on_activation' ], 10, 1 );
+
+		$this->add_action( 'deactivation', [ $this, 'on_deactivation' ], 10, 1 );
+		$this->add_action( 'deactivation', [ $this, 'fw_on_deactivation' ], 10, 1 );
+
+		/**
+		 * Initialization hooks.
+		 */
 		if ( $this instanceof WPG\A6t\Plugin ) {
-			$this->add_action( 'activation', [ $this, 'on_activation_base' ] );
-			$this->add_action( 'activation', [ $this, 'on_plugin_activation' ] );
-
-			$this->add_action( 'deactivation', [ $this, 'on_plugin_deactivation' ] );
-			$this->add_action( 'deactivation', [ $this, 'on_plugin_deactivation_base' ] );
-
-			add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded_base' ], $this->hook_priorities[ 'plugins_loaded' ] );
-			add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded' ], $this->hook_priorities[ 'plugins_loaded' ] );
-
-		} elseif ( $this instanceof WPG\A6t\Theme ) {
-			add_action( 'after_switch_theme', [ $this, 'on_activation_base' ] );
-			add_action( 'after_switch_theme', [ $this, 'on_theme_activation' ] );
-
-			add_action( 'switch_theme', [ $this, 'on_theme_deactivation' ] );
-			add_action( 'switch_theme', [ $this, 'on_theme_deactivation_base' ] );
+			add_action( 'plugins_loaded', [ $this, 'fw_on_plugins_loaded' ], $this->hook_priorities[ 'plugins_loaded' ], 0 );
+			add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded' ], $this->hook_priorities[ 'plugins_loaded' ], 0 );
 		}
-		// The following apply to both app types.
+		add_action( 'after_setup_theme', [ $this, 'fw_on_after_setup_theme' ], $this->hook_priorities[ 'after_setup_theme' ], 0 );
+		add_action( 'after_setup_theme', [ $this, 'on_after_setup_theme' ], $this->hook_priorities[ 'after_setup_theme' ], 0 );
 
-		add_action( 'after_setup_theme', [ $this, 'on_after_setup_theme_base' ], $this->hook_priorities[ 'after_setup_theme' ] );
-		add_action( 'after_setup_theme', [ $this, 'on_after_setup_theme' ], $this->hook_priorities[ 'after_setup_theme' ] );
+		add_action( 'init', [ $this, 'fw_on_init' ], $this->hook_priorities[ 'init' ], 0 );
+		add_action( 'init', [ $this, 'on_init' ], $this->hook_priorities[ 'init' ], 0 );
 
-		add_action( 'init', [ $this, 'on_init_base' ], $this->hook_priorities[ 'init' ] );
-		add_action( 'init', [ $this, 'on_init' ], $this->hook_priorities[ 'init' ] );
+		add_action( 'rest_api_init', [ $this, 'fw_on_rest_api_init' ], $this->hook_priorities[ 'rest_api_init' ], 0 );
+		add_action( 'rest_api_init', [ $this, 'on_rest_api_init' ], $this->hook_priorities[ 'rest_api_init' ], 0 );
 
-		add_action( 'rest_api_init', [ $this, 'on_rest_api_init_base' ], $this->hook_priorities[ 'rest_api_init' ] );
-		add_action( 'rest_api_init', [ $this, 'on_rest_api_init' ], $this->hook_priorities[ 'rest_api_init' ] );
+		/**
+		 * Admin-only initialization hooks; and more.
+		 */
+		if ( is_admin() ) {
+			add_action( 'admin_init', [ $this, 'fw_on_admin_init' ], $this->hook_priorities[ 'admin_init' ], 0 );
+			add_action( 'admin_init', [ $this, 'on_admin_init' ], $this->hook_priorities[ 'admin_init' ], 0 );
 
-		if ( is_admin() ) { // Admin-only hooks.
-			add_action( 'admin_init', [ $this, 'on_admin_init_base' ], $this->hook_priorities[ 'admin_init' ] );
-			add_action( 'admin_init', [ $this, 'on_admin_init' ], $this->hook_priorities[ 'admin_init' ] );
+			add_action( 'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss', [ $this, 'fw_on_wp_ajax_admin_notice_dismiss' ], $this->hook_priorities[ 'wp_ajax' ], 0 );
+			add_action( 'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss', [ $this, 'on_wp_ajax_admin_notice_dismiss' ], $this->hook_priorities[ 'wp_ajax' ], 0 );
 
-			add_action( 'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss', [ $this, 'on_wp_ajax_admin_notice_dismiss_base' ] );
-			add_action( 'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss', [ $this, 'on_wp_ajax_admin_notice_dismiss' ] );
+			add_action( 'admin_enqueue_scripts', [ $this, 'fw_on_admin_enqueue_scripts' ], $this->hook_priorities[ 'admin_enqueue_scripts' ], 0 );
+			add_action( 'admin_enqueue_scripts', [ $this, 'on_admin_enqueue_scripts' ], $this->hook_priorities[ 'admin_enqueue_scripts' ], 0 );
 
-			add_action( 'admin_enqueue_scripts', [ $this, 'on_admin_enqueue_scripts_base' ] );
-			add_action( 'admin_enqueue_scripts', [ $this, 'on_admin_enqueue_scripts' ] );
-
-			add_action( 'all_admin_notices', [ $this, 'on_all_admin_notices_base' ] );
-			add_action( 'all_admin_notices', [ $this, 'on_all_admin_notices' ] );
+			add_action( 'all_admin_notices', [ $this, 'fw_on_all_admin_notices' ], $this->hook_priorities[ 'all_admin_notices' ], 0 );
+			add_action( 'all_admin_notices', [ $this, 'on_all_admin_notices' ], $this->hook_priorities[ 'all_admin_notices' ], 0 );
 		}
+	}
+
+	/**
+	 * Plugin|Theme: setup hooks on instantiation.
+	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 * i.e., This is for our separate pro framework only.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected function fwp_setup_hooks() : void {
+		// DO NOT POPULATE. This is for our separate pro framework only.
+	}
+
+	/**
+	 * Plugin|Theme: setup hooks on instantiation.
+	 *
+	 * DO NOT POPULATE. This is for extenders only.
+	 *
+	 * @since 2021-12-15
+	 */
+	protected function setup_hooks() : void {
+		// DO NOT POPULATE. This is for extenders only.
 	}
 }

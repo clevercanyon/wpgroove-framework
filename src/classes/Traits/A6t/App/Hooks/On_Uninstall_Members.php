@@ -46,30 +46,27 @@ trait On_Uninstall_Members {
 	 * Plugin|Theme: uninstall hooks.
 	 *
 	 * - Plugin: on `uninstall_{$this->subpath}` hook.
-	 * - Theme: on `switch_theme` hook.
+	 *
+	 * - Theme:  on `{$this->var_prefix}deactivation` hook via `switch_theme`.
+	 *           Only when option `uninstall_on_deactivation` is `true`.
 	 *
 	 * @since 2021-12-15
 	 */
-	final public static function on_uninstall_base() : void {
+	final public static function fw_on_uninstall() : void {
 		global $wpdb;
 
-		// Load w/o hook setup.
-
-		try { // Fail softly.
+		try { // Load w/o hook setup.
 			$app = static::load( false );
+
 		} catch ( U\Fatal_Exception $exception ) {
 			error_log( 'Failed to load ' . static::app_type() . ' on: `' . current_action() . '`.' );
-			return; // Fail software.
+			return; // Fail softly on uninstallation.
 		}
-		// App-specific uninstall routines.
+		// App uninstall routines.
 
-		if ( $app instanceof WPG\A6t\Theme ) {
-			static::on_uninstall_theme( $app );
+		static::on_uninstall( $app );
 
-		} elseif ( $app instanceof WPG\A6t\Plugin ) {
-			static::on_uninstall_plugin( $app );
-		}
-		// Base uninstall routines.
+		// Framework uninstall routines.
 
 		$meta_key_tables_columns = [
 			'sitemeta'    => 'meta_key',
@@ -112,28 +109,20 @@ trait On_Uninstall_Members {
 	}
 
 	/**
-	 * Plugin: on `uninstall_{$this->subpath}` hook, via {@see WPG\A6t\App::on_uninstall_base()}.
+	 * Plugin|Theme: uninstall hooks.
+	 *
+	 * - Plugin: on `uninstall_{$this->subpath}` hook.
+	 *
+	 * - Theme:  on `{$this->var_prefix}deactivation` hook via `switch_theme`.
+	 *           Only when option `uninstall_on_deactivation` is `true`.
 	 *
 	 * DO NOT POPULATE. This is for extenders only.
 	 *
 	 * @since 2021-12-15
 	 *
-	 * @param WPG\A6t\Plugin $plugin Plugin instance.
+	 * @param WPG\A6t\App $app App (i.e., plugin|theme) instance.
 	 */
-	public static function on_uninstall_plugin( WPG\A6t\Plugin $plugin ) : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
-
-	/**
-	 * Theme: on `switch_theme` hook, via {@see WPG\A6t\App::on_uninstall_base()}.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @param WPG\A6t\Theme $theme Theme instance.
-	 */
-	public static function on_uninstall_theme( WPG\A6t\Theme $theme ) : void {
+	public static function on_uninstall( WPG\A6t\App $app ) : void {
 		// DO NOT POPULATE. This is for extenders only.
 	}
 }

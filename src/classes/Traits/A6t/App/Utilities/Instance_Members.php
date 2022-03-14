@@ -117,14 +117,14 @@ trait Instance_Members {
 
 		register_activation_hook(
 			$args[ 0 ], // Plugin file.
-			function ( ?bool $network_wide = null ) {
-				static::load()->do_action( 'activation', $network_wide ?: false );
+			function ( bool $network_wide ) {
+				static::load()->do_action( 'activation', $network_wide );
 			}
 		);
 		register_deactivation_hook(
 			$args[ 0 ], // Plugin file.
-			function ( ?bool $network_wide = null ) {
-				static::load()->do_action( 'deactivation', $network_wide ?: false );
+			function ( bool $network_wide ) {
+				static::load()->do_action( 'deactivation', $network_wide );
 			}
 		);
 		// `plugins_loaded` will not fire on activation, deactivation, or uninstallation.
@@ -140,6 +140,9 @@ trait Instance_Members {
 	 * @param string ...$args {@see WPG\A6t\App::__construct()}.
 	 */
 	final protected static function add_theme_instance_hooks( string ...$args ) : void {
+		// There isn't a way to register activation|deactivation hooks for themes.
+		// Instead, themes are handled by {@see fw_setup_hooks()} using theme-switch hooks.
+
 		// `after_setup_theme` will not fire on activation, deactivation, or uninstallation.
 		// That's as it should be. The WP Groove framework has separate handlers for those events.
 		add_action( 'after_setup_theme', [ static::class, 'load' ], -( PHP_INT_MAX - 10000 ), 0 );

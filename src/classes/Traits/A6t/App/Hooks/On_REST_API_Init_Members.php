@@ -47,7 +47,7 @@ trait On_REST_API_Init_Members {
 	 *
 	 * @since 2021-12-15
 	 */
-	final public function on_rest_api_init_base() : void {
+	final public function fw_on_rest_api_init() : void {
 		// Nothing for now.
 	}
 
