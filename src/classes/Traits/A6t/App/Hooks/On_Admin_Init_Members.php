@@ -113,15 +113,4 @@ trait On_Admin_Init_Members {
 
 		exit( $script_file_contents ); // phpcs:ignore -- output ok.
 	}
-
-	/**
-	 * Plugin|Theme: on `admin_init` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_admin_init() : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
 }

@@ -55,28 +55,10 @@ trait On_Style_Script_Tag_Members {
 	 * @return string Revised style tag.
 	 */
 	final public function fw_on_style_loader_tag( string $tag, string $slug, string $href, string $media ) : string {
-		if ( 0 === mb_strpos( $slug, $this->slug_prefix ) ) {
+		if ( $this->slug . '-css' === $slug || 0 === mb_strpos( $slug, $this->slug_prefix ) ) {
 			$tag = str_replace( ' href=', " charset='utf-8' href=", $tag );
 		}
 		return $tag;
-	}
-
-	/**
-	 * Plugin|Theme: on `style_loader_tag` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @param string $tag   Current style tag.
-	 * @param string $slug  Style slug (i.e., handle).
-	 * @param string $href  Style source location.
-	 * @param string $media Style media attribute.
-	 *
-	 * @return string Revised style tag.
-	 */
-	public function on_style_loader_tag( string $tag, string $slug, string $href, string $media ) : string {
-		return $tag; // DO NOT POPULATE. This is for extenders only.
 	}
 
 	/**
@@ -91,26 +73,9 @@ trait On_Style_Script_Tag_Members {
 	 * @return string Revised script tag.
 	 */
 	final public function fw_on_script_loader_tag( string $tag, string $slug, string $src ) : string {
-		if ( 0 === mb_strpos( $slug, $this->slug_prefix ) ) {
+		if ( $this->slug . '-js' === $slug || 0 === mb_strpos( $slug, $this->slug_prefix ) ) {
 			$tag = str_replace( ' src=', " charset='utf-8' src=", $tag );
 		}
 		return $tag;
-	}
-
-	/**
-	 * Plugin|Theme: on `script_loader_tag` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @param string $tag  Current script tag.
-	 * @param string $slug Script slug (i.e., handle).
-	 * @param string $src  Script source location.
-	 *
-	 * @return string Revised script tag.
-	 */
-	public function on_script_loader_tag( string $tag, string $slug, string $src ) : string {
-		return $tag; // DO NOT POPULATE. This is for extenders only.
 	}
 }

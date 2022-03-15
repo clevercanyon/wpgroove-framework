@@ -50,15 +50,4 @@ trait On_REST_API_Init_Members {
 	final public function fw_on_rest_api_init() : void {
 		// Nothing for now.
 	}
-
-	/**
-	 * Plugin|Theme: on `rest_api_init` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_rest_api_init() : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
 }

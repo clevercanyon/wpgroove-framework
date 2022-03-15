@@ -59,20 +59,4 @@ trait On_Deactivation_Members {
 			}
 		}
 	}
-
-	/**
-	 * Plugin|Theme: deactivation hooks.
-	 *
-	 * - Plugin: on `{$this->var_prefix}deactivation` hook.
-	 * - Theme:  on `{$this->var_prefix}deactivation` hook via `switch_theme`.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @param bool $network_wide True if deativated network-wide.
-	 */
-	public function on_deactivation( bool $network_wide ) : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
 }

@@ -56,15 +56,4 @@ trait On_After_Setup_Theme_Members {
 			}
 		}
 	}
-
-	/**
-	 * Plugin|Theme: on `after_setup_theme` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_after_setup_theme() : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
 }

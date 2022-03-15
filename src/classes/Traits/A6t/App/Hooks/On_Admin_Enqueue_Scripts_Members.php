@@ -88,15 +88,4 @@ trait On_Admin_Enqueue_Scripts_Members {
 			],
 		] );
 	}
-
-	/**
-	 * Plugin|Theme: on `admin_enqueue_scripts` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_admin_enqueue_scripts() : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
 }

@@ -58,23 +58,7 @@ trait On_Activation_Members {
 		$this->update_option( 'version', $this->version, true );
 
 		if ( $this instanceof WPG\A6t\Plugin ) {
-			register_uninstall_hook( $this->file, [ static::class, 'on_uninstall_fw' ] );
+			register_uninstall_hook( $this->file, [ static::class, 'fw_on_uninstall' ] );
 		}
-	}
-
-	/**
-	 * Plugin|Theme: activation hooks.
-	 *
-	 * - Plugin: on `{$this->var_prefix}activation` hook.
-	 * - Theme:  on `{$this->var_prefix}activation` hook via `after_switch_theme`.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 *
-	 * @param bool $network_wide True if activated network-wide.
-	 */
-	public function on_activation( bool $network_wide ) : void {
-		// DO NOT POPULATE. This is for extenders only.
 	}
 }

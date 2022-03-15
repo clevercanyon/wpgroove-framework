@@ -133,26 +133,32 @@ trait Constructable_Members {
 		/**
 		 * App’s hook priorities.
 		 */
-		$this->hook_priorities                            ??= [];
-		$this->hook_priorities[ 'plugins_loaded' ]        ??= 10;
-		$this->hook_priorities[ 'after_setup_theme' ]     ??= 10;
-		$this->hook_priorities[ 'init' ]                  ??= 10;
-		$this->hook_priorities[ 'rest_api_init' ]         ??= 10;
-		$this->hook_priorities[ 'admin_init' ]            ??= 10;
-		$this->hook_priorities[ 'admin_enqueue_scripts' ] ??= 10;
-		$this->hook_priorities[ 'all_admin_notices' ]     ??= 10;
-		$this->hook_priorities[ 'wp_ajax' ]               ??= 10;
+		$this->hook_priorities ??= [];
 
-		$this->hook_priorities[ 'style_loader_tag' ]  ??= 10;
-		$this->hook_priorities[ 'script_loader_tag' ] ??= 10;
+		$this->hook_priorities[ 'activation' ]   ??= -( PHP_INT_MAX - 10000 );
+		$this->hook_priorities[ 'deactivation' ] ??= ( PHP_INT_MAX - 10000 );
+
+		$this->hook_priorities[ 'plugins_loaded' ]    ??= -( PHP_INT_MAX - 10000 );
+		$this->hook_priorities[ 'after_setup_theme' ] ??= -( PHP_INT_MAX - 10000 );
+
+		$this->hook_priorities[ 'init' ]          ??= -( PHP_INT_MAX - 10000 );
+		$this->hook_priorities[ 'rest_api_init' ] ??= -( PHP_INT_MAX - 10000 );
+
+		$this->hook_priorities[ 'style_loader_tag' ]  ??= -( PHP_INT_MAX - 10000 );
+		$this->hook_priorities[ 'script_loader_tag' ] ??= -( PHP_INT_MAX - 10000 );
+
+		$this->hook_priorities[ 'admin_init' ]            ??= -( PHP_INT_MAX - 10000 );
+		$this->hook_priorities[ 'admin_enqueue_scripts' ] ??= -( PHP_INT_MAX - 10000 );
+		$this->hook_priorities[ 'all_admin_notices' ]     ??= -( PHP_INT_MAX - 10000 );
+		$this->hook_priorities[ 'wp_ajax' ]               ??= -( PHP_INT_MAX - 10000 );
 
 		if ( $this instanceof WPG\A6t\Plugin ) { // Not lower than plugin instance loader.
 			$this->hook_priorities[ 'plugins_loaded' ] = max(
-				$this->hook_priorities[ 'plugins_loaded' ], -( PHP_INT_MAX - 10001 )
+				$this->hook_priorities[ 'plugins_loaded' ], -( PHP_INT_MAX - 10000 )
 			);
 		} elseif ( $this instanceof WPG\A6t\Theme ) { // Not lower than theme instance loader.
 			$this->hook_priorities[ 'after_setup_theme' ] = max(
-				$this->hook_priorities[ 'after_setup_theme' ], -( PHP_INT_MAX - 10001 )
+				$this->hook_priorities[ 'after_setup_theme' ], -( PHP_INT_MAX - 10000 )
 			);
 		}
 
@@ -255,60 +261,47 @@ trait Constructable_Members {
 		 * Activation & deactivation hooks.
 		 */
 		if ( $this instanceof WPG\A6t\Theme ) {
-			add_action( 'after_switch_theme', fn() => $this->do_action( 'activation', $this->is_network_active() ), 10, 0 );
-			add_action( 'switch_theme', fn() => $this->do_action( 'deactivation', $this->is_network_active() ), 10, 0 );
+			add_action(
+				'after_switch_theme', // Pseudo-activation hook.
+				fn() => $this->do_action( 'activation', $this->is_network_active() ),
+				$this->hook_priorities[ 'activation' ], 0
+			);
+			add_action(
+				'switch_theme',       // Pseudo-deactivation hook.
+				fn() => $this->do_action( 'deactivation', $this->is_network_active() ),
+				$this->hook_priorities[ 'deactivation' ], 0
+			);
 		}
-		$this->add_action( 'activation', [ $this, 'fw_on_activation' ], 10, 1 );
-		$this->add_action( 'activation', [ $this, 'on_activation' ], 10, 1 );
-
-		$this->add_action( 'deactivation', [ $this, 'on_deactivation' ], 10, 1 );
-		$this->add_action( 'deactivation', [ $this, 'fw_on_deactivation' ], 10, 1 );
+		$this->add_action( 'activation', [ $this, 'fw_on_activation' ], $this->hook_priorities[ 'activation' ], 1 );
+		$this->add_action( 'deactivation', [ $this, 'fw_on_deactivation' ], $this->hook_priorities[ 'deactivation' ], 1 );
 
 		/**
 		 * Initialization hooks.
 		 */
 		if ( $this instanceof WPG\A6t\Plugin ) {
 			add_action( 'plugins_loaded', [ $this, 'fw_on_plugins_loaded' ], $this->hook_priorities[ 'plugins_loaded' ], 0 );
-			add_action( 'plugins_loaded', [ $this, 'on_plugins_loaded' ], $this->hook_priorities[ 'plugins_loaded' ], 0 );
 		}
 		add_action( 'after_setup_theme', [ $this, 'fw_on_after_setup_theme' ], $this->hook_priorities[ 'after_setup_theme' ], 0 );
-		add_action( 'after_setup_theme', [ $this, 'on_after_setup_theme' ], $this->hook_priorities[ 'after_setup_theme' ], 0 );
 
 		add_action( 'init', [ $this, 'fw_on_init' ], $this->hook_priorities[ 'init' ], 0 );
-		add_action( 'init', [ $this, 'on_init' ], $this->hook_priorities[ 'init' ], 0 );
-
 		add_action( 'rest_api_init', [ $this, 'fw_on_rest_api_init' ], $this->hook_priorities[ 'rest_api_init' ], 0 );
-		add_action( 'rest_api_init', [ $this, 'on_rest_api_init' ], $this->hook_priorities[ 'rest_api_init' ], 0 );
 
 		/**
 		 * Style & script tag filters.
 		 */
 		add_filter( 'style_loader_tag', [ $this, 'fw_on_style_loader_tag' ], $this->hook_priorities[ 'style_loader_tag' ], 4 );
-		add_filter( 'style_loader_tag', [ $this, 'on_style_loader_tag' ], $this->hook_priorities[ 'style_loader_tag' ], 4 );
-
 		add_filter( 'script_loader_tag', [ $this, 'fw_on_script_loader_tag' ], $this->hook_priorities[ 'script_loader_tag' ], 3 );
-		add_filter( 'script_loader_tag', [ $this, 'on_script_loader_tag' ], $this->hook_priorities[ 'script_loader_tag' ], 3 );
 
 		/**
 		 * Admin-only initialization hooks; and more.
 		 */
 		if ( is_admin() ) {
 			add_action( 'admin_init', [ $this, 'fw_on_admin_init' ], $this->hook_priorities[ 'admin_init' ], 0 );
-			add_action( 'admin_init', [ $this, 'on_admin_init' ], $this->hook_priorities[ 'admin_init' ], 0 );
-
 			add_action( 'admin_enqueue_scripts', [ $this, 'fw_on_admin_enqueue_scripts' ], $this->hook_priorities[ 'admin_enqueue_scripts' ], 0 );
-			add_action( 'admin_enqueue_scripts', [ $this, 'on_admin_enqueue_scripts' ], $this->hook_priorities[ 'admin_enqueue_scripts' ], 0 );
-
 			add_action( 'all_admin_notices', [ $this, 'fw_on_all_admin_notices' ], $this->hook_priorities[ 'all_admin_notices' ], 0 );
-			add_action( 'all_admin_notices', [ $this, 'on_all_admin_notices' ], $this->hook_priorities[ 'all_admin_notices' ], 0 );
-
 			add_action(
 				'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss',
 				[ $this, 'fw_on_wp_ajax_admin_notice_dismiss' ], $this->hook_priorities[ 'wp_ajax' ], 0
-			);
-			add_action(
-				'wp_ajax_' . $this->var_prefix . 'admin_notice_dismiss',
-				[ $this, 'on_wp_ajax_admin_notice_dismiss' ], $this->hook_priorities[ 'wp_ajax' ], 0
 			);
 		}
 	}

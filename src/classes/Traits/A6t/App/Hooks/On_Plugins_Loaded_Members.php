@@ -56,15 +56,4 @@ trait On_Plugins_Loaded_Members {
 			}
 		}
 	}
-
-	/**
-	 * Plugin: on `plugins_loaded` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_plugins_loaded() : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
 }

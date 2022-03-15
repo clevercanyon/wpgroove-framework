@@ -65,17 +65,6 @@ trait On_Admin_Notice_Members {
 	}
 
 	/**
-	 * Plugin|Theme: on `all_admin_notices` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_all_admin_notices() : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
-
-	/**
 	 * Plugin|Theme: on `wp_ajax_{$this->var_prefix}admin_notice_dismiss` hook.
 	 *
 	 * @since 2022-03-11
@@ -87,16 +76,5 @@ trait On_Admin_Notice_Members {
 		if ( $idx && current_user_can( 'exist' ) ) {
 			$this->dequeue_admin_notice( $idx );
 		}
-	}
-
-	/**
-	 * Plugin|Theme: on `wp_ajax_{$this->var_prefix}admin_notice_dismiss` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2022-03-11
-	 */
-	public function on_wp_ajax_admin_notice_dismiss() : void {
-		// DO NOT POPULATE. This is for extenders only.
 	}
 }

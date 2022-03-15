@@ -58,15 +58,4 @@ trait On_Init_Members {
 			}
 		}
 	}
-
-	/**
-	 * Plugin|Theme: on `init` hook.
-	 *
-	 * DO NOT POPULATE. This is for extenders only.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_init() : void {
-		// DO NOT POPULATE. This is for extenders only.
-	}
 }
