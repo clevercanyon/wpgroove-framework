@@ -75,6 +75,7 @@
 						"$concat" : {
 							"vendor" : [
 								"clevercanyon/wpgroove-framework",
+								"clevercanyon/wpgroove-framework-pro",
 								"clevercanyon/wpgroove-framework-dev"
 							]
 						}
