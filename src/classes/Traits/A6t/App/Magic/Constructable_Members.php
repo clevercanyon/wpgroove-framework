@@ -144,9 +144,6 @@ trait Constructable_Members {
 		$this->hook_priorities[ 'init' ]          ??= -( PHP_INT_MAX - 10000 );
 		$this->hook_priorities[ 'rest_api_init' ] ??= -( PHP_INT_MAX - 10000 );
 
-		$this->hook_priorities[ 'style_loader_tag' ]  ??= -( PHP_INT_MAX - 10000 );
-		$this->hook_priorities[ 'script_loader_tag' ] ??= -( PHP_INT_MAX - 10000 );
-
 		$this->hook_priorities[ 'admin_init' ]            ??= -( PHP_INT_MAX - 10000 );
 		$this->hook_priorities[ 'admin_enqueue_scripts' ] ??= -( PHP_INT_MAX - 10000 );
 		$this->hook_priorities[ 'all_admin_notices' ]     ??= -( PHP_INT_MAX - 10000 );
@@ -285,12 +282,6 @@ trait Constructable_Members {
 
 		add_action( 'init', [ $this, 'fw_on_init' ], $this->hook_priorities[ 'init' ], 0 );
 		add_action( 'rest_api_init', [ $this, 'fw_on_rest_api_init' ], $this->hook_priorities[ 'rest_api_init' ], 0 );
-
-		/**
-		 * Style & script tag filters.
-		 */
-		add_filter( 'style_loader_tag', [ $this, 'fw_on_style_loader_tag' ], $this->hook_priorities[ 'style_loader_tag' ], 4 );
-		add_filter( 'script_loader_tag', [ $this, 'fw_on_script_loader_tag' ], $this->hook_priorities[ 'script_loader_tag' ], 3 );
 
 		/**
 		 * Admin-only initialization hooks; and more.

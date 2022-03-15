@@ -106,6 +106,4 @@ trait Members {
 
 	use WPG\Traits\A6t\App\Utilities\Admin_Notice_Members;
 	use WPG\Traits\A6t\App\Hooks\On_Admin_Notice_Members;
-
-	use WPG\Traits\A6t\App\Hooks\On_Style_Script_Tag_Members;
 }
