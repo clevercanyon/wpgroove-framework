@@ -11,6 +11,15 @@
 // <editor-fold desc="Strict types, namespace, use statements, and other headers.">
 
 /**
+ * Lint configuration.
+ *
+ * @since        2021-12-25
+ *
+ * @noinspection PhpTraitsUseListInspection
+ * phpcs:disable WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterOpenParenthesis
+ */
+
+/**
  * Declarations & namespace.
  *
  * @since 2021-12-25
@@ -49,7 +58,7 @@ use WP_Groove\{Framework as WPG};
  */
 trait Members {
 	/**
-	 * Core finals.
+	 * Base trait finals.
 	 *
 	 * @since 2021-12-28
 	 */
@@ -58,9 +67,7 @@ trait Members {
 
 	use U\Traits\A6t\Base\Magic\Finals\Readable_Members;
 	use U\Traits\A6t\Base\Magic\Finals\Unwritable_Members;
-
 	use U\Traits\A6t\Base\Magic\Finals\Uncallable_Members;
-	use U\Traits\A6t\Base\Magic\Finals\Uninvokable_Members;
 
 	use U\Traits\A6t\Base\Magic\Finals\Debuggable_Members;
 	use U\Traits\A6t\Base\Magic\Finals\Stringable_Members;
@@ -72,25 +79,32 @@ trait Members {
 	use U\Traits\A6t\Stc_Base\Magic\Finals\Unimportable_Members;
 
 	/**
+	 * Base factory traits.
+	 *
+	 * @since 2021-12-28
+	 */
+	use U\Traits\A6t\Factory\Members;
+
+	/**
 	 * App traits.
 	 *
 	 * @since 2021-12-28
 	 */
 	use WPG\Traits\A6t\App\Magic\Constructable_Members;
 	use WPG\Traits\A6t\App\Utilities\Instance_Members;
-	use WPG\Traits\A6t\App\Utilities\Property_Members;
+	use WPG\Traits\A6t\App\Properties\Property_Members;
 
 	use WPG\Traits\A6t\App\Hooks\On_Activation_Members;
 	use WPG\Traits\A6t\App\Hooks\On_Deactivation_Members;
 	use WPG\Traits\A6t\App\Hooks\On_Uninstall_Members;
+
+	use WPG\Traits\A6t\App\Utilities\Multisite_Members;
 
 	use WPG\Traits\A6t\App\Hooks\On_Plugins_Loaded_Members;
 	use WPG\Traits\A6t\App\Hooks\On_After_Setup_Theme_Members;
 
 	use WPG\Traits\A6t\App\Hooks\On_Init_Members;
 	use WPG\Traits\A6t\App\Hooks\On_REST_API_Init_Members;
-
-	use WPG\Traits\A6t\App\Utilities\Multisite_Members;
 
 	use WPG\Traits\A6t\App\Utilities\Option_Members;
 	use WPG\Traits\A6t\App\Utilities\Site_Option_Members;

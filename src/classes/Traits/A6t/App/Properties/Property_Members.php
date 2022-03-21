@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\A6t\App\Utilities;
+namespace WP_Groove\Framework\Traits\A6t\App\Properties;
 
 /**
  * Utilities.

@@ -39,7 +39,7 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  */
-final class WC extends U\A6t\Stc_Utilities {
+final class WC extends WPG\A6t\Base {
 	/**
 	 * Traits.
 	 *

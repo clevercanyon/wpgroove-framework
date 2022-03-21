@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\Admin_Notice\Utilities;
+namespace WP_Groove\Framework\Traits\Admin_Notice\Properties;
 
 /**
  * Utilities.
@@ -43,14 +43,7 @@ use WP_Groove\{Framework as WPG};
  */
 trait Property_Members {
 	/**
-	 * Plugin|Theme.
-	 *
-	 * @since 2022-01-28
-	 */
-	private WPG\A6t\App $app;
-
-	/**
-	 * Props `public...protected` are saved in transient data.
+	 * Props `own:public...protected` are saved in transient data.
 	 * Please be very careful before updating properties.
 	 *
 	 * @see WPG\A6t\App::update_admin_notices()

@@ -39,7 +39,7 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  */
-final class Admin_Notice extends U\A6t\Base {
+final class Admin_Notice extends WPG\A6t\Base {
 	/**
 	 * Traits.
 	 *

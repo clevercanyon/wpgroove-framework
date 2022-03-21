@@ -59,7 +59,7 @@ trait Admin_Notice_Members {
 		$transient_admin_notices = u\if_array( $this->get_site_transient( 'admin_notices' ), [] );
 
 		foreach ( $transient_admin_notices as $_idx => $_admin_notice ) {
-			$admin_notices[ $_idx ] = new WPG\Admin_Notice( $this, $_admin_notice );
+			$admin_notices[ $_idx ] = $this( WPG\Admin_Notice::class, $_admin_notice );
 		}
 		return $admin_notices;
 	}
@@ -129,7 +129,7 @@ trait Admin_Notice_Members {
 			if ( is_string( $admin_notice ) ) {
 				$admin_notice = [ 'markup' => $admin_notice ];
 			}
-			$admin_notice = new WPG\Admin_Notice( $this, $admin_notice );
+			$admin_notice = $this( WPG\Admin_Notice::class, $admin_notice );
 		}
 		$admin_notices                       = $this->get_admin_notices();
 		$admin_notices[ $admin_notice->idx ] = $admin_notice;

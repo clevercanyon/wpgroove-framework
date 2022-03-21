@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework;
 
 /**
  * Utilities.
@@ -35,15 +35,15 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Plugin|Theme (i.e., app) base class.
+ * WooCommerce customer class.
  *
  * @since 2021-12-15
  */
-abstract class App extends U\A6t\Base implements U\I7e\Factory {
+final class WC_Customer extends \WC_Customer {
 	/**
 	 * Traits.
 	 *
-	 * @since 2021-12-15
+	 * @since 2022-01-28
 	 */
-	use WPG\Traits\A6t\App\Members;
+	use WPG\Traits\WC_Customer\Members;
 }

@@ -86,8 +86,7 @@ trait Constructable_Members {
 	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
 	public function __construct( WPG\A6t\App $app, array $props ) {
-		parent::__construct();
-		$this->app = $app;
+		parent::__construct( $app );
 
 		$this->idx = u\iff_string( $props[ 'idx' ] )
 			?: U\Crypto::uuid_v4(); // Auto-generate.

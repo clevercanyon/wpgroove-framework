@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework\Traits\A6t\Base\Magic;
 
 /**
  * Utilities.
@@ -35,15 +35,22 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Plugin|Theme (i.e., app) base class.
+ * Class members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\A6t\Base
  */
-abstract class App extends U\A6t\Base implements U\I7e\Factory {
+trait Constructable_Members {
 	/**
-	 * Traits.
+	 * Constructor.
 	 *
-	 * @since 2021-12-15
+	 * @param WPG\A6t\App $app App.
+	 *
+	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
-	use WPG\Traits\A6t\App\Members;
+	public function __construct( WPG\A6t\App $app ) {
+		parent::__construct();
+		$this->app = $app;
+	}
 }

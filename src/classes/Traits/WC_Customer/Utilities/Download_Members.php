@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework\Traits\WC_Customer\Utilities;
 
 /**
  * Utilities.
@@ -35,15 +35,33 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Plugin|Theme (i.e., app) base class.
+ * Class members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\WC_Customer
  */
-abstract class App extends U\A6t\Base implements U\I7e\Factory {
+trait Download_Members {
 	/**
-	 * Traits.
+	 * Can customer download a file by name?
 	 *
 	 * @since 2021-12-15
+	 *
+	 * @param string $name File name.
+	 *
+	 * @return bool `true` if customer can download file name.
 	 */
-	use WPG\Traits\A6t\App\Members;
+	public function x_can_download_file_name( string $name ) : bool {
+		if ( ! $name ) {
+			return false; // Not possible.
+		}
+		$names = [ $name, $this->x_app->brand->slug_prefix . $name ];
+
+		foreach ( $this->get_downloadable_products() as $_dp ) {
+			if ( in_array( $_dp[ 'download_name' ], $names, true ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

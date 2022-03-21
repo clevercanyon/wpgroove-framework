@@ -48,22 +48,12 @@ use WP_Groove\{Framework_Plugin as WP};
  */
 class Plugin extends WPG\A6t\Plugin {
 	/**
-	 * On `plugins_loaded` hook.
+	 * Does hook setup on instantiation.
 	 *
 	 * @since 2021-12-15
 	 */
-	public function on_plugins_loaded() : void {
-		parent::on_plugins_loaded();
-		// Nothing for now.
-	}
-
-	/**
-	 * On `init` hook.
-	 *
-	 * @since 2021-12-15
-	 */
-	public function on_init() : void {
-		parent::on_init();
+	protected function setup_hooks() : void {
+		parent::setup_hooks();
 		// Nothing for now.
 	}
 }

@@ -35,15 +35,15 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Plugin|Theme (i.e., app) base class.
+ * Plugin|Theme: abstract base class.
  *
  * @since 2021-12-15
  */
-abstract class App extends U\A6t\Base implements U\I7e\Factory {
+abstract class Base extends U\A6t\Base {
 	/**
 	 * Traits.
 	 *
 	 * @since 2021-12-15
 	 */
-	use WPG\Traits\A6t\App\Members;
+	use WPG\Traits\A6t\Base\Members;
 }

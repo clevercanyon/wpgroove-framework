@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework\Traits\A6t\Base\Properties;
 
 /**
  * Utilities.
@@ -35,15 +35,17 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Plugin|Theme (i.e., app) base class.
+ * Class members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\A6t\Base
  */
-abstract class App extends U\A6t\Base implements U\I7e\Factory {
+trait Property_Members {
 	/**
-	 * Traits.
+	 * Plugin|Theme.
 	 *
-	 * @since 2021-12-15
+	 * @since 2022-01-28
 	 */
-	use WPG\Traits\A6t\App\Members;
+	protected WPG\A6t\App $app;
 }

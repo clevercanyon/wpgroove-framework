@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\A6t;
+namespace WP_Groove\Framework\Traits\WC_Customer;
 
 /**
  * Utilities.
@@ -35,15 +35,19 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Plugin|Theme (i.e., app) base class.
+ * Class members.
  *
  * @since 2021-12-15
+ *
+ * @see   WPG\WC_Customer
  */
-abstract class App extends U\A6t\Base implements U\I7e\Factory {
+trait Members {
 	/**
 	 * Traits.
 	 *
-	 * @since 2021-12-15
+	 * @since 2021-12-28
 	 */
-	use WPG\Traits\A6t\App\Members;
+	use WPG\Traits\WC_Customer\Magic\Constructable_Members;
+	use WPG\Traits\WC_Customer\Properties\Property_Members;
+	use WPG\Traits\WC_Customer\Utilities\Download_Members;
 }

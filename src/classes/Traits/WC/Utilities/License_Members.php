@@ -58,8 +58,8 @@ trait License_Members {
 	 *
 	 * @return LMFWC_License|null Product, else `null`.
 	 */
-	public static function license_by_key( string $key ) : ?LMFWC_License {
-		if ( ! class_exists( LMFWC_License::class ) ) {
+	public function license_by_key( string $key ) : ?LMFWC_License {
+		if ( ! U\Env::is_wp_plugin_active( 'license-manager-for-woocommerce/license-manager-for-woocommerce.php' ) ) {
 			return null; // Not possible.
 		}
 		if ( ! $key ) {
@@ -68,7 +68,7 @@ trait License_Members {
 		try {
 			$license = lmfwc_get_license( $key );
 		} catch ( \Exception $exception ) {
-			$license = null;
+			$license = null; // Fail softly.
 		}
 		return $license instanceof LMFWC_License ? $license : null;
 	}

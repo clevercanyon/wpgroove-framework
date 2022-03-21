@@ -51,8 +51,8 @@ trait Product_Members {
 	 *
 	 * @return \WC_Product|null Product, else `null`.
 	 */
-	public static function product_by_slug( string $slug ) : ?\WC_Product {
-		if ( ! class_exists( \WC_Product::class ) ) {
+	public function product_by_slug( string $slug ) : ?\WC_Product {
+		if ( ! U\Env::is_woocommerce() ) {
 			return null; // Not possible.
 		}
 		if ( ! $slug ) {

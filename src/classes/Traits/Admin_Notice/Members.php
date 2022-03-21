@@ -48,7 +48,7 @@ trait Members {
 	 * @since 2021-12-28
 	 */
 	use WPG\Traits\Admin_Notice\Magic\Constructable_Members;
-	use WPG\Traits\Admin_Notice\Utilities\Property_Members;
+	use WPG\Traits\Admin_Notice\Properties\Property_Members;
 	use U\Traits\A6t\Base\Magic\Readable_Members;
 
 	use WPG\Traits\Admin_Notice\Utilities\Queue_Members;

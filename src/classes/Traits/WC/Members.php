@@ -47,6 +47,6 @@ trait Members {
 	 *
 	 * @since 2021-12-28
 	 */
-	use WPG\Traits\WC\Utilities\Product_Members;
 	use WPG\Traits\WC\Utilities\License_Members;
+	use WPG\Traits\WC\Utilities\Product_Members;
 }
