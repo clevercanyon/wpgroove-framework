@@ -16,7 +16,7 @@
  * @since 2021-12-25
  */
 declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\A6t\Base;
+namespace WP_Groove\Framework\Traits\WC_Customer\Utilities;
 
 /**
  * Utilities.
@@ -39,15 +39,22 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  *
- * @see   WPG\A6t\Base
+ * @see   WPG\WC_Customer
  */
-trait Members {
+trait WPG_App_Members {
 	/**
-	 * Traits.
+	 * Factory class invocation.
 	 *
-	 * @since 2021-12-28
+	 * @since 2021-12-15
+	 *
+	 * @param string $class   Fully-qualified class name.
+	 * @param mixed  ...$args Optional args to class constructor.
+	 *                        If passed, a 'new' instance is returned.
+	 *
+	 * @return object Requested class instance; {@see WPG\A6t\App::__invoke()}.
 	 */
-	use WPG\Traits\A6t\Base\Magic\Constructable_Members;
-	use WPG\Traits\A6t\Base\Properties\Property_Members;
-	use WPG\Traits\A6t\Base\Utilities\App_Members;
+	public function wpg_app( string $class, ...$args ) : object {
+		$wpg_app = $this->wpg_app;
+		return $wpg_app( ...$args );
+	}
 }

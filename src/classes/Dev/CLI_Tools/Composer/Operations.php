@@ -166,8 +166,8 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			if ( in_array( $_prop, [ 'version', 'stable_tag', 'name' ], true ) ) {
 				$plugin->headers->{$_prop} = $this->project->{$_prop}; // Sync these w/ project data.
 			}
-			$plugin_file_contents        = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $plugin->headers->{$_prop}, $plugin_file_contents );
-			$plugin_readme_file_contents = preg_replace( '/^(\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $plugin->headers->{$_prop}, $plugin_readme_file_contents );
+			$plugin_file_contents        = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_regexp( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $plugin->headers->{$_prop}, $plugin_file_contents );
+			$plugin_readme_file_contents = preg_replace( '/^(\h*)?' . U\Str::esc_regexp( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $plugin->headers->{$_prop}, $plugin_readme_file_contents );
 
 			if ( 'name' === $_prop ) { // Updates plugin name in `readme.txt` file.
 				$plugin_readme_file_contents = preg_replace( '/^\={3}[^=\v]*\={3}/ui', '=== ' . $plugin->headers->{$_prop} . ' ===', $plugin_readme_file_contents, 1 );
@@ -220,10 +220,10 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			if ( in_array( $_prop, [ 'version', 'stable_tag', 'name' ], true ) ) {
 				$theme->headers->{$_prop} = $this->project->{$_prop}; // Sync these w/ project data.
 			}
-			$theme_file_contents           = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_file_contents );
-			$theme_functions_file_contents = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_functions_file_contents );
-			$theme_style_file_contents     = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_style_file_contents );
-			$theme_readme_file_contents    = preg_replace( '/^(\h*)?' . U\Str::esc_reg( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_readme_file_contents );
+			$theme_file_contents           = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_regexp( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_file_contents );
+			$theme_functions_file_contents = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_regexp( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_functions_file_contents );
+			$theme_style_file_contents     = preg_replace( '/^(\h*\*\h*)?' . U\Str::esc_regexp( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_style_file_contents );
+			$theme_readme_file_contents    = preg_replace( '/^(\h*)?' . U\Str::esc_regexp( $_header ) . '\:\h*.*$/umi', '${1}' . $_header . ': ' . $theme->headers->{$_prop}, $theme_readme_file_contents );
 
 			if ( 'name' === $_prop ) { // Updates theme name in `readme.txt` file.
 				$theme_readme_file_contents = preg_replace( '/^\={3}[^=\v]*\={3}/ui', '=== ' . $theme->headers->{$_prop} . ' ===', $theme_readme_file_contents, 1 );
@@ -600,16 +600,16 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 				' Directory is missing: `' . $svn_repo_tag_dir . '`.'
 			);
 		}
-		$zip_basename = $this->project->slug . '-v' . $this->project->version . '.zip';
-		$zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_basename );
+		$file_name = $this->project->slug . '-v' . $this->project->version . '.zip';
+		$file_path = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $file_name );
 
-		if ( ! U\Fs::zip_er( $svn_repo_tag_dir . '->' . $this->project->slug, $zip_path ) ) {
+		if ( ! U\Fs::zip_er( $svn_repo_tag_dir . '->' . $this->project->slug, $file_path ) ) {
 			throw new U\Fatal_Exception(
 				'Failed to zip `./._x/svn-repo/tags/' . $this->project->version . '` directory.' .
-				' From: `' . $svn_repo_tag_dir . '->' . $this->project->slug . '`, to: `' . $zip_path . '`.'
+				' From: `' . $svn_repo_tag_dir . '->' . $this->project->slug . '`, to: `' . $file_path . '`.'
 			);
 		}
-		U\CLI::log( '[' . __FUNCTION__ . '()]: Zipped: `' . $svn_repo_tag_dir . '`' . "\n" . ' →  `' . $zip_path . '`.' );
+		U\CLI::log( '[' . __FUNCTION__ . '()]: Zipped: `' . $svn_repo_tag_dir . '`' . "\n" . ' →  `' . $file_path . '`.' );
 	}
 
 	/**
@@ -626,36 +626,49 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 		if ( ! $this->project->is_wp_project() ) {
 			return; // Not applicable.
 		}
-		$zip_basename = $this->project->slug . '-v' . $this->project->version . '.zip';
-		$zip_path     = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_basename );
+		if ( $this->project->is_wp_plugin() ) {
+			$app = $this->project->wp_plugin_data();
 
-		if ( ! is_file( $zip_path ) ) {
-			throw new U\Fatal_Exception( 'Missing zip file: `' . $zip_path . '`.' );
+		} elseif ( $this->project->is_wp_theme() ) {
+			$app = $this->project->wp_theme_data();
+		} else {
+			throw new U\Fatal_Exception( 'Unknown WordPress app type.' );
 		}
-		$s3_zip_hash           = $this->project->s3_hash_hmac_sha256( $this->project->unbranded_slug . $this->project->version );
-		$s3_zip_file_subpath   = 'cdn/product/' . $this->project->unbranded_slug . '/zips/' . $s3_zip_hash . '/' . $zip_basename;
-		$s3_index_file_subpath = 'cdn/product/' . $this->project->unbranded_slug . '/data/index.json';
+		$zip_file_name = $this->project->slug . '-v' . $this->project->version . '.zip';
+		$zip_file_path = U\Dir::join( $this->project->dir, '/._x/svn-distro-zips/' . $zip_file_name );
+
+		if ( ! is_file( $zip_file_path ) ) {
+			throw new U\Fatal_Exception( 'Missing zip file: `' . $zip_file_path . '`.' );
+		}
+		$s3_zip_file_hash                 = $this->project->s3_hash_hmac_sha256( $this->project->unbranded_slug . $zip_file_name . $this->project->version );
+		$s3_zip_file_subpath              = 'cdn/product/' . $this->project->unbranded_slug . '/files/' . $s3_zip_file_hash . '/' . $zip_file_name;
+		$s3_distro_zips_json_file_subpath = 'cdn/product/' . $this->project->unbranded_slug . '/data/distro-zips.json';
 
 		$s3 = new S3Client( $this->project->s3_bucket_config() );
 
-		// Get index w/ tagged versions.
+		// Get `distro-zips.json` w/ tagged versions.
 
 		try {
-			$_s3r     = $s3->getObject( [
+			$_s3r                = $s3->getObject( [
 				'Bucket' => $this->project->s3_bucket(),
-				'Key'    => $s3_index_file_subpath,
+				'Key'    => $s3_distro_zips_json_file_subpath,
 			] );
-			$s3_index = U\Str::json_decode( (string) $_s3r->get( 'Body' ) );
+			$s3_distro_zips_json = U\Str::json_decode( (string) $_s3r->get( 'Body' ) );
 
-			if ( ! is_object( $s3_index )
-				|| ! isset( $s3_index->versions->tags )
-				|| ! isset( $s3_index->versions->stable_tag )
-				|| ! is_object( $s3_index->versions->tags )
-				|| ! is_string( $s3_index->versions->stable_tag )
+			if ( ! is_object( $s3_distro_zips_json )
+
+				|| ! isset( $s3_distro_zips_json->headers )
+				|| ! is_object( $s3_distro_zips_json->headers )
+
+				|| ! isset( $s3_distro_zips_json->versions->tags )
+				|| ! is_object( $s3_distro_zips_json->versions->tags )
+
+				|| ! isset( $s3_distro_zips_json->versions->stable_tag )
+				|| ! is_string( $s3_distro_zips_json->versions->stable_tag )
 			) {
 				throw new U\Fatal_Exception(
 					'Unable to retrieve valid JSON data from: ' .
-					' `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_index_file_subpath ) . '`.'
+					' `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_distro_zips_json_file_subpath ) . '`.'
 				);
 			}
 		} catch ( \Throwable $throwable ) {
@@ -665,43 +678,49 @@ abstract class Operations extends U\Dev\CLI_Tools\Composer\Operations {
 			if ( 'NoSuchKey' !== $throwable->getAwsErrorCode() ) {
 				throw $throwable; // Problem.
 			}
-			$s3_index = (object) [
+			$s3_distro_zips_json = (object) [
+				'headers'  => (object) [],
 				'versions' => (object) [
 					'tags'       => (object) [],
 					'stable_tag' => '',
 				],
-			]; // No index file yet, we'll create below.
+			]; // No `distro-zips.json` file yet. We'll create below.
 		}
 		// Upload zip file. Throws exception on failure, which we intentionally do not catch.
 
 		$s3->putObject( [
-			'SourceFile' => $zip_path,
+			'SourceFile' => $zip_file_path,
 			'Bucket'     => $this->project->s3_bucket(),
 			'Key'        => $s3_zip_file_subpath,
 		] );
 		U\CLI::log(
-			'[' . __FUNCTION__ . '()]: Uploaded: `' . $zip_path . '`' . "\n" .
+			'[' . __FUNCTION__ . '()]: Uploaded: `' . $zip_file_path . '`' . "\n" .
 			' →  `' . U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_zip_file_subpath ) . '`.'
 		);
-		// Update index w/ tagged versions.
+		// Update headers and tags in `distro-zips.json`.
 		// Throws exception on failure, which we intentionally do not catch.
 
-		$s3_index->versions->tags = (array) $s3_index->versions->tags;
-		$s3_index->versions->tags = array_merge( $s3_index->versions->tags, [ $this->project->version => U\Time::utc() ] );
-
-		uksort( $s3_index->versions->tags, 'version_compare' ); // Example: <https://3v4l.org/QitGb>.
-		$s3_index->versions->tags = array_reverse( $s3_index->versions->tags );
-
-		$s3_index->versions->stable_tag = $this->project->stable_tag;
+		$s3_distro_zips_json->headers                                   = $app->headers;
+		$s3_distro_zips_json->versions->tags                            = (array) $s3_distro_zips_json->versions->tags;
+		$s3_distro_zips_json->versions->tags[ $this->project->version ] = (object) [
+			'time'                    => U\Time::utc(),
+			'version'                 => $this->project->version,
+			'requires_php_version'    => $app->headers->requires_php_version,
+			'requires_wp_version'     => $app->headers->requires_wp_version,
+			'tested_up_to_wp_version' => $app->headers->tested_up_to_wp_version,
+		];
+		uksort( $s3_distro_zips_json->versions->tags, 'version_compare' ); // {@see https://3v4l.org/QitGb}.
+		$s3_distro_zips_json->versions->tags       = (object) array_reverse( $s3_distro_zips_json->versions->tags );
+		$s3_distro_zips_json->versions->stable_tag = $this->project->stable_tag;
 
 		$s3->putObject( [
-			'Body'   => U\Str::json_encode( $s3_index ),
+			'Body'   => U\Str::json_encode( $s3_distro_zips_json ),
 			'Bucket' => $this->project->s3_bucket(),
-			'Key'    => $s3_index_file_subpath,
+			'Key'    => $s3_distro_zips_json_file_subpath,
 		] );
 		U\CLI::log(
 			'[' . __FUNCTION__ . '()]: Updated: `' .
-			U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_index_file_subpath ) .
+			U\Dir::join( 's3://' . $this->project->s3_bucket(), '/' . $s3_distro_zips_json_file_subpath ) .
 			'`.'
 		);
 	}

@@ -11,12 +11,11 @@
 // <editor-fold desc="Strict types, namespace, use statements, and other headers.">
 
 /**
- * Declarations & namespace.
+ * Namespace.
  *
  * @since 2021-12-25
  */
-declare( strict_types = 1 );
-namespace WP_Groove\Framework\Traits\A6t\Base;
+namespace PHPSTORM_META;
 
 /**
  * Utilities.
@@ -35,19 +34,11 @@ use WP_Groove\{Framework as WPG};
 // </editor-fold>
 
 /**
- * Class members.
+ * Overrides.
  *
  * @since 2021-12-15
- *
- * @see   WPG\A6t\Base
  */
-trait Members {
-	/**
-	 * Traits.
-	 *
-	 * @since 2021-12-28
-	 */
-	use WPG\Traits\A6t\Base\Magic\Constructable_Members;
-	use WPG\Traits\A6t\Base\Properties\Property_Members;
-	use WPG\Traits\A6t\Base\Utilities\App_Members;
-}
+override(
+	WPG\Traits\WC_Customer\Utilities\WPG_App_Members::wpg_app(),
+	map( [ '' => '@' ] )
+);

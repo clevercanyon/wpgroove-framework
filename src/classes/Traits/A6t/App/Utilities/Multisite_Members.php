@@ -56,11 +56,10 @@ trait Multisite_Members {
 			return false; // Not applicable.
 		}
 		if ( $this instanceof WPG\A6t\Plugin ) {
-			return is_plugin_active_for_network( $this->file_subpath );
+			return U\Env::is_wp_plugin_network_active( $this->file_subpath );
 
 		} elseif ( $this instanceof WPG\A6t\Theme ) {
-			$allowed_themes = u\if_array( get_site_option( 'allowedthemes' ), [] );
-			return $allowed_themes && ! empty( $allowed_themes[ $this->dir_basename ] );
+			return U\Env::is_wp_theme_network_active( $this->dir_basename );
 		}
 		throw new U\Fatal_Exception( 'Unable to determine app type for class: `' . static::class . '`.' );
 	}

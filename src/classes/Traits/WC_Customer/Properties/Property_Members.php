@@ -47,5 +47,5 @@ trait Property_Members {
 	 *
 	 * @since 2022-01-28
 	 */
-	private WPG\A6t\App $x_app;
+	private WPG\A6t\App $wpg_app;
 }

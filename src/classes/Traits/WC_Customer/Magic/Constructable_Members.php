@@ -45,22 +45,19 @@ trait Constructable_Members {
 	/**
 	 * Constructor.
 	 *
-	 * @param WPG\A6t\App $x_app      App.
-	 * @param int|null    $id         Customer ID. Default is `null` (current user).
-	 * @param bool        $is_session True if this is the customer session; {@see \WC_Customer}.
-	 *
-	 * @noinspection PhpMultipleClassDeclarationsInspection
+	 * @param WPG\A6t\App $wpg_app WP Groove app.
+	 * @param int         $user_id WordPress user ID.
 	 *
 	 * @throws U\Fatal_Exception If customer cannot be found by ID.
+	 * @noinspection PhpMultipleClassDeclarationsInspection
 	 */
-	public function __construct( WPG\A6t\App $x_app, /* int|null */ ?int $id = null, bool $is_session = false ) {
-		$this->x_app = $x_app;
-		$id          ??= get_current_user_id();
+	public function __construct( WPG\A6t\App $wpg_app, int $user_id ) {
+		$this->wpg_app = $wpg_app;
 
 		try { // Fail softly.
-			parent::__construct( $id, $is_session );
-		} catch ( \Exception $exception ) {
-			throw new U\Fatal_Exception( $exception->getMessage() );
+			parent::__construct( $user_id );
+		} catch ( \Throwable $throwable ) {
+			throw new U\Fatal_Exception( $throwable->getMessage() );
 		}
 		if ( ! $this->get_id() ) {
 			throw new U\Fatal_Exception( 'Unknown customer ID.' );

@@ -41,26 +41,41 @@ use WP_Groove\{Framework as WPG};
  *
  * @see   WPG\WC
  */
-trait Product_Members {
+trait Customer_Members {
 	/**
-	 * Gets a WooCommerce product by slug.
+	 * Gets a {@see WPG\WC_Customer}.
 	 *
-	 * @since 2022-03-12
+	 * @since        2022-03-12
 	 *
-	 * @param string $slug Product slug.
+	 * @param int $user_id User ID.
 	 *
-	 * @return \WC_Product|null Product, else `null`.
+	 * @return WPG\WC_Customer|null Customer; else `null`.
+	 *
+	 * @noinspection PhpRedundantCatchClauseInspection
 	 */
-	public function product_by_slug( string $slug ) : ?\WC_Product {
+	public function customer( int $user_id ) /* : WPG\WC_Customer|null */ : ?WPG\WC_Customer {
 		if ( ! U\Env::is_woocommerce() ) {
 			return null; // Not possible.
 		}
-		if ( ! $slug ) {
+		if ( ! $user_id ) {
 			return null; // Not possible.
 		}
-		$product = get_page_by_path( $slug, OBJECT, 'product' );
-		$product = $product ? wc_get_product( $product ) : null;
+		try { // Catch invalid user IDs.
+			$customer = $this->app( WPG\WC_Customer::class, $user_id );
+		} catch ( U\I7e\Exception $exception ) {
+			$customer = null; // Fail softly.
+		}
+		return $customer && $customer->get_id() ? $customer : null;
+	}
 
-		return $product instanceof \WC_Product && $product->exists() && $product->get_id() ? $product : null;
+	/**
+	 * Gets current {@see WPG\WC_Customer}.
+	 *
+	 * @since 2022-03-12
+	 *
+	 * @return WPG\WC_Customer|null Current customer; else `null`.
+	 */
+	public function current_customer() /* : WPG\WC_Customer|null */ : ?WPG\WC_Customer {
+		return is_user_logged_in() ? $this->customer( get_current_user_id() ) : null;
 	}
 }

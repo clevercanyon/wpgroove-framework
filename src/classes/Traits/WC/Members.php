@@ -49,4 +49,5 @@ trait Members {
 	 */
 	use WPG\Traits\WC\Utilities\License_Members;
 	use WPG\Traits\WC\Utilities\Product_Members;
+	use WPG\Traits\WC\Utilities\Customer_Members;
 }

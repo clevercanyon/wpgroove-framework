@@ -37,7 +37,7 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2022-03-12
  */
-use LicenseManagerForWooCommerce\Models\Resources\License as LMFWC_License;
+use LicenseManagerForWooCommerce\Models\Resources\License as WC_License;
 
 // </editor-fold>
 
@@ -50,16 +50,33 @@ use LicenseManagerForWooCommerce\Models\Resources\License as LMFWC_License;
  */
 trait License_Members {
 	/**
+	 * Is license manager active?
+	 *
+	 * @since 2022-03-25
+	 *
+	 * @return bool `true` if license manager is active.
+	 */
+	public function is_license_manager_active() : bool {
+		static $is; // Memoize.
+
+		if ( null !== $is ) {
+			return $is; // Saves times.
+		}
+		return $is = U\Env::is_woocommerce()
+			&& U\Env::is_wp_plugin_active( 'license-manager-for-woocommerce/license-manager-for-woocommerce.php' );
+	}
+
+	/**
 	 * Gets a WooCommerce license by key.
 	 *
 	 * @since 2022-03-12
 	 *
 	 * @param string $key License key.
 	 *
-	 * @return LMFWC_License|null Product, else `null`.
+	 * @return WC_License|null Product, else `null`.
 	 */
-	public function license_by_key( string $key ) : ?LMFWC_License {
-		if ( ! U\Env::is_wp_plugin_active( 'license-manager-for-woocommerce/license-manager-for-woocommerce.php' ) ) {
+	public function license_by_key( string $key ) : ?WC_License {
+		if ( ! $this->is_license_manager_active() ) {
 			return null; // Not possible.
 		}
 		if ( ! $key ) {
@@ -70,6 +87,6 @@ trait License_Members {
 		} catch ( \Exception $exception ) {
 			$license = null; // Fail softly.
 		}
-		return $license instanceof LMFWC_License ? $license : null;
+		return $license instanceof WC_License && $license->getId() ? $license : null;
 	}
 }

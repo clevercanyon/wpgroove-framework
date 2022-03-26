@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities.git",
-                "reference": "6d56eb2f279d6205078bd2e32d7a4859efee6c83"
+                "reference": "bbd0e1195d2402ac252f5200557828ec7d9eafff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/6d56eb2f279d6205078bd2e32d7a4859efee6c83",
-                "reference": "6d56eb2f279d6205078bd2e32d7a4859efee6c83",
+                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/bbd0e1195d2402ac252f5200557828ec7d9eafff",
+                "reference": "bbd0e1195d2402ac252f5200557828ec7d9eafff",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                 "issues": "https://github.com/clevercanyon/utilities/issues",
                 "source": "https://github.com/clevercanyon/utilities/tree/main"
             },
-            "time": "2022-03-23T10:33:10+00:00"
+            "time": "2022-03-26T09:58:00+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -1313,16 +1313,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.215.2",
+            "version": "3.216.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "8ddbc5242ec59a22b2c4704867e028343c6d8ade"
+                "reference": "9e09386c3a5b313eeb324490beff4eb843ed339d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/8ddbc5242ec59a22b2c4704867e028343c6d8ade",
-                "reference": "8ddbc5242ec59a22b2c4704867e028343c6d8ade",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9e09386c3a5b313eeb324490beff4eb843ed339d",
+                "reference": "9e09386c3a5b313eeb324490beff4eb843ed339d",
                 "shasum": ""
             },
             "require": {
@@ -1398,9 +1398,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.215.2"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.216.2"
             },
-            "time": "2022-03-22T19:02:23+00:00"
+            "time": "2022-03-25T18:17:03+00:00"
         },
         {
             "name": "clevercanyon/php-scoper",

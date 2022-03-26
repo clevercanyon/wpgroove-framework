@@ -49,5 +49,7 @@ trait Members {
 	 */
 	use WPG\Traits\WC_Customer\Magic\Constructable_Members;
 	use WPG\Traits\WC_Customer\Properties\Property_Members;
+
+	use WPG\Traits\WC_Customer\Utilities\WPG_App_Members;
 	use WPG\Traits\WC_Customer\Utilities\Download_Members;
 }
