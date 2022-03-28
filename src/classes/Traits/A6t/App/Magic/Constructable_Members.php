@@ -64,10 +64,9 @@ trait Constructable_Members {
 		parent::__construct();
 
 		/**
-		 * Org & brand properties.
+		 * Brand property.
 		 */
 		$this->brand = U\Brand::get( 'w6e' );
-		$this->org   = U\Brand::get( $this->brand->org_n7m );
 
 		/**
 		 * PHP assertions run in debug mode only.
@@ -80,7 +79,7 @@ trait Constructable_Members {
 		assert( $file && is_file( $file ) );
 		assert( $name && U\Str::is_name( $name ) );
 		assert( $slug && U\Str::is_lede_slug( $slug, $this->brand->slug_prefix ) );
-		assert( $version && U\Str::is_version( $version ) );
+		assert( $version && U\Version::is( $version ) );
 
 		/**
 		 * App type & version properties.
@@ -106,7 +105,7 @@ trait Constructable_Members {
 			throw new U\Fatal_Exception( 'Unable to determine app type for class: `' . static::class . '`.' );
 		}
 		$this->vendor_dir    = U\Env::static_var( 'W6E_VENDOR_DIR' ) ?: U\Dir::join( $this->dir, '/vendor' );
-		$this->framework_dir = U\Dir::join( $this->vendor_dir, '/' . $this->org->slug . '/' . $this->brand->slug_prefix . 'framework' );
+		$this->framework_dir = U\Dir::join( $this->vendor_dir, '/' . $this->brand->org->slug . '/' . $this->brand->slug_prefix . 'framework' );
 
 		/**
 		 * Namespace, slug, & var properties.

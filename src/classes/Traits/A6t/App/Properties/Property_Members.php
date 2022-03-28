@@ -39,7 +39,6 @@ use WP_Groove\{Framework as WPG};
  *
  * @since 2021-12-15
  *
- * @property-read $org
  * @property-read $brand
  *
  * @property-read $type
@@ -75,18 +74,11 @@ use WP_Groove\{Framework as WPG};
  */
 trait Property_Members {
 	/**
-	 * Plugin|Theme: org data.
-	 *
-	 * @since 2021-12-15
-	 */
-	protected object $org;
-
-	/**
 	 * Plugin|Theme: brand data.
 	 *
 	 * @since 2021-12-15
 	 */
-	protected object $brand;
+	protected U\Brand $brand;
 
 	/**
 	 * Plugin|Theme: app type.
