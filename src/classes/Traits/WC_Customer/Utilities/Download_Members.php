@@ -32,6 +32,13 @@ use Clever_Canyon\{Utilities as U};
  */
 use WP_Groove\{Framework as WPG};
 
+/**
+ * File-specific.
+ *
+ * @since 2022-03-12
+ */
+use LicenseManagerForWooCommerce\Models\Resources\License as WC_License;
+
 // </editor-fold>
 
 /**
@@ -49,23 +56,45 @@ trait Download_Members {
 	 *
 	 * @param string $file_name File name.
 	 *
+	 * @param array  $via       Via optional additional criteria.
+	 *                          Pass a `license`, `order`, and/or `product` to narrow the scan.
+	 *                          It's important to narrow the scan, for example, when validating a license key.
+	 *
+	 *                          * Pass `license` as {@see WC_License} instance.
+	 *                          * Pass `order` as {@see \WC_Order} instance.
+	 *                          * Pass `product` as {@see \WC_Product} instance.
+	 *
 	 * @return bool `true` if customer can download file name.
+	 *              Return value is dependent upon the value of `$via`.
 	 */
-	public function wpg_can_download_file_name( string $file_name ) : bool {
+	public function wpg_can_download_file_name( string $file_name, array $via = [] ) : bool {
 		if ( '' === $file_name ) {
 			return false; // Clearly not possible.
 		}
 		foreach ( wc_get_customer_download_permissions( $this->get_id() ) as $_download ) {
 			$_download = new \WC_Customer_Download( $_download );
 
-			if ( ! ( $_order = wc_get_order( $_download->get_order_id() ) )
-				|| ! $_order->is_download_permitted() ) {
+			if ( ! empty( $via[ 'license' ] ) && $via[ 'license' ] instanceof WC_License
+				&& ( $_download->get_order_id() !== $via[ 'license' ]->getOrderId()
+					|| $_download->get_product_id() !== $via[ 'license' ]->getProductId() ) ) {
+				continue; // Not for the specific license.
+			}
+			if ( ! empty( $via[ 'order' ] ) && $via[ 'order' ] instanceof \WC_Order
+				&& $_download->get_order_id() !== $via[ 'order' ]->get_id() ) {
+				continue; // Not for the specific product.
+			}
+			if ( ! empty( $via[ 'product' ] ) && $via[ 'product' ] instanceof \WC_Product
+				&& $_download->get_product_id() !== $via[ 'product' ]->get_id() ) {
+				continue; // Not for the specific product.
+			}
+			if ( ! ( $_order = wc_get_order( $_download->get_order_id() ) ) || ! $_order->is_download_permitted() ) {
 				continue; // Not permitted at this time.
 			}
-			if ( ! ( $_product = wc_get_product( $_download->get_product_id() ) )
-				|| ! $_product->exists() // In case product no longer exists.
-				|| ! $_product->has_file( $_download->get_download_id() ) ) {
-				continue; // Product or file no longer exists; or not downloadable.
+			if ( ( ! $_product = wc_get_product( $_download->get_product_id() ) ) || ! $_product->exists() ) {
+				continue; // Product no longer exists.
+			}
+			if ( ! $_product->is_downloadable() || ! $_product->has_file( $_download->get_download_id() ) ) {
+				continue; // Product is not downloadable, or does not have the file.
 			}
 			/** @var \WC_Product_Download $_product_download */ // phpcs:ignore.
 			$_product_download = $_product->get_file( $_download->get_download_id() );

@@ -63,4 +63,30 @@ trait Product_Members {
 
 		return $product instanceof \WC_Product && $product->exists() && $product->get_id() ? $product : null;
 	}
+
+	/**
+	 * Product has a file name?
+	 *
+	 * @since 2022-03-28
+	 *
+	 * @param \WC_Product $product   Product.
+	 * @param string      $file_name Profile file name.
+	 *
+	 * @return bool `true` if product has file name.
+	 */
+	public function product_has_file_name( \WC_Product $product, string $file_name ) : bool {
+		foreach ( $product->get_downloads() ?: [] as $_download_id => $_file ) {
+			/** @var \WC_Product_Download $_product_download */ // phpcs:ignore.
+			$_product_download = $product->get_file( $_download_id );
+
+			$_file_name = $_product_download ? $_product_download->get_name() : '';
+			$_file_path = $_product_download ? $_product_download->get_file() : '';
+			$_file_path = $_file_path && U\URL::is( $_file_path ) ? U\URL::parse( $_file_path, PHP_URL_PATH ) : $_file_path;
+
+			if ( $_product_download && ( $_file_name === $file_name || basename( $_file_path ) === $file_name ) ) {
+				return true; // Product has file.
+			}
+		}
+		return false;
+	}
 }
