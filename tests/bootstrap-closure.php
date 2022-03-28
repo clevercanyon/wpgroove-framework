@@ -57,7 +57,7 @@ if ( ! is_file( '/wp-docker/image/setup-complete' )
  * This leverages preinitialized hooks in WordPress core.
  * {@see https://o5p.me/fFC1I7} {@see https://o5p.me/OIrafd}.
  *
- * At priority `9999` this fires right before the
+ * At priority `9998` this fires right before the
  * {@see \WP_Groove\Framework\A6t\App::load()} hook added by
  * {@see \WP_Groove\Framework\A6t\App::add_plugin_instance_hooks()}.
  *
@@ -71,8 +71,8 @@ return function ( string $file, string $type ) {
 
 	if ( 'plugin' === $type ) {
 		$GLOBALS[ 'wp_filter' ][ 'plugins_loaded' ]                              ??= [];
-		$GLOBALS[ 'wp_filter' ][ 'plugins_loaded' ][ -( PHP_INT_MAX - 9999 ) ]   ??= [];
-		$GLOBALS[ 'wp_filter' ][ 'plugins_loaded' ][ -( PHP_INT_MAX - 9999 ) ][] = [
+		$GLOBALS[ 'wp_filter' ][ 'plugins_loaded' ][ -( PHP_INT_MAX - 9998 ) ]   ??= [];
+		$GLOBALS[ 'wp_filter' ][ 'plugins_loaded' ][ -( PHP_INT_MAX - 9998 ) ][] = [
 			'accepted_args' => 0,
 			'function'      => function () use ( $file, $type ) {
 				require_once dirname( $file, 2 ) . '/vendor/autoload.php';
@@ -81,8 +81,8 @@ return function ( string $file, string $type ) {
 		];
 	} elseif ( 'theme' === $type ) {
 		$GLOBALS[ 'wp_filter' ][ 'after_setup_theme' ]                              ??= [];
-		$GLOBALS[ 'wp_filter' ][ 'after_setup_theme' ][ -( PHP_INT_MAX - 9999 ) ]   ??= [];
-		$GLOBALS[ 'wp_filter' ][ 'after_setup_theme' ][ -( PHP_INT_MAX - 9999 ) ][] = [
+		$GLOBALS[ 'wp_filter' ][ 'after_setup_theme' ][ -( PHP_INT_MAX - 9998 ) ]   ??= [];
+		$GLOBALS[ 'wp_filter' ][ 'after_setup_theme' ][ -( PHP_INT_MAX - 9998 ) ][] = [
 			'accepted_args' => 0,
 			'function'      => function () use ( $file, $type ) {
 				require_once dirname( $file, 2 ) . '/vendor/autoload.php';
