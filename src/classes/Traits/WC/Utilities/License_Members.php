@@ -67,6 +67,23 @@ trait License_Members {
 	}
 
 	/**
+	 * Is license key?
+	 *
+	 * @since 2022-03-29
+	 *
+	 * @param string $str    String to check.
+	 * @param bool   $strict Strict definition? Default is `false`.
+	 *
+	 * @return bool `true` if valid format for a license key.
+	 */
+	public function is_license_key( string $str, bool $strict = false ) : bool {
+		if ( $strict ) { // 8 chunks of 8 chars: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ`; separated by `-`.
+			return U\Str::is_valid_helper( $str, 71, 71, '/^[A-Z0-9]{8}(?:-[A-Z0-9]{8}){7}$/u' );
+		}
+		return U\Str::is_valid_helper( $str, 1, 128, '/^[^\v]+$/u' );
+	}
+
+	/**
 	 * Gets a WooCommerce license by key.
 	 *
 	 * @since 2022-03-12
