@@ -127,7 +127,7 @@ trait Constructable_Members {
 		 * App’s feature needs.
 		 */
 		$this->needs                    ??= [];
-		$this->needs[ 'admin_webpack' ] ??= false;
+		$this->needs[ 'admin_webpack' ] ??= true; // @todo Optimize this.
 
 		/**
 		 * App’s hook priorities.
