@@ -55,6 +55,6 @@ trait WPG_App_Members {
 	 */
 	public function wpg_app( string $class, ...$args ) : object {
 		$wpg_app = $this->wpg_app;
-		return $wpg_app( ...$args );
+		return $wpg_app( $class, ...$args );
 	}
 }

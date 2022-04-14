@@ -55,6 +55,6 @@ trait App_Members {
 	 */
 	final public function app( string $class, ...$args ) : object {
 		$app = $this->app;
-		return $app( ...$args );
+		return $app( $class, ...$args );
 	}
 }
