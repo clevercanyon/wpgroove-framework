@@ -322,6 +322,8 @@ services :
             - 'nxp-data:/etc/nginx/certs'
             - 'nxp-data:/etc/nginx/vhost.d'
             - '/var/run/docker.sock:/tmp/docker.sock:ro'
+            - './config/nxp.conf:/etc/nginx/conf.d/wp-docker.conf'
+            - './config/nxp~prj.conf:/etc/nginx/conf.d/wp-docker~prj.conf'
 
         environment    : # {@see https://o5p.me/bEtXkH}.
             DEFAULT_HOST : '${WP_DOCKER_COMPOSE_PROJECT_SLUG}.wp'

@@ -30,6 +30,10 @@
 *.yaml text
 *.yml text
 
+# TOML
+
+*.toml text
+
 # Properties.
 
 *.properties text

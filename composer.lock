@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0597f86e7816e7b6a44d2adf669922cf",
+    "content-hash": "827b7f262e55d625a4720ff4fcbc1efb",
     "packages": [
         {
             "name": "clevercanyon/utilities",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities.git",
-                "reference": "3e34a0c9fe4da43db6f3aae920526cd5bb626c93"
+                "reference": "22ac57d30f4d0587682d7f8f17ed4b63a4c34c6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/3e34a0c9fe4da43db6f3aae920526cd5bb626c93",
-                "reference": "3e34a0c9fe4da43db6f3aae920526cd5bb626c93",
+                "url": "https://api.github.com/repos/clevercanyon/utilities/zipball/22ac57d30f4d0587682d7f8f17ed4b63a4c34c6b",
+                "reference": "22ac57d30f4d0587682d7f8f17ed4b63a4c34c6b",
                 "shasum": ""
             },
             "require": {
@@ -50,12 +50,6 @@
                         "brand": {
                             "data": {
                                 "n7m": "c10n"
-                            },
-                            "aws": {
-                                "s3": {
-                                    "bucket": "clevercanyon",
-                                    "cdn_domain": "cdn.clevercanyon.com"
-                                }
                             }
                         },
                         "project": {
@@ -122,7 +116,7 @@
                 "issues": "https://github.com/clevercanyon/utilities/issues",
                 "source": "https://github.com/clevercanyon/utilities/tree/main"
             },
-            "time": "2022-04-14T19:08:44+00:00"
+            "time": "2022-04-24T10:22:32+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -1315,16 +1309,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.219.4",
+            "version": "3.220.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "2bbbf5f1ff0764441372fc9e312e6b463da0043e"
+                "reference": "fbb2d7349916c15758ee02dfd001a714883a9adf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2bbbf5f1ff0764441372fc9e312e6b463da0043e",
-                "reference": "2bbbf5f1ff0764441372fc9e312e6b463da0043e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/fbb2d7349916c15758ee02dfd001a714883a9adf",
+                "reference": "fbb2d7349916c15758ee02dfd001a714883a9adf",
                 "shasum": ""
             },
             "require": {
@@ -1400,9 +1394,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.219.4"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.220.3"
             },
-            "time": "2022-04-14T18:14:31+00:00"
+            "time": "2022-04-22T18:18:31+00:00"
         },
         {
             "name": "clevercanyon/php-scoper",
@@ -1593,12 +1587,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/clevercanyon/utilities-dev-npm.git",
-                "reference": "4654c32c69deaf6a884facf439d6ac2b98c4f90b"
+                "reference": "af7aa8a0455a83f1ab3633013123352c01b1bea3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clevercanyon/utilities-dev-npm/zipball/4654c32c69deaf6a884facf439d6ac2b98c4f90b",
-                "reference": "4654c32c69deaf6a884facf439d6ac2b98c4f90b",
+                "url": "https://api.github.com/repos/clevercanyon/utilities-dev-npm/zipball/af7aa8a0455a83f1ab3633013123352c01b1bea3",
+                "reference": "af7aa8a0455a83f1ab3633013123352c01b1bea3",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1617,9 +1611,9 @@
             "description": "Clever Canyon’s utilities for PHP/JS (NPM dev dependencies).",
             "support": {
                 "issues": "https://github.com/clevercanyon/utilities-dev-npm/issues",
-                "source": "https://github.com/clevercanyon/utilities-dev-npm/tree/v1.0.2"
+                "source": "https://github.com/clevercanyon/utilities-dev-npm/tree/main"
             },
-            "time": "2022-02-13T22:14:34+00:00"
+            "time": "2022-04-16T07:44:53+00:00"
         },
         {
             "name": "clevercanyon/wpgroove-framework-dev",

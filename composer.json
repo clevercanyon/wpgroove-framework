@@ -49,12 +49,6 @@
 				"brand"            : {
 					"data" : {
 						"n7m" : "w6e"
-					},
-					"aws"  : {
-						"s3" : {
-							"bucket"     : "wpgroove",
-							"cdn_domain" : "cdn.wpgroove.com"
-						}
 					}
 				},
 				"project"          : {
